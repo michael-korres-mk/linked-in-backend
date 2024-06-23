@@ -1,6 +1,7 @@
 package com.licnosoft.linkedin.controllers.users;
 
 import com.licnosoft.linkedin.domain.users.User;
+import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserDTO;
@@ -73,24 +74,24 @@ public class UserController {
 
     @PostMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-    public ResponseEntity<UserDTO> save(@RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> save(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, true);
     }
 
     @PutMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-    public ResponseEntity<UserDTO> update(@RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> update(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, false);
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<UserDTO> updateProfile(@RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> updateProfile(@RequestBody UserInfoDTO dto) {
         User user = entityService.getLoggedUser();
         dto.setId(user.getId());
         return handleSaveRequest(dto, false);
     }
 
-    private ResponseEntity<UserDTO> handleSaveRequest(UserDTO dto, boolean insert) {
+    private ResponseEntity<UserDTO> handleSaveRequest(UserInfoDTO dto, boolean insert) {
         log.debug("REST request to save a user : {}", dto);
         return new ResponseEntity<>(entityService.save(dto, insert), HttpStatus.CREATED);
     }

@@ -2,6 +2,7 @@ package com.licnosoft.linkedin.services.users;
 
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
+import com.licnosoft.linkedin.config.security.JwtUtil;
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
@@ -32,10 +33,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository entityRepository;
     private final ModelMapper modelMapper;
+    private final JwtUtil jwtUtil;
 
-    public UserServiceImpl(UserRepository entityRepository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository entityRepository, ModelMapper modelMapper, JwtUtil jwtUtil) {
         this.entityRepository = entityRepository;
         this.modelMapper = modelMapper;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -88,6 +91,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO loginUser(String token, String email, String password) {
+        UserInfoDTO info;
+        if(token != null){
+            info = jwtUtil.decodeJwtToUserInfo(token);
+        }
+        else {
+            info = new UserInfoDTO(email, password, null, null, null);
+        }
+
+        UserDTO dto = loginUser(info);
+
+        dto.setToken(jwtUtil.generateToken(info));
+
+        return dto;
+    }
+
+    @Override
     public ToggleEntityDTO toggleEnabled(ToggleEntityDTO dto) {
         User result = findEntityById(dto.getId());
         result.setEnabled(dto.isEnabled());
@@ -96,26 +116,18 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO save(UserDTO dto, boolean insert) {
+    public UserDTO save(UserInfoDTO dto, boolean insert) {
         if (!Utilities.validateEntityDto(dto, insert)) {
             throw new AppValidationException();
         }
-        User entity = modelMapper.map(dto, User.class);
-//        if (insert) {
-//            entity.setCreationDate(LocalDateTime.now());
-//        } else if (dto.isEnabled()) {
-//            entity.setFailedLoginAttempts(0);
-//            entity.setLockedDate(null);
-//        }
-//
-//        entity.getUserRoles().forEach(role -> {
-//            role.setUser(entity);
-//            if (role.getAssignDate() == null) {
-//                role.setAssignDate(LocalDate.now());
-//            }
-//        });
 
-        return modelMapper.map(save(entity), UserDTO.class);
+        if (!Utilities.validateConfirmPassword(dto)) {
+            throw new AppValidationException();
+        }
+
+        UserDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDTO.class);
+        userDTO.setToken(jwtUtil.generateToken(dto));
+        return userDTO;
     }
 
     @Override

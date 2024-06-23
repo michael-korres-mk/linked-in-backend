@@ -29,17 +29,8 @@ public class JwtAuthController {
     public ResponseEntity<UserDTO> login(@RequestParam(name = "token",required = false) String token,
                                          @RequestParam(name = "email",required = false) String email,
                                          @RequestParam(name = "password",required = false) String password) {
-        UserInfoDTO info;
-        if(token != null){
-            info = jwtUtil.decodeJwtToUserInfo(token);
-        }
-        else {
-            info = new UserInfoDTO(email, password, null, null, null);
-        }
-        UserDTO dto = userService.loginUser(info);
-        dto.setToken(jwtUtil.generateToken(info));
 
-        return new ResponseEntity<>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(userService.loginUser(token, email, password), HttpStatus.OK);
     }
 
 }

@@ -2,6 +2,7 @@ package com.licnosoft.linkedin.util;
 
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
 import com.licnosoft.linkedin.domain.general.PlainEntity;
+import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.EntityDTO;
 
 import java.math.BigInteger;
@@ -131,6 +132,11 @@ public class Utilities {
     public static boolean validateEntityDto(EntityDTO dto, boolean insert) {
         return (insert && dto.getId() == null) || (!insert && dto.getId() != null);
     }
+
+    public static boolean validateConfirmPassword(UserInfoDTO dto) {
+        return Objects.equals(dto.getPassword(), dto.getConfirmPassword());
+    }
+
 
     public static void validateUniqueConstraint(PlainEntity<? extends PlainEntity> entity, Optional<? extends PlainEntity> dbResult, String msg) {
         if (!(dbResult.isEmpty() || (entity.getId() != null && dbResult.get().getId().equals(entity.getId())))) {
