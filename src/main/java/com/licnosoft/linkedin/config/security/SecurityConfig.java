@@ -1,7 +1,12 @@
 package com.licnosoft.linkedin.config.security;
 
 import com.licnosoft.linkedin.config.Constants;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -31,6 +36,11 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http, JwtTokenFilter jwtTokenFilter) throws Exception {
+        http
+                .csrf((csrf) -> csrf
+                .ignoringRequestMatchers("/*")
+        );
+
         if (authDisabled) {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
         } else {
@@ -81,6 +91,33 @@ public class SecurityConfig implements WebMvcConfigurer {
             dirName = dirName.replace("../", "");
         }
         registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/" + uploadPath + "/");
+    }
+
+    @Bean
+    public ServletWebServerFactory servletContainer(){
+
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        tomcat.addContextCustomizers((context) -> {
+            SecurityConstraint securityConstraint = new SecurityConstraint();
+            securityConstraint.setUserConstraint("CONFIDENTIAL");
+            SecurityCollection collection = new SecurityCollection();
+            collection.addPattern("/*");
+            securityConstraint.addCollection(collection);
+            context.addConstraint(securityConstraint);}
+        );
+
+        tomcat.addAdditionalTomcatConnectors(redirectConnector());
+        return tomcat;
+
+    }
+    @Bean
+    public Connector redirectConnector(){
+        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
+        connector.setScheme("http");
+        connector.setPort(2222);
+        connector.setSecure(false);
+        connector.setRedirectPort(8443);
+        return connector;
     }
 
 }
