@@ -40,7 +40,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String requestUUIDHeader = request.getHeader("UUID");
 
         if (requestTokenHeader == null) {
             chain.doFilter(request, response);
@@ -55,8 +54,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         UserInfoDTO dto = jwtUtil.decodeJwtToUserInfo(requestTokenHeader.substring(7));
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
-//            User user = userService.findByUsernameAndType(dto.getUsername(), UserType.STATE_EMPLOYEE);
-            User user = userService.findEntityByUsername(dto.getUsername());
+            User user = userService.findEntityByEmailAndPassword(dto.getEmail(),dto.getPassword());
 
             UsernamePasswordAuthenticationToken authentication;
             authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());

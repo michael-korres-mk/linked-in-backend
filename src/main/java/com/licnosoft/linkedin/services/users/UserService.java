@@ -33,7 +33,7 @@ public interface UserService {
 
     ToggleEntityDTO toggleEnabled(ToggleEntityDTO dto);
 
-    UserDTO save(UserDTO dto, boolean insert);
+    UserDTO save(UserInfoDTO dto, boolean insert);
 
     User save(User entity);
 
@@ -48,4 +48,5 @@ public interface UserService {
 
     boolean isUserProfessional(User user);
 
+    UserDTO loginUser(String token, String email, String password);
 }
