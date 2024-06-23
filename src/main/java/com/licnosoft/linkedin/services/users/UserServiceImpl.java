@@ -1,0 +1,189 @@
+package com.licnosoft.linkedin.services.users;
+
+import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
+import com.licnosoft.linkedin.config.exceptions.AppValidationException;
+import com.licnosoft.linkedin.domain.enumeration.UserRole;
+import com.licnosoft.linkedin.domain.users.User;
+import com.licnosoft.linkedin.model.auth.UserInfoDTO;
+import com.licnosoft.linkedin.model.general.PlainEntityDTO;
+import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.users.UserDTO;
+import com.licnosoft.linkedin.repository.users.UserRepository;
+import com.licnosoft.linkedin.util.Utilities;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+
+@Service
+@Transactional
+public class UserServiceImpl implements UserService {
+
+    @Value("${app.auth-disabled:false}")
+    boolean authDisabled;
+
+    private final UserRepository entityRepository;
+    private final ModelMapper modelMapper;
+
+    public UserServiceImpl(UserRepository entityRepository, ModelMapper modelMapper) {
+        this.entityRepository = entityRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public Page<UserDTO> search(String searchTerm,Boolean enabled, Pageable pageable) {
+        return entityRepository.search(searchTerm, enabled, pageable)
+                .map(entity -> modelMapper.map(entity, UserDTO.class));
+    }
+
+    @Override
+    public List<PlainEntityDTO> findAll() {
+        return entityRepository.findAll().stream().map(PlainEntityDTO::new).toList();
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return entityRepository.findAll(pageable);
+    }
+
+    @Override
+    public UserDTO findById(Long id) {
+        return modelMapper.map(findEntityById(id), UserDTO.class);
+    }
+
+    @Override
+    public User findEntityById(Long id) {
+        return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
+    }
+
+    @Override
+    public User findEntityByEmailAndPassword(String username,String password) {
+        return entityRepository.findByEmailAndPassword(username,password).orElseThrow(AppNotFoundException::new);
+    }
+
+    @Override
+    public User findEntityByUsername(String username) {
+        return entityRepository.findByUsername(username).orElseThrow(AppNotFoundException::new);
+    }
+
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return entityRepository.findByEmail(email);
+    }
+
+    @Override
+    public UserDTO loginUser(UserInfoDTO dto) {
+//        UserType type = dto.getType().equals(TokenServiceType.???) ? UserType.GUARDIAN : UserType.STATE_EMPLOYEE;
+        User user = findEntityByEmailAndPassword(dto.getUsername(),dto.getPassword());
+        return modelMapper.map(entityRepository.save(user), UserDTO.class);
+    }
+
+    @Override
+    public ToggleEntityDTO toggleEnabled(ToggleEntityDTO dto) {
+        User result = findEntityById(dto.getId());
+        result.setEnabled(dto.isEnabled());
+        return modelMapper.map(save(result), ToggleEntityDTO.class);
+    }
+
+
+    @Override
+    public UserDTO save(UserDTO dto, boolean insert) {
+        if (!Utilities.validateEntityDto(dto, insert)) {
+            throw new AppValidationException();
+        }
+        User entity = modelMapper.map(dto, User.class);
+//        if (insert) {
+//            entity.setCreationDate(LocalDateTime.now());
+//        } else if (dto.isEnabled()) {
+//            entity.setFailedLoginAttempts(0);
+//            entity.setLockedDate(null);
+//        }
+//
+//        entity.getUserRoles().forEach(role -> {
+//            role.setUser(entity);
+//            if (role.getAssignDate() == null) {
+//                role.setAssignDate(LocalDate.now());
+//            }
+//        });
+
+        return modelMapper.map(save(entity), UserDTO.class);
+    }
+
+    @Override
+    public User save(User entity) {
+        if (!validateFields(entity)) {
+            throw new AppValidationException();
+        }
+
+        Utilities.validateUniqueConstraint(entity, entityRepository.findByUsername(entity.getUsername()), "Υφίσταται ήδη χρήστης με το συγκεκριμένο username!");
+
+        return entityRepository.save(entity);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        entityRepository.deleteById(id);
+    }
+
+    private boolean validateFields(User entity) {
+        return entity.getUsername() != null;
+    }
+
+    @Override
+    public User getOptionalLoggedUser() {
+        return getLoggedUser(true);
+    }
+
+    @Override
+    public User getLoggedUser() {
+        if (authDisabled) {
+            //admin
+            return entityRepository.findById(1L).orElse(null);
+            //professional
+//            return entityRepository.findById(2L).orElse(null);
+        }
+        return getLoggedUser(false);
+    }
+
+    private User getLoggedUser(boolean optional) {
+        User user = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User pUser) {
+            user = pUser;
+        }
+        if (!optional && user == null) {
+            throw new AppNotFoundException();
+        }
+        return user;
+    }
+
+//    @Override
+//    public String getLoggedAfm() {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if (authentication != null && authentication.getPrincipal() instanceof String afm) {
+//            return afm;
+//        } else {
+//            throw new AppNotFoundException();
+//        }
+//    }
+
+    @Override
+    public boolean isUserAdmin(User user) {
+        return user.getUserRole() == UserRole.ADMIN;
+    }
+
+    @Override
+    public boolean isUserProfessional(User user) {
+        return user.getUserRole() == UserRole.PROFESSIONAL;
+    }
+
+}
