@@ -46,6 +46,8 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @Column(name = "enabled")
     private boolean enabled;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserContact> contacts;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -118,7 +120,9 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setEnabled(boolean enabled) {this.enabled = enabled;}
 
+    public List<UserContact> getContacts() {return contacts;}
 
+    public void setContacts(List<UserContact> contacts) {this.contacts = contacts;}
 
     @Override
     public boolean equals(Object o) {

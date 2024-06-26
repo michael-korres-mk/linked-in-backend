@@ -6,7 +6,8 @@ public class Constants {
     public static final String FILES_ENDPOINT = "files/";
     public static final String APP_TIMEZONE = "Europe/Athens";
     public static final String ADMIN_EMAIL = "";
-    public static final int NOTIFICATION_FRESHNESS_DAYS = 30;
+    public static final long NOTIFICATION_FRESHNESS_DAYS = 30;
+	public static final long CHAT_RECENCY_DAYS = 20;
     public static final String MEETING_SLOT_OVERLAP_ERROR = "Η καταχώρηση διαθεσιμότητας δεν μπορεί να ολοκληρωθεί, το διάστημα διαθεσιμότητας υπερκαλύπτετε από άλλη καταχωρημένη διαθεσιμότητα.";
     public static final String MEETING_SLOT_START_AFTER_END_ERROR = "Η καταχώρηση διαθεσιμότητας δεν μπορεί να ολοκληρωθεί, η ημερομηνία λήξης δεν μπορεί να προηγείται της ημερομηνία έναρξης.";
     public static final String MEETING_SLOT_START_END_PAST_ERROR = "Η καταχώρηση διαθεσιμότητας δεν μπορεί να ολοκληρωθεί, η ημερομηνία έναρξης/λήξης δεν μπορεί να είναι παρελθοντική.";

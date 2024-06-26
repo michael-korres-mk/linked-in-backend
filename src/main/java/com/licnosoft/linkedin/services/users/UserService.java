@@ -5,6 +5,7 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.users.UserContactDTO;
 import com.licnosoft.linkedin.model.users.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -49,4 +50,6 @@ public interface UserService {
     boolean isUserProfessional(User user);
 
     UserDTO loginUser(String token, String email, String password);
+
+	List<UserContactDTO> getUserContacts();
 }
