@@ -14,7 +14,8 @@ public interface NotificationRecipientRepository extends JpaRepository<Notificat
     Optional<NotificationRecipient> findByUser_IdAndNotification_Id(Long userId, Long notificationId);
 
     @Query("""
-            SELECT nr FROM NotificationRecipient nr JOIN nr.notification n WHERE nr.user.id = :userId AND nr.dismissedDate IS NULL
+            SELECT nr FROM NotificationRecipient nr JOIN nr.notification n WHERE nr.user.id = :userId 
+            AND nr.dismissedDate IS NULL
             AND n.creationDate >= :startDate
             """)
     List<NotificationRecipient> getFreshNotifications(@Param("userId") Long userId, @Param("startDate") LocalDateTime startDate);

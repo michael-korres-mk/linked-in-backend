@@ -12,13 +12,12 @@ import java.time.LocalDateTime;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    @Query(
-            """
+    @Query("""
             SELECT n FROM Notification n JOIN n.recipients nr WHERE (:searchTerm is null or n.title LIKE %:searchTerm%)
             AND (:kind is null or n.kind = :kind)
             AND (:userId is null or nr.user.id = :userId)
-            AND (:createdFrom is null or n.creationDate >= :createdFrom)
-            AND (:createdTo is null or n.creationDate <= :createdTo)
+            AND (cast(:createdFrom as date) is null or n.creationDate >= :createdFrom)
+            AND (cast(:createdTo as date) is null or n.creationDate <= :createdTo)
             GROUP BY n
             """)
     Page<Notification> findUserNotifications(

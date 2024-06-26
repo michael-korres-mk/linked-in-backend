@@ -36,7 +36,6 @@ public class NotificationController {
     public ResponseEntity<Page<NotificationDTO>> findAllPaged(
             @RequestParam(value = "q", required = false) String searchTerm,
             @RequestParam(value = "notificationkind", required = false) NotificationKind kind,
-            @RequestParam(value = "organization", required = false) Long organizationId,
             @RequestParam(value = "createdfrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdFrom,
             @RequestParam(value = "createdto", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate createdTo, Pageable pageable) {
 

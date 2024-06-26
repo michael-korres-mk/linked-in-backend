@@ -27,9 +27,6 @@ public class NotificationRecipient implements Serializable {
     @NotNull(message = ValidationErrorMessages.USER_NOT_BLANK)
     private User user;
 
-    @Column(name = "sent_date")
-    private LocalDateTime sentDate;
-
     @Column(name = "read_date")
     private LocalDateTime readDate;
 
@@ -67,10 +64,6 @@ public class NotificationRecipient implements Serializable {
     public void setNotification(Notification notification) {
         this.notification = notification;
     }
-
-    public LocalDateTime getSentDate() {return sentDate;}
-
-    public void setSentDate(LocalDateTime sentDate) {this.sentDate = sentDate;}
 
     public LocalDateTime getReadDate() {
         return readDate;
