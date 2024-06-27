@@ -9,25 +9,27 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "user_contacts")
-public class UserContact implements Serializable{
+public class UserContact implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@Column(name = "user_id")
+	@JoinColumn(name = "user_id")
 	private User user;
 
-	@Column(name = "contact_id")
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "contact_id")
 	private User contact;
 
 	@Column(name = "creation_date")
 	private LocalDateTime creationDate;
+	@Column(name = "connection_date")
+	private LocalDateTime connectionDate;
 
-	@Column(name = "chat_id")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "chat_id")
 	private Chat chat;
 
 	public Long getId() {return id;}
@@ -49,6 +51,10 @@ public class UserContact implements Serializable{
 	public Chat getChat() {return chat;}
 
 	public void setChat(Chat chat) {this.chat = chat;}
+
+	public LocalDateTime getConnectionDate() {return connectionDate;}
+
+	public void setConnectionDate(LocalDateTime connectionDate) {this.connectionDate = connectionDate;}
 
 	@Override
 	public boolean equals(Object o) {

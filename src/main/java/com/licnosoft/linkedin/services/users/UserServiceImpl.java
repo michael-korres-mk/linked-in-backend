@@ -69,8 +69,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findEntityByEmailAndPassword(String username,String password) {
-        return entityRepository.findByEmailAndPassword(username,password).orElseThrow(AppNotFoundException::new);
+    public User findEntityByEmailAndPassword(String email,String password) {
+        return entityRepository.findByEmailAndPassword(email,password).orElseThrow(AppNotFoundException::new);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
             info = jwtUtil.decodeJwtToUserInfo(token);
         }
         else {
-            info = new UserInfoDTO(email, password, null, null, null);
+            info = new UserInfoDTO(email, password);
         }
 
         UserDTO dto = loginUser(info);

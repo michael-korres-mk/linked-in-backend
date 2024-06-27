@@ -47,7 +47,7 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     private boolean enabled;
 
     @OneToMany(mappedBy = "user")
-    private List<UserContact> contacts;
+    private List<UserContact> contacts = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

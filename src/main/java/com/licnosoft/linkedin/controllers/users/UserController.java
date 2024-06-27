@@ -40,8 +40,8 @@ public class UserController {
                 search(searchTerm, enabled, pageable), HttpStatus.OK);
     }
 
-    @GetMapping("/users/contacts")
-    public ResponseEntity<List<UserContactDTO>> getContacts() {
+    @GetMapping("/contacts/list")
+    public ResponseEntity<List<UserContactDTO>> getUserContacts() {
         return new ResponseEntity<>(entityService.getUserContacts(), HttpStatus.OK);
     }
 

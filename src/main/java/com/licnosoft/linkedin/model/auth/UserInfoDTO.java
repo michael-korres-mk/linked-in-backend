@@ -16,12 +16,9 @@ public class UserInfoDTO extends EntityDTO {
 
     public UserInfoDTO() {}
 
-    public UserInfoDTO(String subject,String password, String firstName, String lastName, String role) {
-        this.username = subject;
+    public UserInfoDTO(String email, String password) {
+        this.email = email;
         this.password = password;
-        this.firstName = Objects.equals(firstName, "null") ? null : firstName;
-        this.lastName = lastName;
-        this.role = role;
     }
 
     public String getFirstName() {
