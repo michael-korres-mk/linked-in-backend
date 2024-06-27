@@ -36,6 +36,7 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public ChatDTO getChatHistory(Long contactId) {
-		return modelMapper.map(entityRepository.getChatByContact(userService.findEntityById(contactId)),ChatDTO.class);
+		var userId = userService.getLoggedUser().getId();
+		return modelMapper.map(entityRepository.getChatByContact(userId,contactId),ChatDTO.class);
 	}
 }

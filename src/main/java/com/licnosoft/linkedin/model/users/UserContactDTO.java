@@ -1,6 +1,5 @@
 package com.licnosoft.linkedin.model.users;
 
-import com.licnosoft.linkedin.model.chats.ChatDTO;
 import com.licnosoft.linkedin.model.general.EntityDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 
@@ -10,7 +9,6 @@ public class UserContactDTO extends EntityDTO {
 	protected PlainEntityDTO user;
 	protected PlainEntityDTO contact;
 	protected LocalDateTime creationDate;
-	protected ChatDTO chat;
 
 	public PlainEntityDTO getUser() {return user;}
 
@@ -24,7 +22,4 @@ public class UserContactDTO extends EntityDTO {
 
 	public void setCreationDate(LocalDateTime creationDate) {this.creationDate = creationDate;}
 
-	public ChatDTO getChat() {return chat;}
-
-	public void setChat(ChatDTO chat) {this.chat = chat;}
 }

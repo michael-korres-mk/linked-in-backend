@@ -1,6 +1,6 @@
 package com.licnosoft.linkedin.domain.users;
 
-import com.licnosoft.linkedin.domain.Chat;
+import com.licnosoft.linkedin.domain.chats.Chat;
 import jakarta.persistence.*;
 
 import java.io.Serializable;

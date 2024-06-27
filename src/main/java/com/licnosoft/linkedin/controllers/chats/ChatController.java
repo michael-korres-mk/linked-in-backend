@@ -20,12 +20,12 @@ public class ChatController {
         this.entityService = entityService;
     }
 
-    @GetMapping("/chats/recent/list")
+    @GetMapping("/recent/list")
     public ResponseEntity<List<ChatDTO>> getRecentChats() {
         return new ResponseEntity<>(entityService.getRecentChats(), HttpStatus.OK);
     }
 
-    @GetMapping("/chats/history/{contactId}")
+    @GetMapping("/history/{contactId}")
     public ResponseEntity<ChatDTO> getChatHistory(@PathVariable Long contactId) {
         return new ResponseEntity<>(entityService.getChatHistory(contactId), HttpStatus.OK);
     }
