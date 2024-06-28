@@ -13,6 +13,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -37,9 +39,9 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain configure(HttpSecurity http, JwtTokenFilter jwtTokenFilter) throws Exception {
         http
-                .csrf((csrf) -> csrf
-                .ignoringRequestMatchers("/*")
-        );
+            .csrf(AbstractHttpConfigurer::disable).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
+
 
         if (authDisabled) {
             http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
@@ -50,9 +52,6 @@ public class SecurityConfig implements WebMvcConfigurer {
                             // public endpoints
                             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                             .requestMatchers("/ws/**").permitAll()
-                            .requestMatchers("/taxis").permitAll()
-                            .requestMatchers("/psd").permitAll()
-                            .requestMatchers("/eschools/**").permitAll()
                             .requestMatchers("/evictcacheimmediate").permitAll()
                             .requestMatchers("/jwt/**").permitAll()
                             .requestMatchers("/" + Constants.UPLOAD_FOLDER + "/**").permitAll()

@@ -3,13 +3,12 @@ package com.licnosoft.linkedin.model.auth;
 
 import com.licnosoft.linkedin.model.general.EntityDTO;
 
-import java.util.Objects;
-
 public class UserInfoDTO extends EntityDTO {
     protected String firstName;
     protected String lastName;
     protected String username;
     protected String role;
+    protected String mobile;
     protected String email;
     protected String password;
     protected String confirmPassword;
@@ -56,6 +55,10 @@ public class UserInfoDTO extends EntityDTO {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getMobile() {return mobile;}
+
+    public void setMobile(String mobile) {this.mobile = mobile;}
 
     public String getEmail() {
         return email;
