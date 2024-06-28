@@ -13,6 +13,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
     @Query("SELECT c FROM Chat c WHERE c.contact.user.id = :userId AND c.lastMessage.creationDate >= :startDate")
     List<Chat> getRecentChats(@Param("userId") Long userId, @Param("startDate") LocalDateTime startDate);
 
-    @Query("SELECT c FROM Chat c WHERE c.contact.user.id = :userId AND c.contact.contact.id = :contactId")
+    @Query("SELECT c FROM Chat c WHERE c.contact.user.id = :userId AND c.contact.recipient.id = :contactId")
     Chat getChatByContact(@Param("userId") Long userId,@Param("contactId") Long contactId);
 }

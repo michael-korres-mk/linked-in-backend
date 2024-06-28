@@ -11,9 +11,15 @@ public class UserDTO extends EntityDTO {
     protected String firstName;
     protected String lastName;
     protected String username;
+    protected String role;
     protected String email;
     protected String mobile;
     protected boolean enabled;
+    // TODO: Add enabled/disabled (public/private)
+    protected String workExperience;
+    protected String education;
+    protected String skills;
+
     protected String token;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
@@ -107,4 +113,20 @@ public class UserDTO extends EntityDTO {
     public String getToken() {return token;}
 
     public void setToken(String token) {this.token = token;}
+
+    public String getWorkExperience() {return workExperience;}
+
+    public void setWorkExperience(String workExperience) {this.workExperience = workExperience;}
+
+    public String getEducation() {return education;}
+
+    public void setEducation(String education) {this.education = education;}
+
+    public String getSkills() {return skills;}
+
+    public void setSkills(String skills) {this.skills = skills;}
+
+    public String getRole() {return role;}
+
+    public void setRole(String role) {this.role = role;}
 }

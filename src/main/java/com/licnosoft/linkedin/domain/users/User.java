@@ -49,6 +49,15 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @OneToMany(mappedBy = "user")
     private List<UserContact> contacts = new ArrayList<>();
 
+    @Column(name = "workExperience")
+    private String workExperience;
+
+    @Column(name = "education")
+    private String education;
+
+    @Column(name = "skills")
+    private String skills;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<UserRole> authorities = new HashSet<>();
@@ -123,6 +132,18 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     public List<UserContact> getContacts() {return contacts;}
 
     public void setContacts(List<UserContact> contacts) {this.contacts = contacts;}
+
+    public String getWorkExperience() {return workExperience;}
+
+    public void setWorkExperience(String workExperience) {this.workExperience = workExperience;}
+
+    public String getEducation() {return education;}
+
+    public void setEducation(String education) {this.education = education;}
+
+    public String getSkills() {return skills;}
+
+    public void setSkills(String skills) {this.skills = skills;}
 
     @Override
     public boolean equals(Object o) {

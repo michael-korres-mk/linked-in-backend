@@ -61,6 +61,12 @@ public class UserController {
         return new ResponseEntity<>(entityService.findById(entityService.getLoggedUser().getId()), HttpStatus.OK);
     }
 
+    @PutMapping("/profile")
+    public ResponseEntity<UserDTO> updateProfile(@RequestBody UserInfoDTO dto) {
+        User user = entityService.getLoggedUser();
+        dto.setId(user.getId());
+        return handleSaveRequest(dto, false);
+    }
 
     @PutMapping("/enabled")
 //    @PreAuthorize("hasAuthority('users_edit')")
@@ -84,13 +90,6 @@ public class UserController {
     @PutMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<UserDTO> update(@RequestBody UserInfoDTO dto) {
-        return handleSaveRequest(dto, false);
-    }
-
-    @PutMapping("/profile")
-    public ResponseEntity<UserDTO> updateProfile(@RequestBody UserInfoDTO dto) {
-        User user = entityService.getLoggedUser();
-        dto.setId(user.getId());
         return handleSaveRequest(dto, false);
     }
 
