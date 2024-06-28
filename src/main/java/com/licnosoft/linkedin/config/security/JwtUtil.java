@@ -45,8 +45,7 @@ public class JwtUtil {
         DecodedJWT decodedJWT;
         decodedJWT = JWT.decode(jwt);
 
-        return new UserInfoDTO(decodedJWT.getSubject(),
-                decodedJWT.getClaim("password").asString(),decodedJWT.getClaim("firstname").asString(), decodedJWT.getClaim("lastname").asString(), decodedJWT.getClaim("role").asString());
+        return new UserInfoDTO(decodedJWT.getClaim("email").asString(),decodedJWT.getClaim("password").asString());
     }
 
 //    public TokenServiceType getTokenType(String jwt) {

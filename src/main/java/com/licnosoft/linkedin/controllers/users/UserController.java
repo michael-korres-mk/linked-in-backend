@@ -4,20 +4,18 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.users.UserContactDTO;
 import com.licnosoft.linkedin.model.users.UserDTO;
 import com.licnosoft.linkedin.services.users.UserService;
-import com.licnosoft.linkedin.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -40,6 +38,11 @@ public class UserController {
             @RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
         return new ResponseEntity<>(entityService.
                 search(searchTerm, enabled, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/contacts/list")
+    public ResponseEntity<List<UserContactDTO>> getUserContacts() {
+        return new ResponseEntity<>(entityService.getUserContacts(), HttpStatus.OK);
     }
 
     @GetMapping("/list")

@@ -8,6 +8,7 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.users.UserContactDTO;
 import com.licnosoft.linkedin.model.users.UserDTO;
 import com.licnosoft.linkedin.repository.users.UserRepository;
 import com.licnosoft.linkedin.util.Utilities;
@@ -68,8 +69,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findEntityByEmailAndPassword(String username,String password) {
-        return entityRepository.findByEmailAndPassword(username,password).orElseThrow(AppNotFoundException::new);
+    public User findEntityByEmailAndPassword(String email,String password) {
+        return entityRepository.findByEmailAndPassword(email,password).orElseThrow(AppNotFoundException::new);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class UserServiceImpl implements UserService {
             info = jwtUtil.decodeJwtToUserInfo(token);
         }
         else {
-            info = new UserInfoDTO(email, password, null, null, null);
+            info = new UserInfoDTO(email, password);
         }
 
         UserDTO dto = loginUser(info);
@@ -178,7 +179,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-//    @Override
+    @Override
+    public List<UserContactDTO> getUserContacts() {
+        return this.getLoggedUser().getContacts().stream().map(uc -> modelMapper.map(uc,UserContactDTO.class)).toList();
+    }
+
+    //    @Override
 //    public String getLoggedAfm() {
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        if (authentication != null && authentication.getPrincipal() instanceof String afm) {
