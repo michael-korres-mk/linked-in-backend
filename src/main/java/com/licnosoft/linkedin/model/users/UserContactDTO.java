@@ -7,16 +7,16 @@ import java.time.LocalDateTime;
 
 public class UserContactDTO extends EntityDTO {
 	protected PlainEntityDTO user;
-	protected PlainEntityDTO contact;
+	protected PlainEntityDTO recipient;
 	protected LocalDateTime creationDate;
 
 	public PlainEntityDTO getUser() {return user;}
 
 	public void setUser(PlainEntityDTO user) {this.user = user;}
 
-	public PlainEntityDTO getContact() {return contact;}
+	public PlainEntityDTO getRecipient() {return recipient;}
 
-	public void setContact(PlainEntityDTO contact) {this.contact = contact;}
+	public void setRecipient(PlainEntityDTO recipient) {this.recipient = recipient;}
 
 	public LocalDateTime getCreationDate() {return creationDate;}
 

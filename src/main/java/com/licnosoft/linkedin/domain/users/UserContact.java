@@ -20,8 +20,8 @@ public class UserContact implements Serializable {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "contact_id")
-	private User contact;
+	@JoinColumn(name = "recipient_id")
+	private User recipient;
 
 	@Column(name = "creation_date")
 	private LocalDateTime creationDate;
@@ -40,9 +40,9 @@ public class UserContact implements Serializable {
 
 	public void setUser(User user) {this.user = user;}
 
-	public User getContact() {return contact;}
+	public User getRecipient() {return recipient;}
 
-	public void setContact(User contact) {this.contact = contact;}
+	public void setRecipient(User contact) {this.recipient = contact;}
 
 	public LocalDateTime getCreationDate() {return creationDate;}
 
@@ -74,7 +74,7 @@ public class UserContact implements Serializable {
 		return "UserContact{" +
 				"id=" + id +
 				", user=" + user +
-				", contact=" + contact +
+				", contact=" + recipient +
 				'}';
 	}
 }
