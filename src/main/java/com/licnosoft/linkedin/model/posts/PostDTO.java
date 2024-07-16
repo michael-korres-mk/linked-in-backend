@@ -8,7 +8,7 @@ public class PostDTO extends BasicEntityDTO {
 
 	protected List<BasicEntityDTO> comments;
 
-	public List<BasicEntityDTO> getComments() {return comments;}
+	public List<BasicEntityDTO> getComments() { return comments; }
 
-	public void setComments(List<BasicEntityDTO> comments) {this.comments = comments;}
+	public void setComments(List<BasicEntityDTO> comments) { this.comments = comments; }
 }

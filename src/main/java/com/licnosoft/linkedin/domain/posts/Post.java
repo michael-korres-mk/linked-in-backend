@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,8 +40,8 @@ public class Post implements Serializable {
 	@Column(name = "modification_date")
 	private LocalDateTime modificationDate = LocalDateTime.now();
 
-	@OneToMany(mappedBy = "post")
-	private List<Comment> comments;
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private List<Comment> comments = new ArrayList<>();
 
 	public Long getId() {return id;}
 

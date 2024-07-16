@@ -46,7 +46,7 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserContact> contacts = new ArrayList<>();
 
     @Column(name = "workExperience")

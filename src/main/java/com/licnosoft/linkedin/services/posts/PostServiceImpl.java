@@ -25,9 +25,8 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public Page<PostDTO> search(String searchTerm, Boolean enabled, Pageable pageable) {
-//		return entityRepository.search(searchTerm, enabled, pageable)
-//				.map(entity -> modelMapper.map(entity, PostDTO.class));
-		return null;
+		return entityRepository.search(searchTerm, enabled, pageable)
+				.map(entity -> modelMapper.map(entity, PostDTO.class));
 	}
 
 	@Override
