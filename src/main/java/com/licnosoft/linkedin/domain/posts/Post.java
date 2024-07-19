@@ -30,7 +30,7 @@ public class Post implements Serializable {
 	@Column(name = "enabled")
 	private boolean enabled;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "creator_id")
 	private User creator;
 

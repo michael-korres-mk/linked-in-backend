@@ -21,7 +21,7 @@ public class Comment implements Serializable {
 	@Column(name = "creation_date")
 	private LocalDateTime creationDate;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "creator_id")
 	private User creator;
 
