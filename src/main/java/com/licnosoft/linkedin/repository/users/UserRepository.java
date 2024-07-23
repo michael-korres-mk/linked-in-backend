@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -19,10 +18,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
-    @Query("SELECT a FROM User a " +
-            "WHERE (:searchTerm IS NULL) " +
-//          "OR UPPER(COALESCE(a.firstName, '') || COALESCE(a.lastName, '') || COALESCE(a.email, '')) LIKE '%' || UPPER(:searchTerm) || '%') " +
-            "AND (:enabled IS NULL OR a.enabled = :enabled)")
+    @Query("""
+      SELECT u FROM User u WHERE (cast(:searchTerm as string) IS NULL)
+      OR (UPPER(COALESCE(u.firstName, '') || COALESCE(u.lastName, '') || COALESCE(u.email, '')) LIKE '%' || UPPER(cast(:searchTerm as string)) || '%')
+      AND (:enabled IS NULL OR u.enabled = :enabled)
+    """)
     Page<User> search(@Param("searchTerm") String searchTerm, @Param("enabled") Boolean enabled, Pageable pageable);
 
 
