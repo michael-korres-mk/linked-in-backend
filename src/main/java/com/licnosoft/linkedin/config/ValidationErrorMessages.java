@@ -1,7 +1,5 @@
 package com.licnosoft.linkedin.config;
 
-import com.licnosoft.linkedin.config.security.ValidationConstants;
-
 public class ValidationErrorMessages {
 
     public static final String UPDATED_NOT_BLANK = "Ο αριθμός ενημερωμένων εγγραφών eregistry δε μπορεί να είναι κενός";

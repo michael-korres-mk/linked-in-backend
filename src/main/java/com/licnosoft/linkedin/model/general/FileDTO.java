@@ -3,9 +3,10 @@ package com.licnosoft.linkedin.model.general;
 
 import com.licnosoft.linkedin.domain.enumeration.FileType;
 
-public class FileDTO extends PlainEntityDTO {
+public class FileDTO extends BasicEntityDTO {
     private FileType fileType;
     private String filePath;
+    private Float size;
 
     public FileType getFileType() {
         return fileType;
@@ -22,6 +23,10 @@ public class FileDTO extends PlainEntityDTO {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
+    public Float getSize() {return size;}
+
+    public void setSize(Float size) {this.size = size;}
 
     @Override
     public boolean equals(Object o) {

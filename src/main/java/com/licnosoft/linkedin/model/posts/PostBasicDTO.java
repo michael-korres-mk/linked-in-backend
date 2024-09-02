@@ -5,7 +5,7 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 
 import java.util.List;
 
-public class PostDTO extends BasicEntityDTO {
+public class PostBasicDTO extends BasicEntityDTO {
 	protected PlainEntityDTO creator;
 	protected List<CommentDTO> comments;
 

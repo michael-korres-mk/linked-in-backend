@@ -3,6 +3,8 @@ package com.licnosoft.linkedin.config;
 public class Constants {
     public static final String APP_NAME = "Fullcalendar";
     public static final String UPLOAD_FOLDER = "uploads/";
+    public static final String DIRECTORY_SLASH = "/";
+
     public static final String FILES_ENDPOINT = "files/";
     public static final String APP_TIMEZONE = "Europe/Athens";
     public static final String ADMIN_EMAIL = "";
