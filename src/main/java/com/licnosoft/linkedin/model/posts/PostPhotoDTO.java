@@ -5,13 +5,13 @@ import com.licnosoft.linkedin.model.general.FileDTO;
 
 public class PostPhotoDTO extends EntityDTO {
 	protected Integer ordering;
-	protected FileDTO photo;
+	protected FileDTO file;
 
 	public Integer getOrdering() {return ordering;}
 
 	public void setOrdering(Integer ordering) {this.ordering = ordering;}
 
-	public FileDTO getPhoto() {return photo;}
+	public FileDTO getFile() {return file;}
 
-	public void setPhoto(FileDTO photo) {this.photo = photo;}
+	public void setFile(FileDTO file) {this.file = file;}
 }

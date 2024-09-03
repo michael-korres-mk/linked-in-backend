@@ -36,7 +36,7 @@ public class PostPhoto implements Serializable, PlainEntity<PostPhoto>{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "file_id")
     @NotNull(message = ValidationErrorMessages.URL_NOT_BLANK)
-    private File photo;
+    private File file;
 
     @Override
     public Long getId() {
@@ -64,12 +64,12 @@ public class PostPhoto implements Serializable, PlainEntity<PostPhoto>{
         this.ordering = ordering;
     }
 
-    public File getPhoto() {
-        return photo;
+    public File getFile() {
+        return file;
     }
 
-    public void setPhoto(File photo) {
-        this.photo = photo;
+    public void setFile(File file) {
+        this.file = file;
     }
 
     public Post getPost() {
