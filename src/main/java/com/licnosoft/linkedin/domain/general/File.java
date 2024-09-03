@@ -3,7 +3,6 @@ package com.licnosoft.linkedin.domain.general;
 
 import com.licnosoft.linkedin.config.ValidationErrorMessages;
 import com.licnosoft.linkedin.domain.enumeration.FileType;
-import com.licnosoft.linkedin.domain.posts.Post;
 import com.licnosoft.linkedin.domain.users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -46,20 +45,14 @@ public class File implements Serializable, PlainEntity<File> {
     @NotNull(message = ValidationErrorMessages.CREATOR_NOT_BLANK)
     private User creator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post; // if it has a post,it belongs to that post.Otherwise,it is a profile picture of that user.
+    public File() {}
 
-    public File() {
-    }
-
-    public File(String title, String filePath, FileType fileType, Long size, User creator,Post post) {
+    public File(String title, String filePath, FileType fileType, Long size, User creator) {
         this.title = title;
         this.filePath = filePath;
         this.fileType = fileType;
         this.size = size;
         this.creator = creator;
-        this.post = post;
     }
 
     public Long getId() {
@@ -122,10 +115,6 @@ public class File implements Serializable, PlainEntity<File> {
     public boolean isEnabled() {
         return true;
     }
-
-    public Post getPost() {return post;}
-
-    public void setPost(Post post) {this.post = post;}
 
     @Override
     public boolean equals(Object o) {

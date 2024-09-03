@@ -62,10 +62,10 @@ public class FileServiceImpl implements FileService {
         entityRepository.deleteById(id);
     }
 
-	@Override
-	public void updateFilePost(Long fileId, Long postId) {
-        entityRepository.updateFilePost(fileId, postId);
-	}
+//	@Override
+//	public void updateFilePost(Long fileId, Long postId) {
+//        entityRepository.updateFilePost(fileId, postId);
+//	}
 
 	//    @Override
 //    public void updateFileOrganization(Long fileId, Long organizationId) {

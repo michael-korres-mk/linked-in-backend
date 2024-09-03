@@ -90,7 +90,7 @@ public class PostServiceImpl implements PostService{
 			if (insert) {
 				postPhoto.setId(null);
 			}
-			fileService.updateFilePost(postPhoto.getFile().getId(), entity.getId());
+//			fileService.updateFilePost(postPhoto.getFile().getId(), entity.getId());
 			postPhoto.setPost(entity);
 		});
 

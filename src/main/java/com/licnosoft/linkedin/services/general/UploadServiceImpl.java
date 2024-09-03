@@ -79,7 +79,7 @@ public class UploadServiceImpl implements UploadService {
         String fileName = generateFileName(fileType);
         User user = userService.getLoggedUser();
         // First save the file in the database in order to prevent cleaning if failed to save locally
-        File fileEntity = fileService.save(new File(file.getOriginalFilename(), fileName, FileType.valueOf(fileType.toUpperCase()), file.getSize(), user,postId==null? null : postService.findEntityById(postId)));
+        File fileEntity = fileService.save(new File(file.getOriginalFilename(), fileName, FileType.valueOf(fileType.toUpperCase()), file.getSize(), user));
         saveLocalFile(file, fileName);
         log.info("File uploaded successfully, {}", fileEntity.getTitle());
         return modelMapper.map(fileEntity, FileDTO.class);

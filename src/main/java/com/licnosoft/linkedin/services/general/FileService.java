@@ -24,7 +24,7 @@ public interface FileService {
     File save(File entity);
 
     void deleteById(Long id);
-    void updateFilePost(Long fileId, Long postId);
+//    void updateFilePost(Long fileId, Long postId);
 
 //    void updateFileOrganization(Long fileId, Long organizationId);
 

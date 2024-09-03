@@ -6,7 +6,6 @@ import com.licnosoft.linkedin.domain.general.File;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -29,9 +28,9 @@ public interface FileRepository extends JpaRepository<File, Long> {
     @Query("SELECT a FROM File a WHERE a.filePath = :filePath AND (:userId is null or a.creator IS NULL or a.creator.id = :userId)")
     Optional<File> findByPathAndUser(String filePath, Long userId);
 
-    @Modifying
-    @Query("UPDATE File a SET a.post.id = :postId WHERE a.id = :fileId")
-    void updateFilePost(@Param("fileId") Long fileId, @Param("postId") Long postId);
+//    @Modifying
+//    @Query("UPDATE File a SET a.post.id = :postId WHERE a.id = :fileId")
+//    void updateFilePost(@Param("fileId") Long fileId, @Param("postId") Long postId);
 
 //    @Modifying
 //    @Query("UPDATE File a SET a.organization.id = :organizationId WHERE a.id = :fileId")

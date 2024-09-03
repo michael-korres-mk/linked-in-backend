@@ -33,9 +33,9 @@ public class PostPhoto implements Serializable, PlainEntity<PostPhoto>{
     @NotNull(message = ValidationErrorMessages.ANNOUNCEMENT_NOT_BLANK)
     private Post post;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "file_id")
-    @NotNull(message = ValidationErrorMessages.URL_NOT_BLANK)
+    @NotNull(message = ValidationErrorMessages.FILE_NOT_BLANK)
     private File file;
 
     @Override
