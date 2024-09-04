@@ -40,6 +40,12 @@ public class PostController {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
 	}
 
+	@PutMapping("/like/enabled")
+	//    @PreAuthorize("hasAuthority('users_edit')")
+	public ResponseEntity<ToggleEntityDTO> toggleLike(@RequestBody ToggleEntityDTO dto) {
+		return new ResponseEntity<>(entityService.toggleLike(dto), HttpStatus.OK);
+	}
+
 	@PutMapping("/enabled")
 //    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<ToggleEntityDTO> toggleEnabled(@RequestBody ToggleEntityDTO dto) {

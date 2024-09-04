@@ -45,6 +45,9 @@ public class Post implements Serializable {
 	private List<Comment> comments = new ArrayList<>();
 
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private List<Like> likes = new ArrayList<>();
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<PostPhoto> photos = new ArrayList<>();
 
 	@Column(name = "is_job_opening")
@@ -81,6 +84,10 @@ public class Post implements Serializable {
 	public List<Comment> getComments() {return comments;}
 
 	public void setComments(List<Comment> comments) {this.comments = comments;}
+
+	public List<Like> getLikes() {return likes;}
+
+	public void setLikes(List<Like> likes) {this.likes = likes;}
 
 	public boolean isJobOpening() {return jobOpening;}
 

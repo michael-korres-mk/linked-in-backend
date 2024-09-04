@@ -2,10 +2,12 @@ package com.licnosoft.linkedin.services.posts;
 
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
+import com.licnosoft.linkedin.domain.posts.Like;
 import com.licnosoft.linkedin.domain.posts.Post;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.posts.PostDetailedDTO;
+import com.licnosoft.linkedin.repository.posts.LikeRepository;
 import com.licnosoft.linkedin.repository.posts.PostRepository;
 import com.licnosoft.linkedin.services.general.FileService;
 import com.licnosoft.linkedin.services.users.UserService;
@@ -20,12 +22,14 @@ import java.time.LocalDateTime;
 @Service
 public class PostServiceImpl implements PostService{
 
+	private final LikeRepository likeRepository;
 	private final PostRepository entityRepository;
 	private final ModelMapper modelMapper;
 	private final UserService userService;
 	private final FileService fileService;
 
-	public PostServiceImpl(PostRepository entityRepository, ModelMapper modelMapper, UserService userService, FileService fileService) {
+	public PostServiceImpl(LikeRepository likeRepository, PostRepository entityRepository, ModelMapper modelMapper, UserService userService, FileService fileService) {
+		this.likeRepository = likeRepository;
 		this.entityRepository = entityRepository;
 		this.modelMapper = modelMapper;
 		this.userService = userService;
@@ -117,6 +121,27 @@ public class PostServiceImpl implements PostService{
 	public void deleteById(Long id) {
 		entityRepository.deleteById(id);
 	}
+
+	@Override
+	public ToggleEntityDTO toggleLike(ToggleEntityDTO dto){
+		User loggedUser = userService.getLoggedUser();
+		LocalDateTime creationDate = LocalDateTime.now();
+
+		Like like = likeRepository.findByCreator_Id(loggedUser.getId()).orElse(new Like());
+
+		if(like.getId() != null){
+			if(dto.isEnabled()) like.setCreationDate(creationDate);
+			else like.setCreationDate(null);
+		}
+		else {
+			like.setPost(findEntityById(dto.getId()));
+			like.setCreator(loggedUser);
+			like.setCreationDate(creationDate);
+		}
+
+		return modelMapper.map(likeRepository.save(like),ToggleEntityDTO.class);
+	}
+
 
 	private boolean validateFields(Post entity){
 		return (entity.getCreator() != null) && (entity.getCreationDate() != null);

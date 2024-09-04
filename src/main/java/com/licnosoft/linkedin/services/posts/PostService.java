@@ -21,4 +21,5 @@ public interface PostService {
 
 	void deleteById(Long id);
 
+	ToggleEntityDTO toggleLike(ToggleEntityDTO dto);
 }
