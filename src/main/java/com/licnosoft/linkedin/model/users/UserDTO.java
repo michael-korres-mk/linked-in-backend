@@ -18,8 +18,11 @@ public class UserDTO extends EntityDTO {
     // TODO: Add enabled/disabled (public/private)
     protected String workExperience;
     protected String education;
-    protected String skills;
+    protected String jobTitle;
+    protected String company;
 
+
+    protected String skills;
     protected String token;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
@@ -121,6 +124,14 @@ public class UserDTO extends EntityDTO {
     public String getEducation() {return education;}
 
     public void setEducation(String education) {this.education = education;}
+
+    public String getJobTitle() {return jobTitle;}
+
+    public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
+
+    public String getCompany() {return company;}
+
+    public void setCompany(String company) {this.company = company;}
 
     public String getSkills() {return skills;}
 

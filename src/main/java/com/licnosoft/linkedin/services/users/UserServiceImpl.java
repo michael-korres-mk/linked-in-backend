@@ -8,7 +8,7 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.users.UserContactDTO;
+import com.licnosoft.linkedin.model.users.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserDTO;
 import com.licnosoft.linkedin.repository.users.UserRepository;
 import com.licnosoft.linkedin.util.Utilities;
@@ -180,8 +180,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserContactDTO> getUserContacts() {
-        return this.getLoggedUser().getContacts().stream().map(uc -> modelMapper.map(uc,UserContactDTO.class)).toList();
+    public List<UserConnectionDTO> getUserConnectionRequests(boolean accepted){
+        return this.getLoggedUser()
+                .getContacts()
+                .stream()
+                .filter(c -> accepted == (c.getConnectionDate() != null))
+                .map(uc -> modelMapper.map(uc,UserConnectionDTO.class))
+                .toList();
     }
 
     //    @Override

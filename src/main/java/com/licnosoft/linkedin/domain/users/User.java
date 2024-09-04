@@ -46,8 +46,14 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @Column(name = "enabled")
     private boolean enabled;
 
+    @Column(name = "job_title")
+    private String jobTitle;
+
+    @Column(name = "company")
+    private String company;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserContact> contacts = new ArrayList<>();
+    private List<UserConnection> contacts = new ArrayList<>();
 
     @Column(name = "workExperience")
     private String workExperience;
@@ -129,9 +135,9 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setEnabled(boolean enabled) {this.enabled = enabled;}
 
-    public List<UserContact> getContacts() {return contacts;}
+    public List<UserConnection> getContacts() {return contacts;}
 
-    public void setContacts(List<UserContact> contacts) {this.contacts = contacts;}
+    public void setContacts(List<UserConnection> contacts) {this.contacts = contacts;}
 
     public String getWorkExperience() {return workExperience;}
 
@@ -140,6 +146,14 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     public String getEducation() {return education;}
 
     public void setEducation(String education) {this.education = education;}
+
+    public String getJobTitle() {return jobTitle;}
+
+    public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
+
+    public String getCompany() {return company;}
+
+    public void setCompany(String company) {this.company = company;}
 
     public String getSkills() {return skills;}
 

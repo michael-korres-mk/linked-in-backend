@@ -5,10 +5,11 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 
 import java.time.LocalDateTime;
 
-public class UserContactDTO extends EntityDTO {
+public class UserConnectionDTO extends EntityDTO {
 	protected PlainEntityDTO user;
 	protected PlainEntityDTO recipient;
 	protected LocalDateTime creationDate;
+	protected LocalDateTime connectionDate;
 
 	public PlainEntityDTO getUser() {return user;}
 
@@ -22,4 +23,7 @@ public class UserContactDTO extends EntityDTO {
 
 	public void setCreationDate(LocalDateTime creationDate) {this.creationDate = creationDate;}
 
+	public LocalDateTime getConnectionDate() {return connectionDate;}
+
+	public void setConnectionDate(LocalDateTime connectionDate) {this.connectionDate = connectionDate;}
 }

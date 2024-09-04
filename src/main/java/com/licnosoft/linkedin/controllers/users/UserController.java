@@ -4,7 +4,7 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.users.UserContactDTO;
+import com.licnosoft.linkedin.model.users.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserDTO;
 import com.licnosoft.linkedin.services.users.UserService;
 import org.slf4j.Logger;
@@ -41,10 +41,13 @@ public class UserController {
     }
 
     @GetMapping("/contacts/list")
-    public ResponseEntity<List<UserContactDTO>> getUserContacts() {
-        return new ResponseEntity<>(entityService.getUserContacts(), HttpStatus.OK);
+    public ResponseEntity<List<UserConnectionDTO>> getUserConnections() {
+        return new ResponseEntity<>(entityService.getUserConnectionRequests(true), HttpStatus.OK);
     }
-
+    @GetMapping("/connection-requests/list")
+    public ResponseEntity<List<UserConnectionDTO>> getUserConnectionRequests() {
+        return new ResponseEntity<>(entityService.getUserConnectionRequests(false), HttpStatus.OK);
+    }
     @GetMapping("/list")
     public ResponseEntity<List<PlainEntityDTO>> getPlainList() {
         return new ResponseEntity<>(entityService.findAll(), HttpStatus.OK);
