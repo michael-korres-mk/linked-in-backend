@@ -1,6 +1,7 @@
 package com.licnosoft.linkedin.domain.posts;
 
 import com.licnosoft.linkedin.config.ValidationErrorMessages;
+import com.licnosoft.linkedin.domain.general.PostPhoto;
 import com.licnosoft.linkedin.domain.users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -43,6 +44,15 @@ public class Post implements Serializable {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<Comment> comments = new ArrayList<>();
 
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private List<Like> likes = new ArrayList<>();
+
+	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private List<PostPhoto> photos = new ArrayList<>();
+
+	@Column(name = "is_job_opening")
+	private boolean jobOpening;
+
 	public Long getId() {return id;}
 
 	public void setId(Long id) {this.id = id;}
@@ -74,6 +84,18 @@ public class Post implements Serializable {
 	public List<Comment> getComments() {return comments;}
 
 	public void setComments(List<Comment> comments) {this.comments = comments;}
+
+	public List<Like> getLikes() {return likes;}
+
+	public void setLikes(List<Like> likes) {this.likes = likes;}
+
+	public boolean isJobOpening() {return jobOpening;}
+
+	public void setJobOpening(boolean jobOpening) {this.jobOpening = jobOpening;}
+
+	public List<PostPhoto> getPhotos() {return photos;}
+
+	public void setPhotos(List<PostPhoto> photos) {this.photos = photos;}
 
 	@Override
 	public boolean equals(Object o) {

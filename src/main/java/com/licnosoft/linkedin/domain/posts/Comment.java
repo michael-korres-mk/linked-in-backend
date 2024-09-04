@@ -29,6 +29,15 @@ public class Comment implements Serializable {
 	@JoinColumn(name = "post_id")
 	private Post post;
 
+	public Comment() {}
+
+	public Comment(String description, LocalDateTime creationDate, User creator, Post post) {
+		this.description = description;
+		this.creationDate = creationDate;
+		this.creator = creator;
+		this.post = post;
+	}
+
 	public Long getId() {return id;}
 
 	public void setId(Long id) {this.id = id;}

@@ -1,7 +1,8 @@
 package com.licnosoft.linkedin.controllers.posts;
 
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.posts.PostDTO;
+import com.licnosoft.linkedin.model.posts.CommentDTO;
+import com.licnosoft.linkedin.model.posts.PostDetailedDTO;
 import com.licnosoft.linkedin.services.posts.PostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,7 @@ public class PostController {
 
 	@GetMapping("/search")
 //    @PreAuthorize("hasAuthority('ADMIN')")
-	public ResponseEntity<Page<PostDTO>> search(
+	public ResponseEntity<Page<PostDetailedDTO>> search(
 			@RequestParam(value = "q", required = false) String searchTerm,
 			@RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
 		return new ResponseEntity<>(entityService.
@@ -36,8 +37,20 @@ public class PostController {
 
 	@GetMapping("/{id}")
 //    @PreAuthorize("hasAuthority('users_view')")
-	public ResponseEntity<PostDTO> findById(@PathVariable Long id) {
+	public ResponseEntity<PostDetailedDTO> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
+	}
+
+	@PostMapping("/comment")
+	//    @PreAuthorize("hasAuthority('users_edit')")
+	public ResponseEntity<CommentDTO> comment(@RequestBody CommentDTO dto) {
+		return new ResponseEntity<>(entityService.comment(dto), HttpStatus.OK);
+	}
+
+	@PutMapping("/like/enabled")
+	//    @PreAuthorize("hasAuthority('users_edit')")
+	public ResponseEntity<ToggleEntityDTO> toggleLike(@RequestBody ToggleEntityDTO dto) {
+		return new ResponseEntity<>(entityService.toggleLike(dto), HttpStatus.OK);
 	}
 
 	@PutMapping("/enabled")
@@ -55,17 +68,17 @@ public class PostController {
 
 	@PostMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-	public ResponseEntity<PostDTO> save(@RequestBody PostDTO dto) {
+	public ResponseEntity<PostDetailedDTO> save(@RequestBody PostDetailedDTO dto) {
 		return handleSaveRequest(dto, true);
 	}
 
 	@PutMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-	public ResponseEntity<PostDTO> update(@RequestBody PostDTO dto) {
+	public ResponseEntity<PostDetailedDTO> update(@RequestBody PostDetailedDTO dto) {
 		return handleSaveRequest(dto, false);
 	}
 
-	private ResponseEntity<PostDTO> handleSaveRequest(PostDTO dto, boolean insert) {
+	private ResponseEntity<PostDetailedDTO> handleSaveRequest(PostDetailedDTO dto, boolean insert) {
 		log.debug("REST request to save a user : {}", dto);
 		return new ResponseEntity<>(entityService.save(dto, insert), HttpStatus.CREATED);
 	}
