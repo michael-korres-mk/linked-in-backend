@@ -1,6 +1,7 @@
 package com.licnosoft.linkedin.controllers.posts;
 
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.posts.CommentDTO;
 import com.licnosoft.linkedin.model.posts.PostDetailedDTO;
 import com.licnosoft.linkedin.services.posts.PostService;
 import org.slf4j.Logger;
@@ -38,6 +39,12 @@ public class PostController {
 //    @PreAuthorize("hasAuthority('users_view')")
 	public ResponseEntity<PostDetailedDTO> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
+	}
+
+	@PostMapping("/comment")
+	//    @PreAuthorize("hasAuthority('users_edit')")
+	public ResponseEntity<CommentDTO> comment(@RequestBody CommentDTO dto) {
+		return new ResponseEntity<>(entityService.comment(dto), HttpStatus.OK);
 	}
 
 	@PutMapping("/like/enabled")

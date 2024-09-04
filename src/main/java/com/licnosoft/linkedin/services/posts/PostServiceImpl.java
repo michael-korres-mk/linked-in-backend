@@ -2,11 +2,14 @@ package com.licnosoft.linkedin.services.posts;
 
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
+import com.licnosoft.linkedin.domain.posts.Comment;
 import com.licnosoft.linkedin.domain.posts.Like;
 import com.licnosoft.linkedin.domain.posts.Post;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.posts.CommentDTO;
 import com.licnosoft.linkedin.model.posts.PostDetailedDTO;
+import com.licnosoft.linkedin.repository.posts.CommentRepository;
 import com.licnosoft.linkedin.repository.posts.LikeRepository;
 import com.licnosoft.linkedin.repository.posts.PostRepository;
 import com.licnosoft.linkedin.services.general.FileService;
@@ -22,15 +25,17 @@ import java.time.LocalDateTime;
 @Service
 public class PostServiceImpl implements PostService{
 
-	private final LikeRepository likeRepository;
 	private final PostRepository entityRepository;
+	private final LikeRepository likeRepository;
+	private final CommentRepository commentRepository;
 	private final ModelMapper modelMapper;
 	private final UserService userService;
 	private final FileService fileService;
 
-	public PostServiceImpl(LikeRepository likeRepository, PostRepository entityRepository, ModelMapper modelMapper, UserService userService, FileService fileService) {
-		this.likeRepository = likeRepository;
+	public PostServiceImpl(PostRepository entityRepository, LikeRepository likeRepository, CommentRepository commentRepository, ModelMapper modelMapper, UserService userService, FileService fileService) {
 		this.entityRepository = entityRepository;
+		this.likeRepository = likeRepository;
+		this.commentRepository = commentRepository;
 		this.modelMapper = modelMapper;
 		this.userService = userService;
 		this.fileService = fileService;
@@ -60,24 +65,6 @@ public class PostServiceImpl implements PostService{
 		return modelMapper.map(save(result), ToggleEntityDTO.class);
 	}
 
-
-//	@Override
-//	public PostBasicDTO save(PostBasicDTO dto, boolean insert) {
-//		if (!Utilities.validateEntityDto(dto, insert)) {
-//			throw new AppValidationException();
-//		}
-//
-//		Post entity = modelMapper.map(dto, Post.class);
-//
-//		if(insert){
-//			User creator = userService.getLoggedUser();
-//			entity.setCreator(creator);
-//			entity.setCreationDate(LocalDateTime.now());
-//		}
-//
-//		return modelMapper.map(save(entity), PostBasicDTO.class);
-//	}
-
 	@Override
 	public PostDetailedDTO save(PostDetailedDTO dto, boolean insert) {
 		if (!Utilities.validateEntityDto(dto, insert)) {
@@ -91,12 +78,18 @@ public class PostServiceImpl implements PostService{
 			entity.setEnabled(true);
 		}
 		entity.getPhotos().forEach(postPhoto -> {
-			if (insert) {
-				postPhoto.setId(null);
-			}
 //			fileService.updateFilePost(postPhoto.getFile().getId(), entity.getId());
 			postPhoto.setPost(entity);
 		});
+
+		entity.getComments().forEach(comment -> {
+			comment.setPost(entity);
+		});
+
+		entity.getLikes().forEach(like -> {
+			like.setPost(entity);
+		});
+
 
 		PostDetailedDTO postDetailedDTO = modelMapper.map(save(entity), PostDetailedDTO.class);
 
@@ -120,6 +113,14 @@ public class PostServiceImpl implements PostService{
 	@Override
 	public void deleteById(Long id) {
 		entityRepository.deleteById(id);
+	}
+
+	@Override
+	public CommentDTO comment(CommentDTO dto){
+		User loggedUser = userService.getLoggedUser();
+		LocalDateTime creationDate = LocalDateTime.now();
+		Comment comment = new Comment(dto.getDescription(),creationDate,loggedUser,findEntityById(dto.getPostId()));
+		return modelMapper.map(commentRepository.save(comment),CommentDTO.class);
 	}
 
 	@Override

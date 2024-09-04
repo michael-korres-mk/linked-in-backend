@@ -2,6 +2,7 @@ package com.licnosoft.linkedin.services.posts;
 
 import com.licnosoft.linkedin.domain.posts.Post;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.posts.CommentDTO;
 import com.licnosoft.linkedin.model.posts.PostDetailedDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,4 +23,6 @@ public interface PostService {
 	void deleteById(Long id);
 
 	ToggleEntityDTO toggleLike(ToggleEntityDTO dto);
+
+	CommentDTO comment(CommentDTO dto);
 }
