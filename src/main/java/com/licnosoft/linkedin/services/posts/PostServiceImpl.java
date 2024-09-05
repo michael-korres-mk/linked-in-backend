@@ -126,7 +126,7 @@ public class PostServiceImpl implements PostService{
 		User loggedUser = userService.getLoggedUser();
 		LocalDateTime creationDate = LocalDateTime.now();
 
-		Like like = likeRepository.findByCreator_Id(loggedUser.getId()).orElse(new Like());
+		Like like = likeRepository.findByCreator_IdAndPost_Id(loggedUser.getId(),dto.getId()).orElse(new Like());
 
 		if(like.getId() != null){
 			if(dto.isEnabled()) like.setCreationDate(creationDate);
