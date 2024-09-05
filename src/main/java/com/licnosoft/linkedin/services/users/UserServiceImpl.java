@@ -8,8 +8,9 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserConnectionDTO;
-import com.licnosoft.linkedin.model.users.UserDTO;
+import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.repository.users.UserRepository;
 import com.licnosoft.linkedin.util.Utilities;
 import org.modelmapper.ModelMapper;
@@ -43,9 +44,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> search(String searchTerm,Boolean enabled, Pageable pageable) {
+    public Page<UserBasicDTO> search(String searchTerm, Boolean enabled, Pageable pageable) {
         return entityRepository.search(searchTerm, enabled, pageable)
-                .map(entity -> modelMapper.map(entity, UserDTO.class));
+                .map(entity -> modelMapper.map(entity, UserBasicDTO.class));
     }
 
     @Override
@@ -59,8 +60,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findById(Long id) {
-        return modelMapper.map(findEntityById(id), UserDTO.class);
+    public UserDetailedDTO findById(Long id) {
+        return modelMapper.map(findEntityById(id), UserDetailedDTO.class);
     }
 
     @Override
@@ -78,21 +79,20 @@ public class UserServiceImpl implements UserService {
         return entityRepository.findByUsername(username).orElseThrow(AppNotFoundException::new);
     }
 
-
     @Override
     public Optional<User> findByEmail(String email) {
         return entityRepository.findByEmail(email);
     }
 
     @Override
-    public UserDTO loginUser(UserInfoDTO dto) {
+    public UserBasicDTO loginUser(UserInfoDTO dto) {
 //        UserType type = dto.getType().equals(TokenServiceType.???) ? UserType.GUARDIAN : UserType.STATE_EMPLOYEE;
         User user = findEntityByEmailAndPassword(dto.getEmail(),dto.getPassword());
-        return modelMapper.map(entityRepository.save(user), UserDTO.class);
+        return modelMapper.map(entityRepository.save(user), UserBasicDTO.class);
     }
 
     @Override
-    public UserDTO loginUser(String token, String email, String password) {
+    public UserBasicDTO loginUser(String token, String email, String password) {
         UserInfoDTO info;
         if(token != null){
             info = jwtUtil.decodeJwtToUserInfo(token);
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
             info = new UserInfoDTO(email, password);
         }
 
-        UserDTO dto = loginUser(info);
+        UserBasicDTO dto = loginUser(info);
 
         dto.setToken(jwtUtil.generateToken(info));
 
@@ -117,7 +117,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO save(UserInfoDTO dto, boolean insert) {
+    public UserDetailedDTO save(UserInfoDTO dto, boolean insert) {
         if (!Utilities.validateEntityDto(dto, insert)) {
             throw new AppValidationException();
         }
@@ -125,8 +125,8 @@ public class UserServiceImpl implements UserService {
         if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) {
             throw new AppValidationException();
         }
-
-        UserDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDTO.class);
+        // TODO: Check if connections get properly saved
+        UserDetailedDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDetailedDTO.class);
         userDTO.setToken(jwtUtil.generateToken(dto));
         return userDTO;
     }
@@ -182,7 +182,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserConnectionDTO> getUserConnectionRequests(boolean accepted){
         return this.getLoggedUser()
-                .getContacts()
+                .getConnections()
                 .stream()
                 .filter(c -> accepted == (c.getConnectionDate() != null))
                 .map(uc -> modelMapper.map(uc,UserConnectionDTO.class))

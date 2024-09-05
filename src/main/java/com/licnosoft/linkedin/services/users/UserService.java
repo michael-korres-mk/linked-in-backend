@@ -6,7 +6,7 @@ import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserConnectionDTO;
-import com.licnosoft.linkedin.model.users.UserDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,13 +15,13 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Page<UserDTO> search(String searchTerm, Boolean enabled, Pageable pageable);
+    Page<UserBasicDTO> search(String searchTerm, Boolean enabled, Pageable pageable);
 
     Page<User> findAll(Pageable pageable);
 
     List<PlainEntityDTO> findAll();
 
-    UserDTO findById(Long id);
+    UserBasicDTO findById(Long id);
 
     User findEntityById(Long id);
 
@@ -30,11 +30,11 @@ public interface UserService {
 
     Optional<User> findByEmail(String email);
 
-    UserDTO loginUser(UserInfoDTO dto);
+    UserBasicDTO loginUser(UserInfoDTO dto);
 
     ToggleEntityDTO toggleEnabled(ToggleEntityDTO dto);
 
-    UserDTO save(UserInfoDTO dto, boolean insert);
+    UserBasicDTO save(UserInfoDTO dto, boolean insert);
 
     User save(User entity);
 
@@ -49,7 +49,7 @@ public interface UserService {
 
     boolean isUserProfessional(User user);
 
-    UserDTO loginUser(String token, String email, String password);
+    UserBasicDTO loginUser(String token, String email, String password);
 
 	List<UserConnectionDTO> getUserConnectionRequests(boolean accepted);
 

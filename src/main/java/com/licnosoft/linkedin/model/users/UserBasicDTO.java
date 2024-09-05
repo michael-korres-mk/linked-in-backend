@@ -7,7 +7,7 @@ import com.licnosoft.linkedin.model.general.EntityDTO;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserDTO extends EntityDTO {
+public class UserBasicDTO extends EntityDTO {
     protected String firstName;
     protected String lastName;
     protected String username;
@@ -20,8 +20,6 @@ public class UserDTO extends EntityDTO {
     protected String education;
     protected String jobTitle;
     protected String company;
-
-
     protected String skills;
     protected String token;
 

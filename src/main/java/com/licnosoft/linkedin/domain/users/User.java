@@ -53,9 +53,9 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     private String company;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserConnection> contacts = new ArrayList<>();
+    private List<UserConnection> connections = new ArrayList<>();
 
-    @Column(name = "workExperience")
+    @Column(name = "work_experience")
     private String workExperience;
 
     @Column(name = "education")
@@ -135,9 +135,9 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setEnabled(boolean enabled) {this.enabled = enabled;}
 
-    public List<UserConnection> getContacts() {return contacts;}
+    public List<UserConnection> getConnections() {return connections;}
 
-    public void setContacts(List<UserConnection> contacts) {this.contacts = contacts;}
+    public void setConnections(List<UserConnection> connections) {this.connections = connections;}
 
     public String getWorkExperience() {return workExperience;}
 
