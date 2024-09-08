@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
+    // TODO: Fix the query
     @Query("""
       SELECT u FROM User u WHERE (cast(:searchTerm as string) IS NULL)
       OR (UPPER(COALESCE(u.firstName, '') || COALESCE(u.lastName, '') || COALESCE(u.email, '')) LIKE '%' || UPPER(cast(:searchTerm as string)) || '%')
