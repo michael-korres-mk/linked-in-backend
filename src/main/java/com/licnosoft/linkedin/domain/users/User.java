@@ -52,8 +52,8 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @Column(name = "company")
     private String company;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserConnection> connections = new ArrayList<>();
+    @Column(name = "about_me")
+    private String aboutMe;
 
     @Column(name = "work_experience")
     private String workExperience;
@@ -63,6 +63,12 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     @Column(name = "skills")
     private String skills;
+
+    @Column(name = "projects")
+    private String projects;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserConnection> connections = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -158,6 +164,14 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     public String getSkills() {return skills;}
 
     public void setSkills(String skills) {this.skills = skills;}
+
+    public String getAboutMe() {return aboutMe;}
+
+    public void setAboutMe(String aboutMe) {this.aboutMe = aboutMe;}
+
+    public String getProjects() {return projects;}
+
+    public void setProjects(String projects) {this.projects = projects;}
 
     @Override
     public boolean equals(Object o) {

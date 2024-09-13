@@ -22,6 +22,8 @@ public class UserBasicDTO extends EntityDTO {
     protected String jobTitle;
     protected String company;
     protected String skills;
+    protected String aboutMe;
+    private String projects;
     protected String token;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
@@ -139,4 +141,12 @@ public class UserBasicDTO extends EntityDTO {
     public UserRole getUserRole() {return userRole;}
 
     public void setUserRole(UserRole userRole) {this.userRole = userRole;}
+
+    public String getAboutMe() {return aboutMe;}
+
+    public void setAboutMe(String aboutMe) {this.aboutMe = aboutMe;}
+
+    public String getProjects() {return projects;}
+
+    public void setProjects(String projects) {this.projects = projects;}
 }
