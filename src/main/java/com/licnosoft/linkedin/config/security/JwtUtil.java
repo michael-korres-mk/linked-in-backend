@@ -30,7 +30,7 @@ public class JwtUtil {
        return JWT.create()
                .withSubject(userInfo.getEmail())
                .withClaim("firstname", userInfo.getFirstName())
-               .withClaim("role", userInfo.getRole())
+               .withClaim("role", userInfo.getUserRole().toString())
                .withClaim("lastname", userInfo.getLastName())
                .withExpiresAt(new Date(System.currentTimeMillis() + expiration * 1000))
                .withIssuedAt(new Date(System.currentTimeMillis()))

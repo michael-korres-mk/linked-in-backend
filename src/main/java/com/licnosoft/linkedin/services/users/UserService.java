@@ -1,6 +1,7 @@
 package com.licnosoft.linkedin.services.users;
 
 
+import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Page<UserBasicDTO> search(String searchTerm, Boolean enabled, Pageable pageable);
+    Page<UserBasicDTO> search(String searchTerm, String firstName, String lastName, String email, UserRole userRole, Boolean enabled, Pageable pageable);
 
     Page<User> findAll(Pageable pageable);
 

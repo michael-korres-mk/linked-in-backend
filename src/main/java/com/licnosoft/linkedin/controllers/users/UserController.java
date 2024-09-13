@@ -1,11 +1,12 @@
 package com.licnosoft.linkedin.controllers.users;
 
+import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.users.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
+import com.licnosoft.linkedin.model.users.UserConnectionDTO;
 import com.licnosoft.linkedin.services.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -35,9 +37,18 @@ public class UserController {
 //    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Page<UserBasicDTO>> search(
             @RequestParam(value = "q", required = false) String searchTerm,
+            @RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "userRole", required = false) UserRole userRole,
             @RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
         return new ResponseEntity<>(entityService.
-                search(searchTerm, enabled, pageable), HttpStatus.OK);
+                search(searchTerm, firstName,  lastName,  email, userRole, enabled, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/roles/list")
+    public ResponseEntity<List<UserRole>> getSubmissionStatuses() {
+        return new ResponseEntity<>(Arrays.stream(UserRole.values()).toList(), HttpStatus.OK);
     }
 
     @GetMapping("/contacts/list")

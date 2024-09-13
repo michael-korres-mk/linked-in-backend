@@ -2,6 +2,7 @@ package com.licnosoft.linkedin.model.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.licnosoft.linkedin.config.Constants;
+import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.model.general.EntityDTO;
 
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ public class UserBasicDTO extends EntityDTO {
     protected String firstName;
     protected String lastName;
     protected String username;
-    protected String role;
+    protected UserRole userRole;
     protected String email;
     protected String mobile;
     protected boolean enabled;
@@ -135,7 +136,7 @@ public class UserBasicDTO extends EntityDTO {
 
     public void setSkills(String skills) {this.skills = skills;}
 
-    public String getRole() {return role;}
+    public UserRole getUserRole() {return userRole;}
 
-    public void setRole(String role) {this.role = role;}
+    public void setUserRole(UserRole userRole) {this.userRole = userRole;}
 }

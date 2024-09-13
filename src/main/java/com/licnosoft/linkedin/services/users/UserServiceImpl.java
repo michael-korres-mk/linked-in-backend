@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserBasicDTO> search(String searchTerm, Boolean enabled, Pageable pageable) {
-        return entityRepository.search(searchTerm, enabled, pageable)
+    public Page<UserBasicDTO> search(String searchTerm,String firstName, String lastName, String email, UserRole userRole, Boolean enabled, Pageable pageable) {
+        return entityRepository.search(searchTerm, firstName, lastName, email, userRole, enabled, pageable)
                 .map(entity -> modelMapper.map(entity, UserBasicDTO.class));
     }
 
