@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -82,14 +83,11 @@ public class PostServiceImpl implements PostService{
 			postPhoto.setPost(entity);
 		});
 
-		entity.getComments().forEach(comment -> {
-			comment.setPost(entity);
-		});
+		List<Comment> comments = entity.getComments();
+		if(comments != null && !comments.isEmpty()) comments.forEach(comment -> comment.setPost(entity));
 
-		entity.getLikes().forEach(like -> {
-			like.setPost(entity);
-		});
-
+		List<Like> likes = entity.getLikes();
+		if(likes != null && !likes.isEmpty()) likes.forEach(like -> like.setPost(entity));
 
 		PostDetailedDTO postDetailedDTO = modelMapper.map(save(entity), PostDetailedDTO.class);
 
@@ -128,7 +126,7 @@ public class PostServiceImpl implements PostService{
 		User loggedUser = userService.getLoggedUser();
 		LocalDateTime creationDate = LocalDateTime.now();
 
-		Like like = likeRepository.findByCreator_Id(loggedUser.getId()).orElse(new Like());
+		Like like = likeRepository.findByCreator_IdAndPost_Id(loggedUser.getId(),dto.getId()).orElse(new Like());
 
 		if(like.getId() != null){
 			if(dto.isEnabled()) like.setCreationDate(creationDate);

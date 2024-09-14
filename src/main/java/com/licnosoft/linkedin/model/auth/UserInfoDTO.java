@@ -1,9 +1,9 @@
 package com.licnosoft.linkedin.model.auth;
 
 
-import com.licnosoft.linkedin.model.users.UserDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 
-public class UserInfoDTO extends UserDTO {
+public class UserInfoDTO extends UserBasicDTO {
     protected String password;
     protected String confirmPassword;
 

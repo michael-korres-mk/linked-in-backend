@@ -46,10 +46,16 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @Column(name = "enabled")
     private boolean enabled;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserContact> contacts = new ArrayList<>();
+    @Column(name = "job_title")
+    private String jobTitle;
 
-    @Column(name = "workExperience")
+    @Column(name = "company")
+    private String company;
+
+    @Column(name = "about_me")
+    private String aboutMe;
+
+    @Column(name = "work_experience")
     private String workExperience;
 
     @Column(name = "education")
@@ -57,6 +63,12 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     @Column(name = "skills")
     private String skills;
+
+    @Column(name = "projects")
+    private String projects;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserConnection> connections = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -129,9 +141,9 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setEnabled(boolean enabled) {this.enabled = enabled;}
 
-    public List<UserContact> getContacts() {return contacts;}
+    public List<UserConnection> getConnections() {return connections;}
 
-    public void setContacts(List<UserContact> contacts) {this.contacts = contacts;}
+    public void setConnections(List<UserConnection> connections) {this.connections = connections;}
 
     public String getWorkExperience() {return workExperience;}
 
@@ -141,9 +153,25 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setEducation(String education) {this.education = education;}
 
+    public String getJobTitle() {return jobTitle;}
+
+    public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
+
+    public String getCompany() {return company;}
+
+    public void setCompany(String company) {this.company = company;}
+
     public String getSkills() {return skills;}
 
     public void setSkills(String skills) {this.skills = skills;}
+
+    public String getAboutMe() {return aboutMe;}
+
+    public void setAboutMe(String aboutMe) {this.aboutMe = aboutMe;}
+
+    public String getProjects() {return projects;}
+
+    public void setProjects(String projects) {this.projects = projects;}
 
     @Override
     public boolean equals(Object o) {

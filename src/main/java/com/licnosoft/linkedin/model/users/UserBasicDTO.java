@@ -2,24 +2,28 @@ package com.licnosoft.linkedin.model.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.licnosoft.linkedin.config.Constants;
+import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.model.general.EntityDTO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class UserDTO extends EntityDTO {
+public class UserBasicDTO extends EntityDTO {
     protected String firstName;
     protected String lastName;
     protected String username;
-    protected String role;
+    protected UserRole userRole;
     protected String email;
     protected String mobile;
     protected boolean enabled;
     // TODO: Add enabled/disabled (public/private)
     protected String workExperience;
     protected String education;
+    protected String jobTitle;
+    protected String company;
     protected String skills;
-
+    protected String aboutMe;
+    private String projects;
     protected String token;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
@@ -122,11 +126,27 @@ public class UserDTO extends EntityDTO {
 
     public void setEducation(String education) {this.education = education;}
 
+    public String getJobTitle() {return jobTitle;}
+
+    public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
+
+    public String getCompany() {return company;}
+
+    public void setCompany(String company) {this.company = company;}
+
     public String getSkills() {return skills;}
 
     public void setSkills(String skills) {this.skills = skills;}
 
-    public String getRole() {return role;}
+    public UserRole getUserRole() {return userRole;}
 
-    public void setRole(String role) {this.role = role;}
+    public void setUserRole(UserRole userRole) {this.userRole = userRole;}
+
+    public String getAboutMe() {return aboutMe;}
+
+    public void setAboutMe(String aboutMe) {this.aboutMe = aboutMe;}
+
+    public String getProjects() {return projects;}
+
+    public void setProjects(String projects) {this.projects = projects;}
 }

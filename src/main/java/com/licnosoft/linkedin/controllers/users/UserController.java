@@ -1,11 +1,12 @@
 package com.licnosoft.linkedin.controllers.users;
 
+import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.users.UserContactDTO;
-import com.licnosoft.linkedin.model.users.UserDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
+import com.licnosoft.linkedin.model.users.UserConnectionDTO;
 import com.licnosoft.linkedin.services.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -33,18 +35,30 @@ public class UserController {
 
     @GetMapping("/search")
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Page<UserDTO>> search(
+    public ResponseEntity<Page<UserBasicDTO>> search(
             @RequestParam(value = "q", required = false) String searchTerm,
+            @RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "userRole", required = false) UserRole userRole,
             @RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
         return new ResponseEntity<>(entityService.
-                search(searchTerm, enabled, pageable), HttpStatus.OK);
+                search(searchTerm, firstName,  lastName,  email, userRole, enabled, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/roles/list")
+    public ResponseEntity<List<UserRole>> getSubmissionStatuses() {
+        return new ResponseEntity<>(Arrays.stream(UserRole.values()).toList(), HttpStatus.OK);
     }
 
     @GetMapping("/contacts/list")
-    public ResponseEntity<List<UserContactDTO>> getUserContacts() {
-        return new ResponseEntity<>(entityService.getUserContacts(), HttpStatus.OK);
+    public ResponseEntity<List<UserConnectionDTO>> getUserConnections() {
+        return new ResponseEntity<>(entityService.getUserConnectionRequests(true), HttpStatus.OK);
     }
-
+    @GetMapping("/connection-requests/list")
+    public ResponseEntity<List<UserConnectionDTO>> getUserConnectionRequests() {
+        return new ResponseEntity<>(entityService.getUserConnectionRequests(false), HttpStatus.OK);
+    }
     @GetMapping("/list")
     public ResponseEntity<List<PlainEntityDTO>> getPlainList() {
         return new ResponseEntity<>(entityService.findAll(), HttpStatus.OK);
@@ -52,17 +66,17 @@ public class UserController {
 
     @GetMapping("/{id}")
 //    @PreAuthorize("hasAuthority('users_view')")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<UserBasicDTO> findById(@PathVariable Long id) {
         return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<UserDTO> getUserProfile() {
+    public ResponseEntity<UserBasicDTO> getUserProfile() {
         return new ResponseEntity<>(entityService.findById(entityService.getLoggedUser().getId()), HttpStatus.OK);
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<UserDTO> updateProfile(@RequestBody UserInfoDTO dto) {
+    public ResponseEntity<UserBasicDTO> updateProfile(@RequestBody UserInfoDTO dto) {
         User user = entityService.getLoggedUser();
         dto.setId(user.getId());
         return handleSaveRequest(dto, false);
@@ -83,17 +97,17 @@ public class UserController {
 
     @PostMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-    public ResponseEntity<UserDTO> save(@RequestBody UserInfoDTO dto) {
+    public ResponseEntity<UserBasicDTO> save(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, true);
     }
 
     @PutMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-    public ResponseEntity<UserDTO> update(@RequestBody UserInfoDTO dto) {
+    public ResponseEntity<UserBasicDTO> update(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, false);
     }
 
-    private ResponseEntity<UserDTO> handleSaveRequest(UserInfoDTO dto, boolean insert) {
+    private ResponseEntity<UserBasicDTO> handleSaveRequest(UserInfoDTO dto, boolean insert) {
         log.debug("REST request to save a user : {}", dto);
         return new ResponseEntity<>(entityService.save(dto, insert), HttpStatus.CREATED);
     }

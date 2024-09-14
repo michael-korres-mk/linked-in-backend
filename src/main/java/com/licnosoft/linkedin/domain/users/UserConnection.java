@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_contacts")
-public class UserContact implements Serializable {
+@Table(name = "user_connections")
+public class UserConnection implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,7 +60,7 @@ public class UserContact implements Serializable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		UserContact that = (UserContact) o;
+		UserConnection that = (UserConnection) o;
 		return Objects.equals(id, that.id);
 	}
 
@@ -71,7 +71,7 @@ public class UserContact implements Serializable {
 
 	@Override
 	public String toString() {
-		return "UserContact{" +
+		return "UserConnection{" +
 				"id=" + id +
 				", user=" + user +
 				", contact=" + recipient +
