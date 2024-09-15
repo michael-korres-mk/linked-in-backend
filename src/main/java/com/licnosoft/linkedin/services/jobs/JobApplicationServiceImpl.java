@@ -43,9 +43,8 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
 	@Override
 	public JobApplicationDTO save(JobApplicationDTO dto, boolean insert) {
-		if (!Utilities.validateEntityDto(dto, insert)) {
-			throw new AppValidationException();
-		}
+		if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
+
 		User creator = userService.getLoggedUser();
 		JobApplication entity = modelMapper.map(dto, JobApplication.class);
 		if (insert) {
@@ -65,9 +64,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
 	@Override
 	public JobApplication save(JobApplication entity) {
-		if (!validateFields(entity)) {
-			throw new AppValidationException();
-		}
+		if (!validateFields(entity)) throw new AppValidationException();
 
 		return entityRepository.save(entity);
 	}

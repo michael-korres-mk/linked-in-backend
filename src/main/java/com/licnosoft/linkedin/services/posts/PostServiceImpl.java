@@ -68,9 +68,8 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public PostDetailedDTO save(PostDetailedDTO dto, boolean insert) {
-		if (!Utilities.validateEntityDto(dto, insert)) {
-			throw new AppValidationException();
-		}
+		if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
+
 		User creator = userService.getLoggedUser();
 		Post entity = modelMapper.map(dto, Post.class);
 		if (insert) {
@@ -100,9 +99,8 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public Post save(Post entity) {
-		if (!validateFields(entity)) {
-			throw new AppValidationException();
-		}
+		if (!validateFields(entity)) throw new AppValidationException();
+
 		entity.setModificationDate(LocalDateTime.now());
 
 		return entityRepository.save(entity);

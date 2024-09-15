@@ -1,5 +1,6 @@
 package com.licnosoft.linkedin.services.users;
 
+import com.licnosoft.linkedin.config.ValidationErrorMessages;
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
 import com.licnosoft.linkedin.config.security.JwtUtil;
@@ -121,13 +122,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailedDTO save(UserInfoDTO dto, boolean insert) {
-        if (!Utilities.validateEntityDto(dto, insert)) {
-            throw new AppValidationException();
-        }
+        if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
-        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) {
-            throw new AppValidationException();
-        }
+        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISSMATCH);
+
         // TODO: Check if connections get properly saved
         UserDetailedDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDetailedDTO.class);
         userDTO.setToken(jwtUtil.generateToken(dto));
@@ -136,12 +134,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User entity) {
-        if (!validateFields(entity)) {
-            throw new AppValidationException();
-        }
-
-        Utilities.validateUniqueConstraint(entity, entityRepository.findByUsername(entity.getUsername()), "Υφίσταται ήδη χρήστης με το συγκεκριμένο username!");
-
+        Utilities.validateUniqueConstraint(entity, findByEmail(entity.getEmail()), ValidationErrorMessages.USER_EMAIL_EXISTS);
         return entityRepository.save(entity);
     }
 

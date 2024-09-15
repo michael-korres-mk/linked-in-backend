@@ -1,12 +1,11 @@
 package com.licnosoft.linkedin.config;
 
 public class ValidationErrorMessages {
+    public static final String CONFIRM_PASSWORD_MISSMATCH = "Ο κωδικός και επιβεβαίωση κωδικού δε ταυτίζονται.";
+    public static final String USER_EMAIL_EXISTS = "Υφίσταται ήδη χρήστης με το συγκεκριμένο email.";
 
-    public static final String UPDATED_NOT_BLANK = "Ο αριθμός ενημερωμένων εγγραφών eregistry δε μπορεί να είναι κενός";
-    public static final String CREATED_NOT_BLANK = "Ο αριθμός δημιουργημένων εγγραφών eregistry δε μπορεί να είναι κενός";
-    public static final String DISABLED_NOT_BLANK = "Ο αριθμός απενεργοποιημένων εγγραφών eregistry δε μπορεί να είναι κενός";
 
-	private ValidationErrorMessages() {
+    private ValidationErrorMessages() {
         throw new IllegalStateException("Utility class");
     }
     // @NotBlank/@NotNull
