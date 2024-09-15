@@ -46,6 +46,19 @@ public class UserController {
                 search(searchTerm, firstName,  lastName,  email, userRole, enabled, pageable), HttpStatus.OK);
     }
 
+    @GetMapping("/as-list/search")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<UserBasicDTO>> asListSearch(
+            @RequestParam(value = "q", required = false) String searchTerm,
+            @RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "userRole", required = false) UserRole userRole,
+            @RequestParam(value = "enabled", required = false) Boolean enabled) {
+        return new ResponseEntity<>(entityService.
+                asListSearch(searchTerm, firstName,  lastName,  email, userRole, enabled), HttpStatus.OK);
+    }
+
     @GetMapping("/roles/list")
     public ResponseEntity<List<UserRole>> getSubmissionStatuses() {
         return new ResponseEntity<>(Arrays.stream(UserRole.values()).toList(), HttpStatus.OK);
@@ -88,7 +101,7 @@ public class UserController {
         return new ResponseEntity<>(entityService.toggleEnabled(dto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path={"/{id}","/as-list/{id}"})
 //    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         entityService.deleteById(id);
