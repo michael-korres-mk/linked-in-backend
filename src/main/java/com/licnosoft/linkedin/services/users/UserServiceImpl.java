@@ -85,10 +85,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserBasicDTO loginUser(UserInfoDTO dto) {
+    public UserInfoDTO loginUser(UserInfoDTO dto) {
 //        UserType type = dto.getType().equals(TokenServiceType.???) ? UserType.GUARDIAN : UserType.STATE_EMPLOYEE;
         User user = findEntityByEmailAndPassword(dto.getEmail(),dto.getPassword());
-        return modelMapper.map(entityRepository.save(user), UserBasicDTO.class);
+        return modelMapper.map(entityRepository.save(user), UserInfoDTO.class);
     }
 
     @Override
@@ -101,9 +101,12 @@ public class UserServiceImpl implements UserService {
             info = new UserInfoDTO(email, password);
         }
 
-        UserBasicDTO dto = loginUser(info);
+        UserInfoDTO dto = loginUser(info);
 
-        dto.setToken(jwtUtil.generateToken(info));
+        dto.setPassword(null);
+        dto.setConfirmPassword(null);
+
+        dto.setToken(jwtUtil.generateToken(dto));
 
         return dto;
     }
