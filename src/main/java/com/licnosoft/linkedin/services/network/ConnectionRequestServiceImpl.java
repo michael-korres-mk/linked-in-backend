@@ -32,7 +32,7 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 
 	@Override
 	public ConnectionRequest findEntityById(Long id) {
-		return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
+		return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε αίτημα σύνδεσης με το συγκεκριμένο id:" + id + "."));
 	}
 
 	@Override

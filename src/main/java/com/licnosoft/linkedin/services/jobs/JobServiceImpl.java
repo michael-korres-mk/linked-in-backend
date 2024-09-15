@@ -47,7 +47,7 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public Job findEntityById(Long id) {
-		return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
+		return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε αγγελία με αυτό το id: " + id + "."));
 	}
 
 	@Override
@@ -59,9 +59,8 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public JobDetailedDTO save(JobDetailedDTO dto, boolean insert) {
-		if (!Utilities.validateEntityDto(dto, insert)) {
-			throw new AppValidationException();
-		}
+		if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
+
 		User creator = userService.getLoggedUser();
 		Job entity = modelMapper.map(dto, Job.class);
 		if (insert) {
@@ -80,9 +79,7 @@ public class JobServiceImpl implements JobService {
 
 	@Override
 	public Job save(Job entity) {
-		if (!validateFields(entity)) {
-			throw new AppValidationException();
-		}
+		if (!validateFields(entity)) throw new AppValidationException();
 
 		return entityRepository.save(entity);
 	}

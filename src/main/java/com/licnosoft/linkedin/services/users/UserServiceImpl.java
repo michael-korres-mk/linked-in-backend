@@ -1,5 +1,6 @@
 package com.licnosoft.linkedin.services.users;
 
+import com.licnosoft.linkedin.config.ValidationErrorMessages;
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
 import com.licnosoft.linkedin.config.security.JwtUtil;
@@ -66,17 +67,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findEntityById(Long id) {
-        return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
+        return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε χρήστης με το συγκεκριμένο id:" + id + "."));
     }
 
     @Override
     public User findEntityByEmailAndPassword(String email,String password) {
-        return entityRepository.findByEmailAndPassword(email,password).orElseThrow(AppNotFoundException::new);
+        return entityRepository.findByEmailAndPassword(email,password).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε χρήστης με αυτό το email και κωδικό."));
     }
 
     @Override
     public User findEntityByUsername(String username) {
-        return entityRepository.findByUsername(username).orElseThrow(AppNotFoundException::new);
+        return entityRepository.findByUsername(username).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε χρήστης με αυτό το username: " + username +"."));
     }
 
     @Override
@@ -121,13 +122,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailedDTO save(UserInfoDTO dto, boolean insert) {
-        if (!Utilities.validateEntityDto(dto, insert)) {
-            throw new AppValidationException();
-        }
+        if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
-        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) {
-            throw new AppValidationException();
-        }
+        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISMATCH);
+
         // TODO: Check if connections get properly saved
         UserDetailedDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDetailedDTO.class);
         userDTO.setToken(jwtUtil.generateToken(dto));
@@ -136,12 +134,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User entity) {
-        if (!validateFields(entity)) {
-            throw new AppValidationException();
-        }
-
-        Utilities.validateUniqueConstraint(entity, entityRepository.findByUsername(entity.getUsername()), "Υφίσταται ήδη χρήστης με το συγκεκριμένο username!");
-
+        Utilities.validateUniqueConstraint(entity, findByEmail(entity.getEmail()), ValidationErrorMessages.USER_EMAIL_EXISTS);
         return entityRepository.save(entity);
     }
 
@@ -177,7 +170,7 @@ public class UserServiceImpl implements UserService {
             user = pUser;
         }
         if (!optional && user == null) {
-            throw new AppNotFoundException();
+            throw new AppNotFoundException(ValidationErrorMessages.BAD_CREDENTIALS);
         }
         return user;
     }
