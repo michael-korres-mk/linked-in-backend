@@ -55,7 +55,7 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public Post findEntityById(Long id) {
-		return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
+		return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε άρθρο με το συγκεκριμένο id:" + id + "."));
 	}
 
 

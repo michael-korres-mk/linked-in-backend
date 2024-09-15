@@ -67,17 +67,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findEntityById(Long id) {
-        return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
+        return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε χρήστης με το συγκεκριμένο id:" + id + "."));
     }
 
     @Override
     public User findEntityByEmailAndPassword(String email,String password) {
-        return entityRepository.findByEmailAndPassword(email,password).orElseThrow(AppNotFoundException::new);
+        return entityRepository.findByEmailAndPassword(email,password).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε χρήστης με αυτό το email και κωδικό."));
     }
 
     @Override
     public User findEntityByUsername(String username) {
-        return entityRepository.findByUsername(username).orElseThrow(AppNotFoundException::new);
+        return entityRepository.findByUsername(username).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε χρήστης με αυτό το username: " + username +"."));
     }
 
     @Override
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     public UserDetailedDTO save(UserInfoDTO dto, boolean insert) {
         if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
-        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISSMATCH);
+        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISMATCH);
 
         // TODO: Check if connections get properly saved
         UserDetailedDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDetailedDTO.class);
@@ -170,7 +170,7 @@ public class UserServiceImpl implements UserService {
             user = pUser;
         }
         if (!optional && user == null) {
-            throw new AppNotFoundException();
+            throw new AppNotFoundException(ValidationErrorMessages.BAD_CREDENTIALS);
         }
         return user;
     }

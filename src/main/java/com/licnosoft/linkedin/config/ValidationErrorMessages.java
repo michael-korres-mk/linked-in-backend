@@ -1,9 +1,9 @@
 package com.licnosoft.linkedin.config;
 
 public class ValidationErrorMessages {
-    public static final String CONFIRM_PASSWORD_MISSMATCH = "Ο κωδικός και επιβεβαίωση κωδικού δε ταυτίζονται.";
+    public static final String CONFIRM_PASSWORD_MISMATCH = "Ο κωδικός και η επιβεβαίωση κωδικού δε ταυτίζονται.";
     public static final String USER_EMAIL_EXISTS = "Υφίσταται ήδη χρήστης με το συγκεκριμένο email.";
-
+    public static final String BAD_CREDENTIALS = "Λάθος email ή κωδικός χρήστη.";
 
     private ValidationErrorMessages() {
         throw new IllegalStateException("Utility class");

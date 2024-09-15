@@ -38,7 +38,7 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 
 	@Override
 	public JobApplication findEntityById(Long id) {
-		return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
+		return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε αίτηση με αυτό το id: " + id +"."));
 	}
 
 	@Override
