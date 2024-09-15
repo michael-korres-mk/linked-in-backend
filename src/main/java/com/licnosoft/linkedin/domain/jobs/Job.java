@@ -24,6 +24,10 @@ public class Job implements Serializable {
 	@NotBlank(message = ValidationErrorMessages.TITLE_NOT_BLANK)
 	private String title;
 
+	@Column(name = "description")
+	@NotBlank(message = ValidationErrorMessages.DESCRIPTION_NOT_BLANK)
+	private String description;
+
 	@Column(name = "company")
 	private String company;
 
@@ -78,6 +82,10 @@ public class Job implements Serializable {
 	public boolean isEnabled() {return enabled;}
 
 	public void setEnabled(boolean enabled) {this.enabled = enabled;}
+
+	public String getDescription() {return description;}
+
+	public void setDescription(String description) {this.description = description;}
 
 	@Override
 	public boolean equals(Object o) {

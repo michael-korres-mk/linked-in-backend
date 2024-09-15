@@ -14,10 +14,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
+@Transactional
 public class JobServiceImpl implements JobService {
 
 	private final JobRepository entityRepository;
@@ -47,7 +49,6 @@ public class JobServiceImpl implements JobService {
 	public Job findEntityById(Long id) {
 		return entityRepository.findById(id).orElseThrow(AppNotFoundException::new);
 	}
-
 
 	@Override
 	public ToggleEntityDTO toggleEnabled(ToggleEntityDTO dto) {
