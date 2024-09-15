@@ -1,5 +1,6 @@
 package com.licnosoft.linkedin.services.general;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.licnosoft.linkedin.config.Constants;
 import com.licnosoft.linkedin.config.ValidationErrorMessages;
 import com.licnosoft.linkedin.config.exceptions.AppRuntimeException;
@@ -7,9 +8,14 @@ import com.licnosoft.linkedin.domain.enumeration.FileType;
 import com.licnosoft.linkedin.domain.general.File;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.general.FileDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
+import com.licnosoft.linkedin.model.users.UsersFileDTO;
 import com.licnosoft.linkedin.services.posts.PostService;
 import com.licnosoft.linkedin.services.users.UserService;
+import com.licnosoft.linkedin.util.UserListWrapper;
 import jakarta.annotation.PostConstruct;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -150,4 +157,40 @@ public class UploadServiceImpl implements UploadService {
     private String generateFileName(String fileType) {
         return UUID.randomUUID() + "." + fileType;
     }
+
+    @Override
+    public Resource getUsersFile(UsersFileDTO dto){
+
+        try {
+            boolean xml = dto.isXml();
+            String fileType = (xml)? "xml" : "json";
+            String filePath = this.fileStorageLocation + Constants.DIRECTORY_SLASH + "users-list." + fileType;
+
+            java.io.File file = new java.io.File(filePath);
+
+            if (file.exists()) file.delete();
+
+            List<UserBasicDTO> userDTOs = dto.getUsers();
+
+            if (xml) {
+                JAXBContext context = JAXBContext.newInstance(UserListWrapper.class);
+                Marshaller marshaller = context.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                UserListWrapper listWrapper = new UserListWrapper(userDTOs);
+
+                marshaller.marshal(listWrapper, file);
+            } else {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.writeValue(file, userDTOs);
+            }
+
+            return resourceLoader.getResource("file:" + filePath);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

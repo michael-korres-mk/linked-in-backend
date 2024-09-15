@@ -4,6 +4,7 @@ import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.domain.general.PlainEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.xml.bind.annotation.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Entity
+@XmlRootElement
 @Table(name = "users")
 public class User implements Serializable, UserDetails, PlainEntity<User> {
 
@@ -131,6 +133,7 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setLastName(String lastName) {this.lastName = lastName;}
 
+    @XmlID
     public String getEmail() {return email;}
 
     public void setEmail(String email) {this.email = email;}
@@ -141,6 +144,9 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setEnabled(boolean enabled) {this.enabled = enabled;}
 
+    @XmlTransient
+//    @XmlElementWrapper(name = "connections")
+//    @XmlElement(name = "connection")
     public List<UserConnection> getConnections() {return connections;}
 
     public void setConnections(List<UserConnection> connections) {this.connections = connections;}
