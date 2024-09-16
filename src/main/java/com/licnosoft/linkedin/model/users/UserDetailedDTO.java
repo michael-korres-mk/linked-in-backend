@@ -1,6 +1,7 @@
 package com.licnosoft.linkedin.model.users;
 
 import com.licnosoft.linkedin.model.jobs.JobDetailedDTO;
+import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import com.licnosoft.linkedin.model.posts.CommentDTO;
 import com.licnosoft.linkedin.model.posts.LikeDTO;
 import com.licnosoft.linkedin.model.posts.PostDetailedDTO;

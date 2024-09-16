@@ -50,9 +50,6 @@ public class Post implements Serializable {
 	@OneToMany(mappedBy = "post", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<PostPhoto> photos = new ArrayList<>();
 
-	@Column(name = "is_job_opening")
-	private boolean jobOpening;
-
 	public Long getId() {return id;}
 
 	public void setId(Long id) {this.id = id;}
@@ -88,10 +85,6 @@ public class Post implements Serializable {
 	public List<Like> getLikes() {return likes;}
 
 	public void setLikes(List<Like> likes) {this.likes = likes;}
-
-	public boolean isJobOpening() {return jobOpening;}
-
-	public void setJobOpening(boolean jobOpening) {this.jobOpening = jobOpening;}
 
 	public List<PostPhoto> getPhotos() {return photos;}
 

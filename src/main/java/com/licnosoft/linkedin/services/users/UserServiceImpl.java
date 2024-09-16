@@ -9,8 +9,8 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
+import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
-import com.licnosoft.linkedin.model.users.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.repository.users.UserRepository;
 import com.licnosoft.linkedin.util.Utilities;
@@ -162,11 +162,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getLoggedUser() {
-        if (authDisabled) {
+        if (authDisabled) { // TODO: Get rid of auth disabled
             //admin
-            return entityRepository.findById(1L).orElse(null);
+//            return entityRepository.findById(1L).orElse(null);
             //professional
-//            return entityRepository.findById(2L).orElse(null);
+            return entityRepository.findById(22L).orElse(null);
         }
         return getLoggedUser(false);
     }
@@ -189,7 +189,7 @@ public class UserServiceImpl implements UserService {
                 .getConnections()
                 .stream()
                 .filter(c -> accepted == (c.getConnectionDate() != null))
-                .map(uc -> modelMapper.map(uc,UserConnectionDTO.class))
+                .map(uc -> modelMapper.map(uc, UserConnectionDTO.class))
                 .toList();
     }
 

@@ -1,21 +1,22 @@
 package com.licnosoft.linkedin.model.chats;
 
 import com.licnosoft.linkedin.model.general.EntityDTO;
-import com.licnosoft.linkedin.model.users.UserConnectionDTO;
+import com.licnosoft.linkedin.model.network.UserConnectionDTO;
+
 import java.util.List;
 
 public class ChatDTO extends EntityDTO {
 
-	private UserConnectionDTO contact;
+	private UserConnectionDTO connection;
 	private List<MessageDTO> messages;
 
 	private MessageDTO lastMessage;
 
 	private String token;
 
-	public UserConnectionDTO getContact() {return contact;}
+	public UserConnectionDTO getConnection() {return connection;}
 
-	public void setContact(UserConnectionDTO contact) {this.contact = contact;}
+	public void setConnection(UserConnectionDTO connection) {this.connection = connection;}
 
 	public List<MessageDTO> getMessages() {return messages;}
 

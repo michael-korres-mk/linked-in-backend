@@ -8,7 +8,7 @@ import java.util.List;
 public interface ChatService {
 	List<ChatDTO> getRecentChats();
 
-	ChatDTO getChatHistory(Long contactId);
+	ChatDTO getChatHistory(Long connectionId);
 
 	ChatDTO save(ChatDTO dto);
 
