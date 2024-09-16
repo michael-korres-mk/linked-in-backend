@@ -1,11 +1,11 @@
 package com.licnosoft.linkedin.model.users;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.licnosoft.linkedin.config.Constants;
+import com.licnosoft.linkedin.config.LocalDateTimeAdapter;
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.model.general.EntityDTO;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UserBasicDTO extends EntityDTO {
@@ -25,14 +25,10 @@ public class UserBasicDTO extends EntityDTO {
     protected String aboutMe;
     private String projects;
     protected String token;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
     protected LocalDateTime creationDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
     protected LocalDateTime lastVisit;
     protected Integer failedLoginAttempts = 0;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = Constants.APP_TIMEZONE)
-    protected LocalDate birthDate;
+    protected LocalDateTime birthDate;
 
     public String getEmail() {
         return email;
@@ -42,14 +38,18 @@ public class UserBasicDTO extends EntityDTO {
         this.email = email;
     }
 
-    public LocalDate getBirthDate() {
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    @XmlElement(name = "birth-date")
+    public LocalDateTime getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    @XmlElement(name = "creation-date")
     public LocalDateTime getCreationDate() {
         return creationDate;
     }
@@ -74,6 +74,8 @@ public class UserBasicDTO extends EntityDTO {
         this.enabled = enabled;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    @XmlElement(name = "last-vist")
     public LocalDateTime getLastVisit() {
         return lastVisit;
     }
