@@ -7,6 +7,7 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserConnectionDTO;
+import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.services.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +49,7 @@ public class UserController {
 
     @GetMapping("/as-list/search")
 //    @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<UserBasicDTO>> asListSearch(
+    public ResponseEntity<List<UserDetailedDTO>> asListSearch(
             @RequestParam(value = "q", required = false) String searchTerm,
             @RequestParam(value = "firstName", required = false) String firstName,
             @RequestParam(value = "lastName", required = false) String lastName,

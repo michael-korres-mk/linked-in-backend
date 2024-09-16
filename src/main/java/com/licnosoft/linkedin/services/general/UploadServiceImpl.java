@@ -13,7 +13,6 @@ import com.licnosoft.linkedin.domain.general.File;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.general.FileDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
-import com.licnosoft.linkedin.model.users.UsersFileDTO;
 import com.licnosoft.linkedin.services.posts.PostService;
 import com.licnosoft.linkedin.services.users.UserService;
 import com.licnosoft.linkedin.util.UserListWrapper;
@@ -166,10 +165,9 @@ public class UploadServiceImpl implements UploadService {
     }
 
     @Override
-    public Resource getUsersFile(UsersFileDTO dto){
+    public Resource getUsersFile(List<UserDetailedDTO> userDTOs,Boolean xml){
 
         try {
-            boolean xml = dto.isXml();
             String fileType = (xml)? "xml" : "json";
             String filePath = this.fileStorageLocation + Constants.DIRECTORY_SLASH + "users-list." + fileType;
 
@@ -177,9 +175,6 @@ public class UploadServiceImpl implements UploadService {
 
             if (file.exists()) file.delete();
 
-            List<UserDetailedDTO> userDTOs =
-		            List.of(this.modelMapper.map(this.userService.getLoggedUser(), UserDetailedDTO.class));
-            //dto.getUsers();
 
             if (xml) {
                 JAXBContext context = JAXBContext.newInstance(UserListWrapper.class);

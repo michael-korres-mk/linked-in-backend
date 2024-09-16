@@ -1,9 +1,11 @@
 package com.licnosoft.linkedin.services.general;
 
 import com.licnosoft.linkedin.model.general.FileDTO;
-import com.licnosoft.linkedin.model.users.UsersFileDTO;
+import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface UploadService {
 
@@ -15,5 +17,5 @@ public interface UploadService {
 
     Resource getInstructionManual();
 
-    Resource getUsersFile(UsersFileDTO dto);
+    Resource getUsersFile(List<UserDetailedDTO> userDTOs, Boolean xml);
 }
