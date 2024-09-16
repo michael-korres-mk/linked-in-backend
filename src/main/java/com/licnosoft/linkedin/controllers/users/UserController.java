@@ -7,6 +7,7 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserConnectionDTO;
+import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.services.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,6 +45,19 @@ public class UserController {
             @RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
         return new ResponseEntity<>(entityService.
                 search(searchTerm, firstName,  lastName,  email, userRole, enabled, pageable), HttpStatus.OK);
+    }
+
+    @GetMapping("/as-list/search")
+//    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<UserDetailedDTO>> asListSearch(
+            @RequestParam(value = "q", required = false) String searchTerm,
+            @RequestParam(value = "firstName", required = false) String firstName,
+            @RequestParam(value = "lastName", required = false) String lastName,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "userRole", required = false) UserRole userRole,
+            @RequestParam(value = "enabled", required = false) Boolean enabled) {
+        return new ResponseEntity<>(entityService.
+                asListSearch(searchTerm, firstName,  lastName,  email, userRole, enabled), HttpStatus.OK);
     }
 
     @GetMapping("/roles/list")
@@ -88,7 +102,7 @@ public class UserController {
         return new ResponseEntity<>(entityService.toggleEnabled(dto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(path={"/{id}","/as-list/{id}"})
 //    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         entityService.deleteById(id);

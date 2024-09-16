@@ -4,6 +4,7 @@ package com.licnosoft.linkedin.controllers.general;
 import com.licnosoft.linkedin.domain.enumeration.FileType;
 import com.licnosoft.linkedin.model.general.FileDTO;
 import com.licnosoft.linkedin.model.general.PlainListDTO;
+import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.services.general.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -31,6 +32,12 @@ public class FileController {
     public ResponseEntity<List<PlainListDTO>> getPlainList() {
         return new ResponseEntity<>(Arrays.stream(FileType.values())
                 .map(type -> new PlainListDTO(type.name(), type.name().toLowerCase())).toList(), HttpStatus.OK);
+    }
+
+    @PostMapping(path ="/users-download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    //    @PreAuthorize("hasAuthority('users_edit')")
+    public ResponseEntity<Resource> getUsersFile(@RequestBody List<UserDetailedDTO> userDTOs, @RequestParam Boolean xml) {
+        return new ResponseEntity<>(entityService.getUsersFile(userDTOs,xml), HttpStatus.OK);
     }
 
 //    @GetMapping(path  = "/instruction-manual", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

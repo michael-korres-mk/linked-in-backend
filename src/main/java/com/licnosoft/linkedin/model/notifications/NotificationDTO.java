@@ -1,21 +1,19 @@
 package com.licnosoft.linkedin.model.notifications;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.licnosoft.linkedin.config.Constants;
+import com.licnosoft.linkedin.config.LocalDateTimeAdapter;
 import com.licnosoft.linkedin.domain.enumeration.NotificationKind;
 import com.licnosoft.linkedin.model.general.BasicEntityDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import java.time.LocalDateTime;
 
 public class NotificationDTO extends BasicEntityDTO {
 
     private NotificationKind kind;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
-    private LocalDateTime readDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = Constants.APP_TIMEZONE)
-    private LocalDateTime endDate;
+    protected LocalDateTime readDate;
+    protected LocalDateTime endDate;
     private PlainEntityDTO creator;
     private String url;
     private String message;
@@ -28,6 +26,8 @@ public class NotificationDTO extends BasicEntityDTO {
         this.message = message;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    @XmlElement(name = "end-date")
     public LocalDateTime getEndDate() {
         return endDate;
     }
@@ -36,6 +36,8 @@ public class NotificationDTO extends BasicEntityDTO {
         this.endDate = endDate;
     }
 
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
+    @XmlElement(name = "read-date")
     public LocalDateTime getReadDate() { return readDate; }
 
     public void setReadDate(LocalDateTime readDate) { this.readDate = readDate; }

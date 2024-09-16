@@ -2,6 +2,10 @@ package com.licnosoft.linkedin.domain.users;
 
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.domain.general.PlainEntity;
+import com.licnosoft.linkedin.domain.jobs.Job;
+import com.licnosoft.linkedin.domain.posts.Comment;
+import com.licnosoft.linkedin.domain.posts.Like;
+import com.licnosoft.linkedin.domain.posts.Post;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
@@ -69,6 +73,18 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserConnection> connections = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Job> jobs = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -144,6 +160,22 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     public List<UserConnection> getConnections() {return connections;}
 
     public void setConnections(List<UserConnection> connections) {this.connections = connections;}
+
+    public List<Like> getLikes() {return likes;}
+
+    public void setLikes(List<Like> likes) {this.likes = likes;}
+
+    public List<Comment> getComments() {return comments;}
+
+    public void setComments(List<Comment> comments) {this.comments = comments;}
+
+    public List<Post> getPosts() {return posts;}
+
+    public void setPosts(List<Post> posts) {this.posts = posts;}
+
+    public List<Job> getJobs() {return jobs;}
+
+    public void setJobs(List<Job> jobs) {this.jobs = jobs;}
 
     public String getWorkExperience() {return workExperience;}
 

@@ -8,6 +8,7 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
+import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,7 +17,8 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Page<UserBasicDTO> search(String searchTerm, String firstName, String lastName, String email, UserRole userRole, Boolean enabled, Pageable pageable);
+    Page<UserBasicDTO> search(String searchTerm, String firstName, String lastName, String email, UserRole userRole, Boolean enabled,Pageable pageable);
+    List<UserDetailedDTO> asListSearch(String searchTerm, String firstName, String lastName, String email, UserRole userRole, Boolean enabled);
 
     Page<User> findAll(Pageable pageable);
 

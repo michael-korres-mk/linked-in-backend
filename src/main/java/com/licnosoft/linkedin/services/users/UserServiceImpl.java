@@ -51,6 +51,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDetailedDTO> asListSearch(String searchTerm,String firstName, String lastName, String email, UserRole userRole, Boolean enabled) {
+        return entityRepository.asListSearch(searchTerm, firstName, lastName, email, userRole, enabled)
+                .stream()
+                .map(entity -> modelMapper.map(entity, UserDetailedDTO.class))
+                .toList();
+    }
+
+    @Override
     public List<PlainEntityDTO> findAll() {
         return entityRepository.findAll().stream().map(PlainEntityDTO::new).toList();
     }

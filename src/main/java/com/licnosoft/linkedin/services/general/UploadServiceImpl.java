@@ -1,15 +1,25 @@
 package com.licnosoft.linkedin.services.general;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.licnosoft.linkedin.config.Constants;
+import com.licnosoft.linkedin.config.LocalDateTimeAdapter;
 import com.licnosoft.linkedin.config.ValidationErrorMessages;
 import com.licnosoft.linkedin.config.exceptions.AppRuntimeException;
 import com.licnosoft.linkedin.domain.enumeration.FileType;
 import com.licnosoft.linkedin.domain.general.File;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.general.FileDTO;
+import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.services.posts.PostService;
 import com.licnosoft.linkedin.services.users.UserService;
+import com.licnosoft.linkedin.util.UserListWrapper;
 import jakarta.annotation.PostConstruct;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +35,10 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -150,4 +163,44 @@ public class UploadServiceImpl implements UploadService {
     private String generateFileName(String fileType) {
         return UUID.randomUUID() + "." + fileType;
     }
+
+    @Override
+    public Resource getUsersFile(List<UserDetailedDTO> userDTOs,Boolean xml){
+
+        try {
+            String fileType = (xml)? "xml" : "json";
+            String filePath = this.fileStorageLocation + Constants.DIRECTORY_SLASH + "users-list." + fileType;
+
+            java.io.File file = new java.io.File(filePath);
+
+            if (file.exists()) file.delete();
+
+
+            if (xml) {
+                JAXBContext context = JAXBContext.newInstance(UserListWrapper.class);
+                Marshaller marshaller = context.createMarshaller();
+                Unmarshaller unmarshaller = context.createUnmarshaller();
+                marshaller.setAdapter(new LocalDateTimeAdapter());
+                unmarshaller.setAdapter(new LocalDateTimeAdapter());
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+                UserListWrapper listWrapper = new UserListWrapper(userDTOs);
+                marshaller.marshal(listWrapper, file);
+            } else {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JavaTimeModule module = new JavaTimeModule();
+                module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd '|' HH:mm:ss")));
+                objectMapper.registerModule(module);
+                objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                objectMapper.writeValue(file, userDTOs);
+            }
+
+            return resourceLoader.getResource("file:" + filePath);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }
