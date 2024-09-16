@@ -1,17 +1,17 @@
 package com.licnosoft.linkedin.services.network;
 
-import com.licnosoft.linkedin.domain.network.ConnectionRequest;
-import com.licnosoft.linkedin.model.network.ConnectionRequestDTO;
+import com.licnosoft.linkedin.domain.network.UserConnection;
+import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 
 public interface ConnectionRequestService {
-	ConnectionRequestDTO findById(Long id);
+	UserConnectionDTO findById(Long id);
 
-	ConnectionRequest findEntityById(Long id);
+	UserConnection findEntityById(Long id);
 
 
-	ConnectionRequestDTO save(ConnectionRequestDTO dto, boolean insert);
+	UserConnectionDTO save(UserConnectionDTO dto, boolean insert);
 
-	ConnectionRequest save(ConnectionRequest entity);
+	UserConnection save(UserConnection entity);
 
 	void deleteById(Long id);
 

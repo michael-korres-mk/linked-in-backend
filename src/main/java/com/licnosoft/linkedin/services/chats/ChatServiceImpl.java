@@ -38,9 +38,9 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public ChatDTO getChatHistory(Long contactId) {
+	public ChatDTO getChatHistory(Long recipientId) {
 		var userId = userService.getLoggedUser().getId();
-		return modelMapper.map(entityRepository.getChatByContact(userId,contactId),ChatDTO.class);
+		return modelMapper.map(entityRepository.getChatByRecipient(userId,recipientId),ChatDTO.class);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	private boolean validateDto(ChatDTO dto) {
-		return dto.getLastMessage() != null && dto.getContact() != null && dto.getContact().getRecipient() != null && dto.getContact().getRecipient().getId() != null;
+		return dto.getLastMessage() != null && dto.getConnection() != null && dto.getConnection().getRecipient() != null && dto.getConnection().getRecipient().getId() != null;
 	}
 
 //	private boolean validateFields(UserChat entity) {

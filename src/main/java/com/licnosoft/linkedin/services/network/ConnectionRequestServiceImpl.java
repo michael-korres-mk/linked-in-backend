@@ -2,9 +2,9 @@ package com.licnosoft.linkedin.services.network;
 
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
-import com.licnosoft.linkedin.domain.network.ConnectionRequest;
+import com.licnosoft.linkedin.domain.network.UserConnection;
 import com.licnosoft.linkedin.domain.users.User;
-import com.licnosoft.linkedin.model.network.ConnectionRequestDTO;
+import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import com.licnosoft.linkedin.repository.network.ConnectionRequestRepository;
 import com.licnosoft.linkedin.services.users.UserService;
 import com.licnosoft.linkedin.util.Utilities;
@@ -26,37 +26,37 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 	}
 
 	@Override
-	public ConnectionRequestDTO findById(Long id) {
-		return modelMapper.map(findEntityById(id), ConnectionRequestDTO.class);
+	public UserConnectionDTO findById(Long id) {
+		return modelMapper.map(findEntityById(id), UserConnectionDTO.class);
 	}
 
 	@Override
-	public ConnectionRequest findEntityById(Long id) {
+	public UserConnection findEntityById(Long id) {
 		return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε αίτημα σύνδεσης με το συγκεκριμένο id:" + id + "."));
 	}
 
 	@Override
-	public ConnectionRequestDTO save(ConnectionRequestDTO dto, boolean insert) {
+	public UserConnectionDTO save(UserConnectionDTO dto, boolean insert) {
 		if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
 		User creator = userService.getLoggedUser();
-		ConnectionRequest entity = modelMapper.map(dto, ConnectionRequest.class);
+		UserConnection entity = modelMapper.map(dto, UserConnection.class);
 		if (insert) {
 			entity.setCreator(creator);
 			entity.setRecipient(userService.findEntityById(dto.getRecipientId()));
 		}
 
-		ConnectionRequestDTO connectionRequestDTO = modelMapper.map(save(entity), ConnectionRequestDTO.class);
+		UserConnectionDTO userConnectionDTO = modelMapper.map(save(entity), UserConnectionDTO.class);
 
 //		NotificationKind kind = (insert)?NotificationKind.ANNOUNCEMENT_CREATED:NotificationKind.ANNOUNCEMENT_UPDATED;
 //		notificationService.addInAppEmailNotificationToProviders(kind, entity.getTitle(), entity.getDescription(),entity.getMarket(),"/announcements/" + entity.getId() + "?view=1");
 
-		return connectionRequestDTO;
+		return userConnectionDTO;
 
 	}
 
 	@Override
-	public ConnectionRequest save(ConnectionRequest entity) {
+	public UserConnection save(UserConnection entity) {
 		return entityRepository.save(entity);
 	}
 
@@ -65,7 +65,7 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 		entityRepository.deleteById(id);
 	}
 
-	private boolean validateFields(ConnectionRequest entity){
+	private boolean validateFields(UserConnection entity){
 		return (entity.getCreator() != null) && (entity.getCreationDate() != null);
 	}
 }

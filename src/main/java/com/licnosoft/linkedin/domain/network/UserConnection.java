@@ -1,5 +1,6 @@
 package com.licnosoft.linkedin.domain.network;
 
+import com.licnosoft.linkedin.domain.chats.Chat;
 import com.licnosoft.linkedin.domain.users.User;
 import jakarta.persistence.*;
 
@@ -7,8 +8,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "connection_requests")
-public class ConnectionRequest {
+@Table(name = "user_connections")
+public class UserConnection {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +19,19 @@ public class ConnectionRequest {
 	@JoinColumn(name = "creator_id")
 	private User creator;
 
-	@Column(name = "creation_date")
-	private LocalDateTime creationDate;
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "recipient_id")
 	private User recipient;
+
+	@Column(name = "creation_date")
+	private LocalDateTime creationDate;
+
+	@Column(name = "connection_date")
+	private LocalDateTime connectionDate;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "chat_id")
+	private Chat chat;
 
 	public Long getId() {return id;}
 
@@ -41,11 +49,19 @@ public class ConnectionRequest {
 
 	public void setRecipient(User recipient) {this.recipient = recipient;}
 
+	public LocalDateTime getConnectionDate() {return connectionDate;}
+
+	public void setConnectionDate(LocalDateTime connectionDate) {this.connectionDate = connectionDate;}
+
+	public Chat getChat() {return chat;}
+
+	public void setChat(Chat chat) {this.chat = chat;}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		ConnectionRequest that = (ConnectionRequest) o;
+		UserConnection that = (UserConnection) o;
 		return Objects.equals(id, that.id);
 	}
 

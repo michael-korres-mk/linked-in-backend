@@ -43,8 +43,9 @@ public class PostServiceImpl implements PostService{
 	}
 
 	@Override
-	public Page<PostDetailedDTO> search(String searchTerm, Boolean enabled, Pageable pageable) {
-		return entityRepository.search(searchTerm, enabled, pageable)
+	public Page<PostDetailedDTO> search(Pageable pageable) {
+		User user = userService.getLoggedUser();
+		return entityRepository.search(user.getId(), pageable)
 				.map(entity -> modelMapper.map(entity, PostDetailedDTO.class));
 	}
 

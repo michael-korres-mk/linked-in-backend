@@ -3,6 +3,7 @@ package com.licnosoft.linkedin.domain.users;
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.domain.general.PlainEntity;
 import com.licnosoft.linkedin.domain.jobs.Job;
+import com.licnosoft.linkedin.domain.network.UserConnection;
 import com.licnosoft.linkedin.domain.posts.Comment;
 import com.licnosoft.linkedin.domain.posts.Like;
 import com.licnosoft.linkedin.domain.posts.Post;
@@ -71,7 +72,7 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @Column(name = "projects")
     private String projects;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<UserConnection> connections = new ArrayList<>();
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)

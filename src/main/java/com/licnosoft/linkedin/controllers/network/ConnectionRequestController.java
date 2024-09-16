@@ -1,6 +1,6 @@
 package com.licnosoft.linkedin.controllers.network;
 
-import com.licnosoft.linkedin.model.network.ConnectionRequestDTO;
+import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import com.licnosoft.linkedin.services.network.ConnectionRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +24,7 @@ public class ConnectionRequestController {
 
 	@GetMapping("/{id}")
 //    @PreAuthorize("hasAuthority('users_view')")
-	public ResponseEntity<ConnectionRequestDTO> findById(@PathVariable Long id) {
+	public ResponseEntity<UserConnectionDTO> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
 	}
 
@@ -37,17 +37,17 @@ public class ConnectionRequestController {
 
 	@PostMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-	public ResponseEntity<ConnectionRequestDTO> save(@RequestBody ConnectionRequestDTO dto) {
+	public ResponseEntity<UserConnectionDTO> save(@RequestBody UserConnectionDTO dto) {
 		return handleSaveRequest(dto, true);
 	}
 
 	@PutMapping
 //    @PreAuthorize("hasAuthority('users_edit')")
-	public ResponseEntity<ConnectionRequestDTO> update(@RequestBody ConnectionRequestDTO dto) {
+	public ResponseEntity<UserConnectionDTO> update(@RequestBody UserConnectionDTO dto) {
 		return handleSaveRequest(dto, false);
 	}
 
-	private ResponseEntity<ConnectionRequestDTO> handleSaveRequest(ConnectionRequestDTO dto, boolean insert) {
+	private ResponseEntity<UserConnectionDTO> handleSaveRequest(UserConnectionDTO dto, boolean insert) {
 		log.debug("REST request to save a user : {}", dto);
 		return new ResponseEntity<>(entityService.save(dto, insert), HttpStatus.CREATED);
 	}

@@ -1,6 +1,6 @@
 package com.licnosoft.linkedin.domain.chats;
 
-import com.licnosoft.linkedin.domain.users.UserConnection;
+import com.licnosoft.linkedin.domain.network.UserConnection;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class Chat {
 	private Long id;
 
 	@OneToOne(mappedBy = "chat")
-	private UserConnection contact;
+	private UserConnection connection;
 
 	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL)
 	private List<Message> messages = new ArrayList<>();
@@ -29,9 +29,9 @@ public class Chat {
 
 	public void setId(Long id) {this.id = id;}
 
-	public UserConnection getContact() {return contact;}
+	public UserConnection getConnection() {return connection;}
 
-	public void setContact(UserConnection contact) {this.contact = contact;}
+	public void setConnection(UserConnection connection) {this.connection = connection;}
 
 	public List<Message> getMessages() {return messages;}
 
@@ -58,7 +58,7 @@ public class Chat {
 	public String toString() {
 		return "Chat{" +
 				"id=" + id +
-				", contact=" + contact +
+				", connection=" + connection +
 				'}';
 	}
 }

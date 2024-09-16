@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PostService {
-	Page<PostDetailedDTO> search(String searchTerm, Boolean enabled, Pageable pageable);
+	Page<PostDetailedDTO> search(Pageable pageable);
 
 	PostDetailedDTO findById(Long id);
 

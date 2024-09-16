@@ -28,11 +28,9 @@ public class PostController {
 
 	@GetMapping("/search")
 //    @PreAuthorize("hasAuthority('ADMIN')")
-	public ResponseEntity<Page<PostDetailedDTO>> search(
-			@RequestParam(value = "q", required = false) String searchTerm,
-			@RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
+	public ResponseEntity<Page<PostDetailedDTO>> search(Pageable pageable) {
 		return new ResponseEntity<>(entityService.
-				search(searchTerm, enabled, pageable), HttpStatus.OK);
+				search(pageable), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")

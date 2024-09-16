@@ -31,9 +31,9 @@ public class ChatController {
         return new ResponseEntity<>(entityService.getRecentChats(), HttpStatus.OK);
     }
 
-    @GetMapping("/history/{contactId}")
-    public ResponseEntity<ChatDTO> getChatHistory(@PathVariable Long contactId) {
-        return new ResponseEntity<>(entityService.getChatHistory(contactId), HttpStatus.OK);
+    @GetMapping("/history/{id}")
+    public ResponseEntity<ChatDTO> getChatHistory(@PathVariable("id") Long recipientId) {
+        return new ResponseEntity<>(entityService.getChatHistory(recipientId), HttpStatus.OK);
     }
 
     @MessageMapping("/chat")

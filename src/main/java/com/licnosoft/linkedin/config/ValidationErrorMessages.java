@@ -14,6 +14,9 @@ public class ValidationErrorMessages {
     public static final String EREGISTRY_LICENSE_NOT_BLANK = "Το άδεια eregistry δεν μπορεί να είναι κενή.";
     public static final String TURNOVER_NOT_BLANK = "Ο τζίρος δεν μπορεί να είναι κενός.";
     public static final String DIMENSION_NOT_BLANK = "Η διάσταση δεν μπορεί να είναι κενή.";
+    public static final String MESSAGE_NOT_BLANK = "Το μήνυμα δεν μπορεί να είναι κενό.";
+    public static final String SENDER_NOT_BLANK = "Ο αποστολέας δεν μπορεί να είναι κενός.";
+    public static final String RECIPIENT_NOT_BLANK = "Ο παραλήπτης δεν μπορεί να είναι κενός.";
 
     public static final String TITLE_NOT_BLANK = "Ο τίτλος δεν μπορεί να είναι κενός.";
     public static final String ESS_TEMPLATE_NOT_BLANK = "Το πρότυπο ΕΣΣ δεν μπορεί να είναι κενό.";
