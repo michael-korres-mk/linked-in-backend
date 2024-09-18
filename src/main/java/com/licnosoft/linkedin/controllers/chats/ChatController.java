@@ -26,22 +26,21 @@ public class ChatController {
         this.entityService = entityService;
     }
 
-    @GetMapping("/recent/list")
-    public ResponseEntity<List<ChatDTO>> getRecentChats() {
-        return new ResponseEntity<>(entityService.getRecentChats(), HttpStatus.OK);
+    @GetMapping("/list")
+    public ResponseEntity<List<ChatDTO>> getChats() {
+        return new ResponseEntity<>(entityService.getChats(), HttpStatus.OK);
     }
 
-    @GetMapping("/history/{id}")
-    public ResponseEntity<ChatDTO> getChatHistory(@PathVariable("id") Long recipientId) {
-        return new ResponseEntity<>(entityService.getChatHistory(recipientId), HttpStatus.OK);
+    @GetMapping("/messages/{id}")
+    public ResponseEntity<List<MessageDTO>> getChatMessages(@PathVariable("id") Long recipientId) {
+        return new ResponseEntity<>(entityService.getChatMessages(recipientId), HttpStatus.OK);
     }
 
     @MessageMapping("/chat")
 //    @PreAuthorize("hasAuthority('chat_edit')")
     // TODO: Fix Message saving in db - refactor chat entities
     public void processMessage(@Payload MessageDTO dto) {
-
         String userId = dto.getRecipient().getId().toString();
-//        messagingTemplate.convertAndSendToUser(userId, "/queue/messages", entityService.save(dto));
+        messagingTemplate.convertAndSendToUser(userId, "/queue/messages", entityService.saveMessage(dto));
     }
 }

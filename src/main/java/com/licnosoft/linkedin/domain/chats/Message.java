@@ -23,10 +23,10 @@ public class Message {
 	private User recipient;
 
 	@Column(name = "creation_date")
-	private LocalDateTime creationDate;
+	private LocalDateTime creationTimestamp;
 
-	@Column(name = "message")
-	private String message;
+	@Column(name = "text")
+	private String text;
 
 	@Column(name = "delivered")
 	private boolean delivered;
@@ -49,13 +49,9 @@ public class Message {
 
 	public void setRecipient(User recipient) {this.recipient = recipient;}
 
-	public LocalDateTime getCreationDate() {return creationDate;}
+	public LocalDateTime getCreationTimestamp() {return creationTimestamp;}
 
-	public void setCreationDate(LocalDateTime creationDate) {this.creationDate = creationDate;}
-
-	public String getMessage() {return message;}
-
-	public void setMessage(String message) {this.message = message;}
+	public void setCreationTimestamp(LocalDateTime creationTimestamp) {this.creationTimestamp = creationTimestamp;}
 
 	public boolean isDelivered() {return delivered;}
 
@@ -68,6 +64,10 @@ public class Message {
 	public Chat getChat() {return chat;}
 
 	public void setChat(Chat chat) {this.chat = chat;}
+
+	public String getText() {return text;}
+
+	public void setText(String text) {this.text = text;}
 
 	@Override
 	public boolean equals(Object o) {
@@ -88,8 +88,7 @@ public class Message {
 				"id=" + id +
 				", sender=" + sender +
 				", recipient=" + recipient +
-				", creationDate=" + creationDate +
-				", message='" + message + '\'' +
+				", creationDate=" + creationTimestamp +
 				", delivered=" + delivered +
 				", read=" + read +
 				'}';
