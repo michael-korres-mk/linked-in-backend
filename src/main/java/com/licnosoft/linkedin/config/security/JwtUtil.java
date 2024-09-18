@@ -34,6 +34,7 @@ public class JwtUtil {
                .withClaim("firstName", userInfo.getFirstName())
                .withClaim("lastName", userInfo.getLastName())
                .withClaim("userRole", userInfo.getUserRole().toString())
+               .withClaim("password", userInfo.getPassword())
                .withExpiresAt(new Date(System.currentTimeMillis() + expiration * 1000))
                .withIssuedAt(new Date(System.currentTimeMillis()))
                .sign(getAlgorithm());
@@ -52,6 +53,7 @@ public class JwtUtil {
         userInfoDTO.setFirstName(decodedJWT.getClaim("firstName").asString());
         userInfoDTO.setLastName(decodedJWT.getClaim("lastName").asString());
         userInfoDTO.setUserRole(UserRole.valueOf(decodedJWT.getClaim("userRole").asString()));
+        userInfoDTO.setPassword(decodedJWT.getClaim("password").asString());
 
         return userInfoDTO;
     }

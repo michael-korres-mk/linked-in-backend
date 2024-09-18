@@ -112,10 +112,10 @@ public class UserServiceImpl implements UserService {
 
         UserInfoDTO dto = loginUser(info);
 
+        dto.setToken(jwtUtil.generateToken(dto));
+
         dto.setPassword(null);
         dto.setConfirmPassword(null);
-
-        dto.setToken(jwtUtil.generateToken(dto));
 
         return dto;
     }
@@ -162,12 +162,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getLoggedUser() {
-        if (authDisabled) { // TODO: Get rid of auth disabled
-            //admin
-//            return entityRepository.findById(1L).orElse(null);
-            //professional
-            return entityRepository.findById(22L).orElse(null);
-        }
+//        if (authDisabled) {
+//            //admin
+////            return entityRepository.findById(1L).orElse(null);
+//            //professional
+//            return entityRepository.findById(22L).orElse(null);
+//        }
         return getLoggedUser(false);
     }
 
@@ -192,16 +192,6 @@ public class UserServiceImpl implements UserService {
                 .map(uc -> modelMapper.map(uc, UserConnectionDTO.class))
                 .toList();
     }
-
-    //    @Override
-//    public String getLoggedAfm() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication != null && authentication.getPrincipal() instanceof String afm) {
-//            return afm;
-//        } else {
-//            throw new AppNotFoundException();
-//        }
-//    }
 
     @Override
     public boolean isUserAdmin(User user) {

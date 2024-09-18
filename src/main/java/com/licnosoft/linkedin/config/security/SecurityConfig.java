@@ -42,24 +42,25 @@ public class SecurityConfig implements WebMvcConfigurer {
             .csrf(AbstractHttpConfigurer::disable).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
 
+//        if (authDisabled) {
+//            http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+//            return http.build();
+//        }
 
-        if (authDisabled) {
-            http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
-        } else {
-            http
-                    // other configuration options
-                    .authorizeHttpRequests(auth -> auth
-                            // public endpoints
-                            .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                            .requestMatchers("/ws/**").permitAll()
-                            .requestMatchers("/evictcacheimmediate").permitAll()
-                            .requestMatchers("/jwt/**").permitAll()
-                            .requestMatchers("/" + Constants.UPLOAD_FOLDER + "/**").permitAll()
-                            // private endpoints
-                            .anyRequest().authenticated()
-                    );
-        }
-        return http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class).build();
+        http
+        // other configuration options
+        .authorizeHttpRequests(auth -> auth
+                // public endpoints
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/ws/**").permitAll()
+                .requestMatchers("/evictcacheimmediate").permitAll()
+                .requestMatchers("/jwt/**").permitAll()
+                .requestMatchers("/" + Constants.UPLOAD_FOLDER + "/**").permitAll()
+                // private endpoints
+                .anyRequest().authenticated()
+        ).addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean
