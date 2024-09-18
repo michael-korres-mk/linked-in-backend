@@ -70,9 +70,6 @@ public class JobServiceImpl implements JobService {
 
 		JobDetailedDTO jobDetailedDTO = modelMapper.map(save(entity), JobDetailedDTO.class);
 
-//		NotificationKind kind = (insert)?NotificationKind.ANNOUNCEMENT_CREATED:NotificationKind.ANNOUNCEMENT_UPDATED;
-//		notificationService.addInAppEmailNotificationToProviders(kind, entity.getTitle(), entity.getDescription(),entity.getMarket(),"/announcements/" + entity.getId() + "?view=1");
-
 		return jobDetailedDTO;
 
 	}

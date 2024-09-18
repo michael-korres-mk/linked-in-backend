@@ -22,10 +22,10 @@ public class NotificationRecipient implements Serializable {
     @NotNull(message = ValidationErrorMessages.NOTIFICATION_NOT_BLANK)
     private Notification notification;
 
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "recipient_id")
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = ValidationErrorMessages.USER_NOT_BLANK)
-    private User user;
+    private User recipient;
 
     @Column(name = "read_date")
     private LocalDateTime readDate;
@@ -36,9 +36,9 @@ public class NotificationRecipient implements Serializable {
     public NotificationRecipient() {
     }
 
-    public NotificationRecipient(Notification notification, User user) {
+    public NotificationRecipient(Notification notification, User recipient) {
         this.notification = notification;
-        this.user = user;
+        this.recipient = recipient;
     }
 
     public Integer getId() {
@@ -49,12 +49,12 @@ public class NotificationRecipient implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getRecipient() {
+        return recipient;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setRecipient(User recipient) {
+        this.recipient = recipient;
     }
 
     public Notification getNotification() {
@@ -99,7 +99,7 @@ public class NotificationRecipient implements Serializable {
         return "NotificationRecipient{" +
                 "id=" + id +
                 ", notification=" + notification +
-                ", user=" + user +
+                ", user=" + recipient +
                 ", readTime=" + readDate +
                 ", dismissedTime=" + dismissedDate +
                 '}';
