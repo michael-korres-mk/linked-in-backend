@@ -6,12 +6,13 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import java.time.LocalDateTime;
 
 public class MessageDTO extends EntityDTO {
-	private PlainEntityDTO sender;
-	private PlainEntityDTO recipient;
-	private LocalDateTime creationDate;
-	private String message;
-	private boolean delivered;
-	private boolean read;
+	protected PlainEntityDTO sender;
+	protected PlainEntityDTO recipient;
+	protected EntityDTO chat;
+	protected LocalDateTime creationDate;
+	protected String text;
+	protected boolean delivered;
+	protected boolean read;
 
 	public PlainEntityDTO getSender() {return sender;}
 
@@ -25,9 +26,9 @@ public class MessageDTO extends EntityDTO {
 
 	public void setCreationDate(LocalDateTime creationDate) {this.creationDate = creationDate;}
 
-	public String getMessage() {return message;}
+	public String getText() {return text;}
 
-	public void setMessage(String message) {this.message = message;}
+	public void setText(String text) {this.text = text;}
 
 	public boolean isDelivered() {return delivered;}
 
@@ -36,4 +37,8 @@ public class MessageDTO extends EntityDTO {
 	public boolean isRead() {return read;}
 
 	public void setRead(boolean read) {this.read = read;}
+
+	public EntityDTO getChat() {return chat;}
+
+	public void setChat(EntityDTO chat) {this.chat = chat;}
 }
