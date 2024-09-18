@@ -1,7 +1,7 @@
 package com.licnosoft.linkedin.services.chats;
 
-import com.auth0.jwt.JWT;
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
+import com.licnosoft.linkedin.config.security.JwtUtil;
 import com.licnosoft.linkedin.domain.chats.Chat;
 import com.licnosoft.linkedin.domain.chats.Message;
 import com.licnosoft.linkedin.domain.users.User;
@@ -14,6 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -23,12 +24,14 @@ public class ChatServiceImpl implements ChatService {
 	private final ChatRepository entityRepository;
 	private final MessageRepository messageRepository;
 	private final UserService userService;
+	private final JwtUtil jwtUtil;
 	private final ModelMapper modelMapper;
 
-	public ChatServiceImpl(ChatRepository entityRepository, MessageRepository messageRepository, UserService userService, ModelMapper modelMapper) {
+	public ChatServiceImpl(ChatRepository entityRepository, MessageRepository messageRepository, UserService userService, JwtUtil jwtUtil, ModelMapper modelMapper) {
 		this.entityRepository = entityRepository;
 		this.messageRepository = messageRepository;
 		this.userService = userService;
+		this.jwtUtil = jwtUtil;
 		this.modelMapper = modelMapper;
 	}
 
@@ -54,42 +57,18 @@ public class ChatServiceImpl implements ChatService {
 
 	@Override
 	public ChatDTO save(ChatDTO dto) {
-//		if (!(validateDto(dto))) {
-//			throw new AppValidationException();
-//		}
 		Chat entity = modelMapper.map(dto, Chat.class);
-		JWT parsedJwt;
-		User sender;
-//		try {
-////			parsedJwt = JWTParser.parse(dto.getToken());
-////			sender = userService.findByAfm(parsedJwt.getJWTClaimsSet().getStringClaim(afmClaim));
-//		} catch (ParseException e) {
-//			throw new AppNotFoundException();
-//		}
-//		if (sender == null) {
-//			throw new AppNotFoundException();
-//		}
-//		entity.se(sender);
-//		entity.setCreationDate(LocalDateTime.now());
-
-
 
 		return modelMapper.map(save(entity), ChatDTO.class);
 	}
 
 	@Override
 	public Chat save(Chat entity) {
-//		if (!validateFields(entity)) {
-//			throw new AppValidationException();
-//		}
 		return entityRepository.save(entity);
 	}
 
 	@Override
 	public Message saveMessage(Message entity) {
-	//		if (!validateFields(entity)) {
-	//			throw new AppValidationException();
-	//		}
 		return messageRepository.save(entity);
 	}
 
@@ -103,17 +82,19 @@ public class ChatServiceImpl implements ChatService {
 
 		entity.setLastMessage(message);
 
+		Long senderId = jwtUtil.decodeJwtToUserInfo(dto.getToken()).getId();
+
+		User sender = userService.findEntityById(senderId);
+
+		if (sender == null) throw new AppNotFoundException("Δε βρέθηκε χρήστης (αποστολέας) με το συγκεκριμένο id: " + senderId +".");
+
+		message.setSender(sender);
+		message.setCreationTimestamp(LocalDateTime.now());
+
 		save(entity);
 
 		return modelMapper.map(message,MessageDTO.class);
 
 	}
 
-//	private boolean validateDto(ChatDTO dto) {
-//		return dto.getLastMessage() != null && dto.getRecipient() != null && dto.getRecipient().getId() != null;
-//	}
-
-//	private boolean validateFields(UserChat entity) {
-//		return entity.getMessage() != null && entity.getCreationDate() != null && entity.getRecipient() != null;
-//	}
 }

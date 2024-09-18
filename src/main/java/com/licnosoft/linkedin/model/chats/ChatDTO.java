@@ -7,15 +7,10 @@ public class ChatDTO extends BasicEntityDTO {
 	protected PlainEntityDTO creator;
 	protected PlainEntityDTO recipient;
 	protected MessageDTO lastMessage;
-	protected String token;
 
 	public MessageDTO getLastMessage() {return lastMessage;}
 
 	public void setLastMessage(MessageDTO lastMessage) {this.lastMessage = lastMessage;}
-
-	public String getToken() {return token;}
-
-	public void setToken(String token) {this.token = token;}
 
 	public PlainEntityDTO getCreator() {return creator;}
 

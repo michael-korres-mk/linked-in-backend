@@ -1,5 +1,6 @@
 package com.licnosoft.linkedin.model.chats;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.licnosoft.linkedin.model.general.EntityDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 
@@ -9,10 +10,13 @@ public class MessageDTO extends EntityDTO {
 	protected PlainEntityDTO sender;
 	protected PlainEntityDTO recipient;
 	protected EntityDTO chat;
-	protected LocalDateTime creationDate;
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
+	protected LocalDateTime creationTimestamp;
 	protected String text;
 	protected boolean delivered;
 	protected boolean read;
+
+	protected String token;
 
 	public PlainEntityDTO getSender() {return sender;}
 
@@ -21,10 +25,6 @@ public class MessageDTO extends EntityDTO {
 	public PlainEntityDTO getRecipient() {return recipient;}
 
 	public void setRecipient(PlainEntityDTO recipient) {this.recipient = recipient;}
-
-	public LocalDateTime getCreationDate() {return creationDate;}
-
-	public void setCreationDate(LocalDateTime creationDate) {this.creationDate = creationDate;}
 
 	public String getText() {return text;}
 
@@ -41,4 +41,12 @@ public class MessageDTO extends EntityDTO {
 	public EntityDTO getChat() {return chat;}
 
 	public void setChat(EntityDTO chat) {this.chat = chat;}
+
+	public String getToken() {return token;}
+
+	public void setToken(String token) {this.token = token;}
+
+	public LocalDateTime getCreationTimestamp() {return creationTimestamp;}
+
+	public void setCreationTimestamp(LocalDateTime creationTimestamp) {this.creationTimestamp = creationTimestamp;}
 }

@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,11 @@ public class JwtUtil {
 
     private String createJwt(UserInfoDTO userInfo, long expiration) {
        return JWT.create()
-               .withSubject(userInfo.getEmail())
-               .withClaim("firstname", userInfo.getFirstName())
-               .withClaim("role", userInfo.getUserRole().toString())
-               .withClaim("lastname", userInfo.getLastName())
+               .withSubject(userInfo.getId().toString())
+               .withClaim("email", userInfo.getEmail())
+               .withClaim("firstName", userInfo.getFirstName())
+               .withClaim("lastName", userInfo.getLastName())
+               .withClaim("userRole", userInfo.getUserRole().toString())
                .withExpiresAt(new Date(System.currentTimeMillis() + expiration * 1000))
                .withIssuedAt(new Date(System.currentTimeMillis()))
                .sign(getAlgorithm());
@@ -42,10 +44,16 @@ public class JwtUtil {
     }
 
     public UserInfoDTO decodeJwtToUserInfo(String jwt) {
-        DecodedJWT decodedJWT;
-        decodedJWT = JWT.decode(jwt);
+        DecodedJWT decodedJWT = JWT.decode(jwt);
 
-        return new UserInfoDTO(decodedJWT.getClaim("email").asString(),decodedJWT.getClaim("password").asString());
+        UserInfoDTO userInfoDTO = new UserInfoDTO();
+        userInfoDTO.setId(Long.valueOf(decodedJWT.getSubject()));
+        userInfoDTO.setEmail(decodedJWT.getClaim("email").asString());
+        userInfoDTO.setFirstName(decodedJWT.getClaim("firstName").asString());
+        userInfoDTO.setLastName(decodedJWT.getClaim("lastName").asString());
+        userInfoDTO.setUserRole(UserRole.valueOf(decodedJWT.getClaim("userRole").asString()));
+
+        return userInfoDTO;
     }
 
 //    public TokenServiceType getTokenType(String jwt) {

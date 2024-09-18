@@ -12,7 +12,7 @@ public interface ChatRepository extends JpaRepository<Chat, Long> {
 //    @Query("SELECT c FROM Chat c WHERE c.connection.creator.id = :userId AND c.lastMessage.creationDate >= :startDate")
 //    List<Chat> getRecentChats(@Param("userId") Long userId, @Param("startDate") LocalDateTime startDate);
 
-        @Query("SELECT c FROM Chat c WHERE c.creator.id = :userId OR c.recipient.id = :userId ORDER BY c.lastMessage.creationDate ASC")
+        @Query("SELECT c FROM Chat c WHERE c.creator.id = :userId OR c.recipient.id = :userId ORDER BY c.lastMessage.creationTimestamp ASC")
         List<Chat> getChats(@Param("userId") Long userId);
 
 

@@ -23,7 +23,7 @@ public class Message {
 	private User recipient;
 
 	@Column(name = "creation_date")
-	private LocalDateTime creationDate;
+	private LocalDateTime creationTimestamp;
 
 	@Column(name = "text")
 	private String text;
@@ -49,9 +49,9 @@ public class Message {
 
 	public void setRecipient(User recipient) {this.recipient = recipient;}
 
-	public LocalDateTime getCreationDate() {return creationDate;}
+	public LocalDateTime getCreationTimestamp() {return creationTimestamp;}
 
-	public void setCreationDate(LocalDateTime creationDate) {this.creationDate = creationDate;}
+	public void setCreationTimestamp(LocalDateTime creationTimestamp) {this.creationTimestamp = creationTimestamp;}
 
 	public boolean isDelivered() {return delivered;}
 
@@ -88,7 +88,7 @@ public class Message {
 				"id=" + id +
 				", sender=" + sender +
 				", recipient=" + recipient +
-				", creationDate=" + creationDate +
+				", creationDate=" + creationTimestamp +
 				", delivered=" + delivered +
 				", read=" + read +
 				'}';
