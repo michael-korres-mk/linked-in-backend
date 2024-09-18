@@ -17,6 +17,7 @@ public class NotificationDTO extends BasicEntityDTO {
     private PlainEntityDTO creator;
     private String url;
     private String message;
+    private Long entityId;
 
     public String getMessage() {
         return message;
@@ -54,4 +55,7 @@ public class NotificationDTO extends BasicEntityDTO {
 
     public void setCreator(PlainEntityDTO creator) { this.creator = creator; }
 
+    public Long getEntityId() {return entityId;}
+
+    public void setEntityId(Long entityId) {this.entityId = entityId;}
 }

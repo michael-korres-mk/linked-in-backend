@@ -14,8 +14,8 @@ import java.util.Date;
 @Service
 public class JwtUtil {
 
-    @Value("${app.auth-disabled:false}")
-    private boolean authDisabled;
+//    @Value("${app.auth-disabled:false}")
+//    private boolean authDisabled;
 
     @Value("${jwt.expiresSec}")
     private long expiresSec;
