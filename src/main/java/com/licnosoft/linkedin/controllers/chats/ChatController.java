@@ -37,8 +37,6 @@ public class ChatController {
     }
 
     @MessageMapping("/chat")
-//    @PreAuthorize("hasAuthority('chat_edit')")
-    // TODO: Fix Message saving in db - refactor chat entities
     public void processMessage(@Payload MessageDTO dto) {
         String userId = dto.getRecipient().getId().toString();
         messagingTemplate.convertAndSendToUser(userId, "/queue/messages", entityService.saveMessage(dto));

@@ -27,51 +27,43 @@ public class PostController {
 	}
 
 	@GetMapping("/search")
-//    @PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Page<PostDetailedDTO>> search(Pageable pageable) {
 		return new ResponseEntity<>(entityService.
 				search(pageable), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_view')")
 	public ResponseEntity<PostDetailedDTO> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
 	}
 
 	@PostMapping("/comment")
-	//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<CommentDTO> comment(@RequestBody CommentDTO dto) {
 		return new ResponseEntity<>(entityService.comment(dto), HttpStatus.OK);
 	}
 
 	@PutMapping("/like/enabled")
-	//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<ToggleEntityDTO> toggleLike(@RequestBody ToggleEntityDTO dto) {
 		return new ResponseEntity<>(entityService.toggleLike(dto), HttpStatus.OK);
 	}
 
 	@PutMapping("/enabled")
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<ToggleEntityDTO> toggleEnabled(@RequestBody ToggleEntityDTO dto) {
 		return new ResponseEntity<>(entityService.toggleEnabled(dto), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
 		entityService.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PostMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<PostDetailedDTO> save(@RequestBody PostDetailedDTO dto) {
 		return handleSaveRequest(dto, true);
 	}
 
 	@PutMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<PostDetailedDTO> update(@RequestBody PostDetailedDTO dto) {
 		return handleSaveRequest(dto, false);
 	}

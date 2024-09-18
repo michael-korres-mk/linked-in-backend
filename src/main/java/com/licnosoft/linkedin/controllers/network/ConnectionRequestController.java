@@ -22,27 +22,28 @@ public class ConnectionRequestController {
 		this.entityService = entityService;
 	}
 
+	@GetMapping("/search")
+	public ResponseEntity<UserConnectionDTO> findRequests(@RequestParam(name = "recipient") Long recipientId, @RequestParam(name = "accepted") Boolean accepted) {
+		return new ResponseEntity<>(entityService.findRequests(recipientId,accepted), HttpStatus.OK);
+	}
+
 	@GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_view')")
 	public ResponseEntity<UserConnectionDTO> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
 		entityService.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PostMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<UserConnectionDTO> save(@RequestBody UserConnectionDTO dto) {
 		return handleSaveRequest(dto, true);
 	}
 
 	@PutMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<UserConnectionDTO> update(@RequestBody UserConnectionDTO dto) {
 		return handleSaveRequest(dto, false);
 	}

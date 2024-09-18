@@ -19,4 +19,5 @@ public interface NotificationService {
 
     void addNotification(NotificationKind kind, String title, String message, LocalDateTime endDate, List<User> users, String url, Long entityId);
 
+    void clearNotificationEntityId(Long entityId);
 }

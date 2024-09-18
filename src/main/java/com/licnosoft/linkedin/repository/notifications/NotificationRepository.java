@@ -26,4 +26,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
             @Param("kind") NotificationKind kind,
             @Param("createdFrom") LocalDateTime createdFrom,
             @Param("createdTo") LocalDateTime createdTo, Pageable pageable);
+
+    Notification findByEntityId(Long entityId);
+
+
 }

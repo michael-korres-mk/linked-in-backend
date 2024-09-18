@@ -9,7 +9,6 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.repository.users.UserRepository;
@@ -181,16 +180,6 @@ public class UserServiceImpl implements UserService {
             throw new AppNotFoundException(ValidationErrorMessages.BAD_CREDENTIALS);
         }
         return user;
-    }
-
-    @Override
-    public List<UserConnectionDTO> getUserConnectionRequests(boolean accepted){
-        return this.getLoggedUser()
-                .getConnections()
-                .stream()
-                .filter(c -> accepted == (c.getConnectionDate() != null))
-                .map(uc -> modelMapper.map(uc, UserConnectionDTO.class))
-                .toList();
     }
 
     @Override

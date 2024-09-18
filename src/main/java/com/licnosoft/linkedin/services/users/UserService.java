@@ -6,7 +6,6 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import org.springframework.data.domain.Page;
@@ -53,7 +52,5 @@ public interface UserService {
     boolean isUserProfessional(User user);
 
     UserBasicDTO loginUser(String token, String email, String password);
-
-	List<UserConnectionDTO> getUserConnectionRequests(boolean accepted);
 
 }

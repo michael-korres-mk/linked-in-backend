@@ -33,6 +33,12 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 	}
 
 	@Override
+	public UserConnectionDTO findRequests(Long recipientId,Boolean accepted) {
+		Long creatorId = userService.getLoggedUser().getId();
+		return modelMapper.map(entityRepository.findByCreatorAndRecipient(creatorId,recipientId,accepted),UserConnectionDTO.class);
+	}
+
+	@Override
 	public UserConnectionDTO findById(Long id) {
 		return modelMapper.map(findEntityById(id), UserConnectionDTO.class);
 	}
@@ -59,15 +65,30 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 			temp.setConnectionDate(LocalDateTime.now());
 		}
 
-
 		UserConnection entity = save(temp);
 
 		if(insert){
 			notificationService.addNotification(NotificationKind.CONNECTION_REQUEST, "Έχετε νέο αίτημα σύνδεσης: " + creator.getTitle(),null, null, List.of(entity.getRecipient()),"/in/" + creator.getId() + "?view=1",entity.getId());
 		}
+		else{
+			notificationService.clearNotificationEntityId(entity.getId());
+		}
 
 		return modelMapper.map(entity, UserConnectionDTO.class);
 	}
+
+//	List<UserConnectionDTO> getUserConnections(){
+//		return getUserConnectionRequests(true);
+//	}
+//
+//
+//	@Override
+//	public List<UserConnectionDTO> getUserConnectionRequests(boolean accepted){
+//		User loggedUser = userService.getLoggedUser();
+//		return entityRepository.getUserConnections
+//
+//	}
+
 
 	@Override
 	public UserConnection save(UserConnection entity) {
@@ -76,6 +97,7 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 
 	@Override
 	public void deleteById(Long id) {
+		notificationService.clearNotificationEntityId(id);
 		entityRepository.deleteById(id);
 	}
 
