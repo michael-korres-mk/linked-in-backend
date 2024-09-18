@@ -53,4 +53,5 @@ public class NotificationDTO extends BasicEntityDTO {
     public PlainEntityDTO getCreator() { return creator; }
 
     public void setCreator(PlainEntityDTO creator) { this.creator = creator; }
+
 }

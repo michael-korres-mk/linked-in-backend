@@ -2,6 +2,8 @@ package com.licnosoft.linkedin.services.posts;
 
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
+import com.licnosoft.linkedin.domain.enumeration.NotificationKind;
+import com.licnosoft.linkedin.domain.general.PostPhoto;
 import com.licnosoft.linkedin.domain.posts.Comment;
 import com.licnosoft.linkedin.domain.posts.Like;
 import com.licnosoft.linkedin.domain.posts.Post;
@@ -12,7 +14,7 @@ import com.licnosoft.linkedin.model.posts.PostDetailedDTO;
 import com.licnosoft.linkedin.repository.posts.CommentRepository;
 import com.licnosoft.linkedin.repository.posts.LikeRepository;
 import com.licnosoft.linkedin.repository.posts.PostRepository;
-import com.licnosoft.linkedin.services.general.FileService;
+import com.licnosoft.linkedin.services.notifications.NotificationService;
 import com.licnosoft.linkedin.services.users.UserService;
 import com.licnosoft.linkedin.util.Utilities;
 import org.modelmapper.ModelMapper;
@@ -31,15 +33,15 @@ public class PostServiceImpl implements PostService{
 	private final CommentRepository commentRepository;
 	private final ModelMapper modelMapper;
 	private final UserService userService;
-	private final FileService fileService;
+	private final NotificationService notificationService;
 
-	public PostServiceImpl(PostRepository entityRepository, LikeRepository likeRepository, CommentRepository commentRepository, ModelMapper modelMapper, UserService userService, FileService fileService) {
+	public PostServiceImpl(PostRepository entityRepository, LikeRepository likeRepository, CommentRepository commentRepository, ModelMapper modelMapper, UserService userService, NotificationService notificationService) {
 		this.entityRepository = entityRepository;
 		this.likeRepository = likeRepository;
 		this.commentRepository = commentRepository;
 		this.modelMapper = modelMapper;
 		this.userService = userService;
-		this.fileService = fileService;
+		this.notificationService = notificationService;
 	}
 
 	@Override
@@ -78,10 +80,9 @@ public class PostServiceImpl implements PostService{
 			entity.setCreationDate(LocalDateTime.now());
 			entity.setEnabled(true);
 		}
-		entity.getPhotos().forEach(postPhoto -> {
-//			fileService.updateFilePost(postPhoto.getFile().getId(), entity.getId());
-			postPhoto.setPost(entity);
-		});
+
+		List<PostPhoto> photos = entity.getPhotos();
+		photos.forEach(postPhoto -> postPhoto.setPost(entity));
 
 		List<Comment> comments = entity.getComments();
 		if(comments != null && !comments.isEmpty()) comments.forEach(comment -> comment.setPost(entity));
@@ -89,12 +90,8 @@ public class PostServiceImpl implements PostService{
 		List<Like> likes = entity.getLikes();
 		if(likes != null && !likes.isEmpty()) likes.forEach(like -> like.setPost(entity));
 
-		PostDetailedDTO postDetailedDTO = modelMapper.map(save(entity), PostDetailedDTO.class);
 
-//		NotificationKind kind = (insert)?NotificationKind.ANNOUNCEMENT_CREATED:NotificationKind.ANNOUNCEMENT_UPDATED;
-//		notificationService.addInAppEmailNotificationToProviders(kind, entity.getTitle(), entity.getDescription(),entity.getMarket(),"/announcements/" + entity.getId() + "?view=1");
-
-		return postDetailedDTO;
+		return modelMapper.map(save(entity), PostDetailedDTO.class);
 
 	}
 
@@ -114,30 +111,39 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public CommentDTO comment(CommentDTO dto){
-		User loggedUser = userService.getLoggedUser();
+		User creator = userService.getLoggedUser();
 		LocalDateTime creationDate = LocalDateTime.now();
-		Comment comment = new Comment(dto.getDescription(),creationDate,loggedUser,findEntityById(dto.getPostId()));
-		return modelMapper.map(commentRepository.save(comment),CommentDTO.class);
+		Comment temp = new Comment(dto.getDescription(),creationDate,creator,findEntityById(dto.getPostId()));
+
+		Comment entity = commentRepository.save(temp);
+
+		notificationService.addNotification(NotificationKind.EXPRESSION_OF_INTEREST,"O χρήστης: " + creator.getTitle() + " σχολίασε: " + entity.getDescription(),entity.getDescription(), null,List.of(entity.getPost().getCreator()),"/posts/" + entity.getPost().getId() + "?view=1");
+
+		return modelMapper.map(entity,CommentDTO.class);
 	}
 
 	@Override
 	public ToggleEntityDTO toggleLike(ToggleEntityDTO dto){
-		User loggedUser = userService.getLoggedUser();
+		User creator = userService.getLoggedUser();
 		LocalDateTime creationDate = LocalDateTime.now();
 
-		Like like = likeRepository.findByCreator_IdAndPost_Id(loggedUser.getId(),dto.getId()).orElse(new Like());
+		Like temp = likeRepository.findByCreator_IdAndPost_Id(creator.getId(),dto.getId()).orElse(new Like());
 
-		if(like.getId() != null){
-			if(dto.isEnabled()) like.setCreationDate(creationDate);
-			else like.setCreationDate(null);
+		if(temp.getId() != null){
+			if(dto.isEnabled()) temp.setCreationDate(creationDate);
+			else temp.setCreationDate(null);
 		}
 		else {
-			like.setPost(findEntityById(dto.getId()));
-			like.setCreator(loggedUser);
-			like.setCreationDate(creationDate);
+			temp.setPost(findEntityById(dto.getId()));
+			temp.setCreator(creator);
+			temp.setCreationDate(creationDate);
 		}
 
-		return modelMapper.map(likeRepository.save(like),ToggleEntityDTO.class);
+		Like entity = likeRepository.save(temp);
+
+		if(entity.getCreationDate() != null) notificationService.addNotification(NotificationKind.EXPRESSION_OF_INTEREST,"Η δημοσίευσή σας αρέσει στον χρήστη: " + creator.getTitle(),null, null,List.of(entity.getPost().getCreator()),"/posts/" + entity.getPost().getId() + "?view=1");
+
+		return modelMapper.map(entity,ToggleEntityDTO.class);
 	}
 
 

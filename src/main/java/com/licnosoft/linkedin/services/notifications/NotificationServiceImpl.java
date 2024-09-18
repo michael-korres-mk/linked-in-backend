@@ -59,14 +59,14 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void dismiss(Long id) {
-        NotificationRecipient notificationRecipient = notificationRecipientRepository.findByUser_IdAndNotification_Id(userService.getLoggedUser().getId(), id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε ειδοποίηση με αυτό το id: " + id +"."));
+        NotificationRecipient notificationRecipient = notificationRecipientRepository.findByRecipient_IdAndNotification_Id(userService.getLoggedUser().getId(), id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε ειδοποίηση με αυτό το id: " + id +"."));
         notificationRecipient.setDismissedDate(LocalDateTime.now());
         notificationRecipientRepository.save(notificationRecipient);
     }
 
 
     @Override
-    public void addNotification(NotificationKind kind, String title, List<User> users, String message, LocalDateTime endDate, String url) {
+    public void addNotification(NotificationKind kind, String title, String message, LocalDateTime endDate, List<User> users, String url) {
         entityRepository.save(new Notification(kind, title, message, endDate, users, url, userService.getOptionalLoggedUser()));
     }
 }

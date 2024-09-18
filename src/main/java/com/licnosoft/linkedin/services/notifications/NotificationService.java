@@ -17,6 +17,6 @@ public interface NotificationService {
 
     void dismiss(Long id);
 
-    void addNotification(NotificationKind kind, String title, List<User> users, String message, LocalDateTime endDate, String url);
+    void addNotification(NotificationKind kind, String title, String message, LocalDateTime endDate, List<User> users, String url);
 
 }

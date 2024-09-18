@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.Optional;
 
 public interface NotificationRecipientRepository extends JpaRepository<NotificationRecipient, Long> {
-    Optional<NotificationRecipient> findByUser_IdAndNotification_Id(Long userId, Long notificationId);
+    Optional<NotificationRecipient> findByRecipient_IdAndNotification_Id(Long recipientId, Long notificationId);
 
     @Query("""
-            SELECT nr FROM NotificationRecipient nr JOIN nr.notification n WHERE nr.user.id = :userId 
+            SELECT nr FROM NotificationRecipient nr JOIN nr.notification n WHERE nr.recipient.id = :recipientId
             AND nr.dismissedDate IS NULL
             AND n.creationDate >= :startDate
             """)
-    List<NotificationRecipient> getFreshNotifications(@Param("userId") Long userId, @Param("startDate") LocalDateTime startDate);
+    List<NotificationRecipient> getFreshNotifications(@Param("recipientId") Long recipientId, @Param("startDate") LocalDateTime startDate);
 
     @Modifying
-    void deleteAllByUser_Id(Long userId);
+    void deleteAllByRecipient_Id(Long recipientId);
 
 }
