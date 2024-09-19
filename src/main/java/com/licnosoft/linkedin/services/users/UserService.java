@@ -16,8 +16,8 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Page<UserBasicDTO> search(String searchTerm, String firstName, String lastName, String email, UserRole userRole, Boolean enabled,Pageable pageable);
-    List<UserDetailedDTO> asListSearch(String searchTerm, String firstName, String lastName, String email, UserRole userRole, Boolean enabled);
+    Page<UserBasicDTO> search(String searchTerm, String firstName, String lastName, String email, UserRole userRole,Boolean exceptLoggedUser, Boolean enabled,Pageable pageable);
+    List<UserDetailedDTO> asListSearch(String searchTerm, String firstName, String lastName, String email, UserRole userRole,Boolean exceptLoggedUser, Boolean enabled);
 
     Page<User> findAll(Pageable pageable);
 

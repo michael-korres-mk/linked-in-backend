@@ -40,9 +40,10 @@ public class UserController {
             @RequestParam(value = "lastName", required = false) String lastName,
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "userRole", required = false) UserRole userRole,
+            @RequestParam(value = "exceptLoggedUser", required = false) Boolean exceptLoggedUser,
             @RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
         return new ResponseEntity<>(entityService.
-                search(searchTerm, firstName,  lastName,  email, userRole, enabled, pageable), HttpStatus.OK);
+                search(searchTerm, firstName,  lastName,  email, userRole, exceptLoggedUser,enabled, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/as-list/search")
@@ -52,9 +53,10 @@ public class UserController {
             @RequestParam(value = "lastName", required = false) String lastName,
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "userRole", required = false) UserRole userRole,
+            @RequestParam(value = "exceptLoggedUser", required = false) Boolean exceptLoggedUser,
             @RequestParam(value = "enabled", required = false) Boolean enabled) {
         return new ResponseEntity<>(entityService.
-                asListSearch(searchTerm, firstName,  lastName,  email, userRole, enabled), HttpStatus.OK);
+                asListSearch(searchTerm, firstName,  lastName,  email, userRole, exceptLoggedUser, enabled), HttpStatus.OK);
     }
 
     @GetMapping("/roles/list")
