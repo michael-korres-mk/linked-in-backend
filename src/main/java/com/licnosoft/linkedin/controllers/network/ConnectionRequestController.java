@@ -30,7 +30,7 @@ public class ConnectionRequestController {
 	public ResponseEntity<Page<UserConnectionDTO>> findRequests(
 			@RequestParam(name = "creator",required = false) Long creatorId,
 			@RequestParam(name = "recipient",required = false) Long recipientId,
-			@RequestParam(name = "accepted") Boolean accepted,
+			@RequestParam(name = "accepted",required = false) Boolean accepted,
 			Pageable pageable) {
 		return new ResponseEntity<>(entityService.findRequests(creatorId,recipientId,accepted,pageable), HttpStatus.OK);
 	}
@@ -39,7 +39,7 @@ public class ConnectionRequestController {
 	public ResponseEntity<List<UserConnectionDTO>> findRequests(
 			@RequestParam(name = "creator",required = false) Long creatorId,
 			@RequestParam(name = "recipient",required = false) Long recipientId,
-			@RequestParam(name = "accepted") Boolean accepted) {
+			@RequestParam(name = "accepted",required = false) Boolean accepted) {
 		return new ResponseEntity<>(entityService.findRequests(creatorId,recipientId,accepted), HttpStatus.OK);
 	}
 

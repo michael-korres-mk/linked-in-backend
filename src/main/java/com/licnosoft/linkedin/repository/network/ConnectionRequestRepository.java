@@ -12,8 +12,10 @@ public interface ConnectionRequestRepository extends JpaRepository<UserConnectio
 
 	@Query("""
 		SELECT uc FROM UserConnection uc
-		WHERE (:creatorId IS NULL OR uc.recipient.id = :creatorId OR uc.creator.id = :creatorId)
-		AND (:recipientId IS NULL OR uc.recipient.id = :recipientId OR uc.creator.id = :recipientId)
+		WHERE ((:creatorId IS NULL) OR
+		(uc.creator.id = :creatorId AND :recipientId IS NULL) OR
+		(uc.creator.id = :creatorId AND uc.recipient.id =:recipientId) OR
+		(uc.creator.id = :recipientId AND uc.recipient.id =:creatorId))
 		AND (:accepted IS NULL OR (:accepted = true AND uc.connectionDate IS NOT NULL) OR (:accepted = false AND uc.connectionDate IS NULL))
 		"""
 	 )
@@ -27,4 +29,5 @@ public interface ConnectionRequestRepository extends JpaRepository<UserConnectio
 		"""
 	)
 	List<UserConnection> findByCreatorAndRecipient(Long creatorId, Long recipientId, Boolean accepted);
+
 }
