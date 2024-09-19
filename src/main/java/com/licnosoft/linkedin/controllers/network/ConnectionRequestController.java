@@ -5,6 +5,8 @@ import com.licnosoft.linkedin.services.network.ConnectionRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,18 @@ public class ConnectionRequestController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<UserConnectionDTO> findRequests(@RequestParam(name = "recipient") Long recipientId, @RequestParam(name = "accepted") Boolean accepted) {
-		return new ResponseEntity<>(entityService.findRequests(recipientId,accepted), HttpStatus.OK);
+	public ResponseEntity<Page<UserConnectionDTO>> findRequests(
+			@RequestParam(name = "creator",required = false) Long creatorId,
+			@RequestParam(name = "recipient",required = false) Long recipientId,
+			@RequestParam(name = "accepted") Boolean accepted,
+			Pageable pageable) {
+		return new ResponseEntity<>(entityService.findRequests(creatorId,recipientId,accepted,pageable), HttpStatus.OK);
 	}
+
+//	@GetMapping("/list")
+//	public ResponseEntity<UserConnectionDTO> findRequests(@RequestParam(name = "recipient") Long recipientId, @RequestParam(name = "accepted") Boolean accepted) {
+//		return new ResponseEntity<>(entityService.findRequests(recipientId,accepted), HttpStatus.OK);
+//	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UserConnectionDTO> findById(@PathVariable Long id) {

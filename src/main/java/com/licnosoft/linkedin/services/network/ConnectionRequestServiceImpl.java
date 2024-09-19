@@ -11,6 +11,8 @@ import com.licnosoft.linkedin.services.notifications.NotificationService;
 import com.licnosoft.linkedin.services.users.UserService;
 import com.licnosoft.linkedin.util.Utilities;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,9 +35,8 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 	}
 
 	@Override
-	public UserConnectionDTO findRequests(Long recipientId,Boolean accepted) {
-		Long creatorId = userService.getLoggedUser().getId();
-		return modelMapper.map(entityRepository.findByCreatorAndRecipient(creatorId,recipientId,accepted),UserConnectionDTO.class);
+	public Page<UserConnectionDTO> findRequests(Long creatorId,Long recipientId, Boolean accepted, Pageable pageable) {
+		return entityRepository.findByCreatorAndRecipient(creatorId,recipientId,accepted,pageable).map(entity -> modelMapper.map(entity,UserConnectionDTO.class));
 	}
 
 	@Override
