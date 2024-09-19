@@ -40,6 +40,14 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 	}
 
 	@Override
+	public List<UserConnectionDTO> findRequests(Long creatorId,Long recipientId, Boolean accepted) {
+		return entityRepository.findByCreatorAndRecipient(creatorId,recipientId,accepted)
+				.stream()
+				.map(entity -> modelMapper.map(entity,UserConnectionDTO.class))
+				.toList();
+	}
+
+	@Override
 	public UserConnectionDTO findById(Long id) {
 		return modelMapper.map(findEntityById(id), UserConnectionDTO.class);
 	}

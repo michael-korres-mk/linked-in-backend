@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/connection-requests")
 public class ConnectionRequestController {
@@ -33,10 +35,13 @@ public class ConnectionRequestController {
 		return new ResponseEntity<>(entityService.findRequests(creatorId,recipientId,accepted,pageable), HttpStatus.OK);
 	}
 
-//	@GetMapping("/list")
-//	public ResponseEntity<UserConnectionDTO> findRequests(@RequestParam(name = "recipient") Long recipientId, @RequestParam(name = "accepted") Boolean accepted) {
-//		return new ResponseEntity<>(entityService.findRequests(recipientId,accepted), HttpStatus.OK);
-//	}
+	@GetMapping("/list")
+	public ResponseEntity<List<UserConnectionDTO>> findRequests(
+			@RequestParam(name = "creator",required = false) Long creatorId,
+			@RequestParam(name = "recipient",required = false) Long recipientId,
+			@RequestParam(name = "accepted") Boolean accepted) {
+		return new ResponseEntity<>(entityService.findRequests(creatorId,recipientId,accepted), HttpStatus.OK);
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UserConnectionDTO> findById(@PathVariable Long id) {

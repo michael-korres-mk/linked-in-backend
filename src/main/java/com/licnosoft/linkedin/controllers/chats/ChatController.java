@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,8 +24,13 @@ public class ChatController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<ChatDTO>> getChats() {
-        return new ResponseEntity<>(entityService.getChats(), HttpStatus.OK);
+    public ResponseEntity<List<ChatDTO>> getChats(@RequestParam(name = "recipient",required = false) Long recipientId) {
+        return new ResponseEntity<>(entityService.getChats(recipientId), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<ChatDTO> getOrCreateChat(@RequestParam(name = "recipient") Long recipientId) {
+        return new ResponseEntity<>(entityService.getOrCreateChat(recipientId), HttpStatus.OK);
     }
 
     @GetMapping("/messages/{id}")

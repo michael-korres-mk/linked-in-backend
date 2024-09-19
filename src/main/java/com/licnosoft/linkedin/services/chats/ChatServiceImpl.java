@@ -36,18 +36,26 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public List<ChatDTO> getChats() {
+	public List<ChatDTO> getChats(Long recipientId) {
 //		LocalDateTime startDate = DateUtil.toStartOfDay(LocalDate.now().minusDays(Constants.CHAT_RECENCY_DAYS));
-		return entityRepository.getChats(userService.getLoggedUser().getId()).stream().map(c -> modelMapper.map(c,ChatDTO.class)).toList();
+		Long userId = userService.getLoggedUser().getId();
+		return entityRepository.getChats(userId,recipientId).stream().map(c -> modelMapper.map(c,ChatDTO.class)).toList();
 	}
+
 
 	@Override
 	public List<MessageDTO> getChatMessages(Long recipientId) {
 		Long userId = userService.getLoggedUser().getId();
-		return entityRepository.getChatByRecipient(userId,recipientId).getMessages()
+		return entityRepository.getChats(userId,recipientId).getFirst().getMessages()
 				.stream()
 				.map(m -> modelMapper.map(m,MessageDTO.class))
 				.toList();
+	}
+
+	private Chat getEntityByRecipientId(Long recipientId){
+		Long creatorId = userService.getLoggedUser().getId();
+		List<Chat> chats = entityRepository.getChats(creatorId,recipientId);
+		return (chats != null && !chats.isEmpty())? chats.getFirst() : null;
 	}
 
 	@Override
@@ -56,10 +64,21 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
-	public ChatDTO save(ChatDTO dto) {
-		Chat entity = modelMapper.map(dto, Chat.class);
+	public ChatDTO getOrCreateChat(Long recipientId) {
+		Chat entity = getEntityByRecipientId(recipientId);
+		if (entity != null) return modelMapper.map(entity, ChatDTO.class);
 
-		return modelMapper.map(save(entity), ChatDTO.class);
+		User loggedUser = this.userService.getLoggedUser();
+		User recipient = this.userService.findEntityById(recipientId);
+
+		Chat newEntity = new Chat();
+
+		newEntity.setCreator(loggedUser);
+		newEntity.setCreationDate(LocalDateTime.now());
+		newEntity.setRecipient(recipient);
+
+		return modelMapper.map(save(newEntity), ChatDTO.class);
+
 	}
 
 	@Override

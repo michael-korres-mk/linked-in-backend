@@ -5,9 +5,12 @@ import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface ConnectionRequestService {
 
 	Page<UserConnectionDTO> findRequests(Long creatorId, Long recipientId, Boolean accepted, Pageable pageable);
+	List<UserConnectionDTO> findRequests(Long creatorId, Long recipientId, Boolean accepted);
 
 	UserConnectionDTO findById(Long id);
 
