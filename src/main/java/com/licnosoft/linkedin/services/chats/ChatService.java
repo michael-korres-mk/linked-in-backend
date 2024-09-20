@@ -8,11 +8,12 @@ import com.licnosoft.linkedin.model.chats.MessageDTO;
 import java.util.List;
 
 public interface ChatService {
-	List<ChatDTO> getChats();
+	List<ChatDTO> getChats(Long recipientId);
 	List<MessageDTO> getChatMessages(Long recipientId);
 	Chat findEntityById(Long id);
-	ChatDTO save(ChatDTO dto);
 	Chat save(Chat entity);
 	MessageDTO saveMessage(MessageDTO dto);
 	Message saveMessage(Message entity);
+
+	ChatDTO getOrCreateChat(Long recipientId);
 }

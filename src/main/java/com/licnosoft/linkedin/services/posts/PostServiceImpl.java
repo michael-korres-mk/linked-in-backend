@@ -117,7 +117,7 @@ public class PostServiceImpl implements PostService{
 
 		Comment entity = commentRepository.save(temp);
 
-		notificationService.addNotification(NotificationKind.EXPRESSION_OF_INTEREST,"O χρήστης: " + creator.getTitle() + " σχολίασε: " + entity.getDescription(),entity.getDescription(), null,List.of(entity.getPost().getCreator()),"/posts/" + entity.getPost().getId() + "?view=1");
+		notificationService.addNotification(NotificationKind.EXPRESSION_OF_INTEREST,"O χρήστης: " + creator.getTitle() + " σχολίασε: " + entity.getDescription(),entity.getDescription(), null,List.of(entity.getPost().getCreator()),"/posts/" + entity.getPost().getId() + "?view=1",entity.getPost().getId());
 
 		return modelMapper.map(entity,CommentDTO.class);
 	}
@@ -141,7 +141,7 @@ public class PostServiceImpl implements PostService{
 
 		Like entity = likeRepository.save(temp);
 
-		if(entity.getCreationDate() != null) notificationService.addNotification(NotificationKind.EXPRESSION_OF_INTEREST,"Η δημοσίευσή σας αρέσει στον χρήστη: " + creator.getTitle(),null, null,List.of(entity.getPost().getCreator()),"/posts/" + entity.getPost().getId() + "?view=1");
+		if(entity.getCreationDate() != null) notificationService.addNotification(NotificationKind.EXPRESSION_OF_INTEREST,"Η δημοσίευσή σας αρέσει στον χρήστη: " + creator.getTitle(),null, null,List.of(entity.getPost().getCreator()),"/posts/" + entity.getPost().getId() + "?view=1",entity.getPost().getId());
 
 		return modelMapper.map(entity,ToggleEntityDTO.class);
 	}

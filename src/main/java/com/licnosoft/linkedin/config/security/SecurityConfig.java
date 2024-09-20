@@ -4,7 +4,6 @@ import com.licnosoft.linkedin.config.Constants;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -33,8 +32,8 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
-    @Value("${app.auth-disabled:false}")
-    boolean authDisabled;
+//    @Value("${app.auth-disabled:false}")
+//    boolean authDisabled;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http, JwtTokenFilter jwtTokenFilter) throws Exception {

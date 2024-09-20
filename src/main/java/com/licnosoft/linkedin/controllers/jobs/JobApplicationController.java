@@ -23,20 +23,17 @@ public class JobApplicationController {
 	}
 
 	@GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_view')")
 	public ResponseEntity<JobApplicationDTO> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
 		entityService.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PostMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<JobApplicationDTO> save(@RequestBody JobApplicationDTO dto) {
 		return handleSaveRequest(dto, true);
 	}

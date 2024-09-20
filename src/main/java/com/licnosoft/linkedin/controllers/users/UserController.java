@@ -5,7 +5,6 @@ import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
-import com.licnosoft.linkedin.model.network.UserConnectionDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
 import com.licnosoft.linkedin.services.users.UserService;
@@ -35,29 +34,29 @@ public class UserController {
     }
 
     @GetMapping("/search")
-//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Page<UserBasicDTO>> search(
             @RequestParam(value = "q", required = false) String searchTerm,
             @RequestParam(value = "firstName", required = false) String firstName,
             @RequestParam(value = "lastName", required = false) String lastName,
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "userRole", required = false) UserRole userRole,
+            @RequestParam(value = "exceptLoggedUser", required = false) Boolean exceptLoggedUser,
             @RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
         return new ResponseEntity<>(entityService.
-                search(searchTerm, firstName,  lastName,  email, userRole, enabled, pageable), HttpStatus.OK);
+                search(searchTerm, firstName,  lastName,  email, userRole, exceptLoggedUser,enabled, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/as-list/search")
-//    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<UserDetailedDTO>> asListSearch(
             @RequestParam(value = "q", required = false) String searchTerm,
             @RequestParam(value = "firstName", required = false) String firstName,
             @RequestParam(value = "lastName", required = false) String lastName,
             @RequestParam(value = "email", required = false) String email,
             @RequestParam(value = "userRole", required = false) UserRole userRole,
+            @RequestParam(value = "exceptLoggedUser", required = false) Boolean exceptLoggedUser,
             @RequestParam(value = "enabled", required = false) Boolean enabled) {
         return new ResponseEntity<>(entityService.
-                asListSearch(searchTerm, firstName,  lastName,  email, userRole, enabled), HttpStatus.OK);
+                asListSearch(searchTerm, firstName,  lastName,  email, userRole, exceptLoggedUser, enabled), HttpStatus.OK);
     }
 
     @GetMapping("/roles/list")
@@ -65,21 +64,16 @@ public class UserController {
         return new ResponseEntity<>(Arrays.stream(UserRole.values()).toList(), HttpStatus.OK);
     }
 
-    @GetMapping("/connections/list")
-    public ResponseEntity<List<UserConnectionDTO>> getUserConnections() {
-        return new ResponseEntity<>(entityService.getUserConnectionRequests(true), HttpStatus.OK);
-    }
-    @GetMapping("/connection-requests/list")
-    public ResponseEntity<List<UserConnectionDTO>> getUserConnectionRequests() {
-        return new ResponseEntity<>(entityService.getUserConnectionRequests(false), HttpStatus.OK);
-    }
+//    @GetMapping("/connection-requests/list")
+//    public ResponseEntity<List<UserConnectionDTO>> getUserConnectionRequests() {
+//        return new ResponseEntity<>(entityService.getUserConnectionRequests(false), HttpStatus.OK);
+//    }
     @GetMapping("/list")
     public ResponseEntity<List<PlainEntityDTO>> getPlainList() {
         return new ResponseEntity<>(entityService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_view')")
     public ResponseEntity<UserBasicDTO> findById(@PathVariable Long id) {
         return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
     }
@@ -97,26 +91,22 @@ public class UserController {
     }
 
     @PutMapping("/enabled")
-//    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<ToggleEntityDTO> toggleEnabled(@RequestBody ToggleEntityDTO dto) {
         return new ResponseEntity<>(entityService.toggleEnabled(dto), HttpStatus.OK);
     }
 
     @DeleteMapping(path={"/{id}","/as-list/{id}"})
-//    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         entityService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<UserBasicDTO> save(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, true);
     }
 
     @PutMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<UserBasicDTO> update(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, false);
     }

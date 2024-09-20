@@ -26,6 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         AND ((cast(:lastName as string) IS NULL) OR (UPPER(COALESCE(u.lastName, '')) LIKE '%' || UPPER(cast(:lastName as string)) || '%'))
         AND ((cast(:email as string) IS NULL) OR (UPPER(COALESCE(u.email, '')) LIKE '%' || UPPER(cast(:email as string)) || '%'))
         AND ((:userRole IS NULL) OR (u.userRole  = :userRole))
+        AND ((:loggedUserId IS NULL) OR (u.id != :loggedUserId))
         AND ((:enabled IS NULL) OR (u.enabled = :enabled))
     """)
     Page<User> search(@Param("searchTerm") String searchTerm,
@@ -33,6 +34,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                       @Param("lastName") String lastName,
                       @Param("email") String email,
                       @Param("userRole") UserRole userRole,
+                      @Param("loggedUserId") Long loggedUserId,
                       @Param("enabled") Boolean enabled, Pageable pageable);
 
     @Query("""
@@ -41,6 +43,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
         AND ((cast(:lastName as string) IS NULL) OR (UPPER(COALESCE(u.lastName, '')) LIKE '%' || UPPER(cast(:lastName as string)) || '%'))
         AND ((cast(:email as string) IS NULL) OR (UPPER(COALESCE(u.email, '')) LIKE '%' || UPPER(cast(:email as string)) || '%'))
         AND ((:userRole IS NULL) OR (u.userRole  = :userRole))
+        AND ((:loggedUserId IS NULL) OR (u.id != :loggedUserId))
         AND ((:enabled IS NULL) OR (u.enabled = :enabled))
     """)
     List<User> asListSearch(@Param("searchTerm") String searchTerm,
@@ -48,6 +51,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                       @Param("lastName") String lastName,
                       @Param("email") String email,
                       @Param("userRole") UserRole userRole,
+                      @Param("loggedUserId") Long loggedUserId,
                       @Param("enabled") Boolean enabled);
 
     Optional<User> findTopByOrderByIdAsc();

@@ -66,7 +66,15 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     @Override
-    public void addNotification(NotificationKind kind, String title, String message, LocalDateTime endDate, List<User> users, String url) {
-        entityRepository.save(new Notification(kind, title, message, endDate, users, url, userService.getOptionalLoggedUser()));
+    public void addNotification(NotificationKind kind, String title, String message, LocalDateTime endDate, List<User> users, String url, Long entityId) {
+        entityRepository.save(new Notification(kind, title, message, endDate, users, url, entityId, userService.getOptionalLoggedUser()));
     }
+
+    @Override
+    public void clearNotificationEntityId(Long entityId){
+        Notification notification = entityRepository.findByEntityId(entityId);
+        notification.setEntityId(null);
+        entityRepository.save(notification);
+    }
+
 }

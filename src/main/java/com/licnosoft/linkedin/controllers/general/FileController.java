@@ -35,7 +35,6 @@ public class FileController {
     }
 
     @PostMapping(path ="/users-download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    //    @PreAuthorize("hasAuthority('users_edit')")
     public ResponseEntity<Resource> getUsersFile(@RequestBody List<UserDetailedDTO> userDTOs, @RequestParam Boolean xml) {
         return new ResponseEntity<>(entityService.getUsersFile(userDTOs,xml), HttpStatus.OK);
     }

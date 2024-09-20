@@ -11,9 +11,12 @@ import com.licnosoft.linkedin.services.notifications.NotificationService;
 import com.licnosoft.linkedin.services.users.UserService;
 import com.licnosoft.linkedin.util.Utilities;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,6 +35,19 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 	}
 
 	@Override
+	public Page<UserConnectionDTO> findRequests(Long creatorId,Long recipientId, Boolean accepted, Pageable pageable) {
+		return entityRepository.findByCreatorAndRecipient(creatorId,recipientId,accepted,pageable).map(entity -> modelMapper.map(entity,UserConnectionDTO.class));
+	}
+
+	@Override
+	public List<UserConnectionDTO> findRequests(Long creatorId,Long recipientId, Boolean accepted) {
+		return entityRepository.findByCreatorAndRecipient(creatorId,recipientId,accepted)
+				.stream()
+				.map(entity -> modelMapper.map(entity,UserConnectionDTO.class))
+				.toList();
+	}
+
+	@Override
 	public UserConnectionDTO findById(Long id) {
 		return modelMapper.map(findEntityById(id), UserConnectionDTO.class);
 	}
@@ -46,18 +62,42 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 		if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
 		User creator = userService.getLoggedUser();
-		UserConnection temp = modelMapper.map(dto, UserConnection.class);
-		if (insert) {
+		UserConnection temp = (insert)? modelMapper.map(dto, UserConnection.class):findEntityById(dto.getId());
+
+		if(insert){
 			temp.setCreator(creator);
 			temp.setRecipient(userService.findEntityById(dto.getRecipientId()));
+			temp.setCreationDate(LocalDateTime.now());
+			temp.setConnectionDate(null);
+		}
+		else {
+			temp.setConnectionDate(LocalDateTime.now());
 		}
 
 		UserConnection entity = save(temp);
 
-		notificationService.addNotification(NotificationKind.CONNECTION_REQUEST, "Έχετε νέο αίτημα σύνδεσης: " + creator.getTitle(),null, null,List.of(entity.getRecipient()),"/in/" + creator.getId() + "?view=1");
+		if(insert){
+			notificationService.addNotification(NotificationKind.CONNECTION_REQUEST, "Έχετε νέο αίτημα σύνδεσης: " + creator.getTitle(),null, null, List.of(entity.getRecipient()),"/in/" + creator.getId() + "?view=1",entity.getId());
+		}
+		else{
+			notificationService.clearNotificationEntityId(entity.getId());
+		}
 
 		return modelMapper.map(entity, UserConnectionDTO.class);
 	}
+
+//	List<UserConnectionDTO> getUserConnections(){
+//		return getUserConnectionRequests(true);
+//	}
+//
+//
+//	@Override
+//	public List<UserConnectionDTO> getUserConnectionRequests(boolean accepted){
+//		User loggedUser = userService.getLoggedUser();
+//		return entityRepository.getUserConnections
+//
+//	}
+
 
 	@Override
 	public UserConnection save(UserConnection entity) {
@@ -66,6 +106,7 @@ public class ConnectionRequestServiceImpl implements ConnectionRequestService{
 
 	@Override
 	public void deleteById(Long id) {
+		notificationService.clearNotificationEntityId(id);
 		entityRepository.deleteById(id);
 	}
 

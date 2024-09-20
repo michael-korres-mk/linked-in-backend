@@ -47,13 +47,16 @@ public class Notification implements Serializable {
     @JoinColumn(name = "creator_id")
     private User creator;
 
+    @Column(name = "entity_id")
+    private Long entityId;
+
     @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL)
     private List<NotificationRecipient> recipients = new ArrayList<>();
 
     public Notification() {
     }
 
-    public Notification(NotificationKind kind, String title, String message, LocalDateTime endDate, List<User> users, String url, User creator) {
+    public Notification(NotificationKind kind, String title, String message, LocalDateTime endDate, List<User> users, String url, Long entityId, User creator) {
         this.kind = kind;
         this.title = title;
         this.message = message;
@@ -61,6 +64,7 @@ public class Notification implements Serializable {
         this.recipients = users.stream().map(user -> new NotificationRecipient(this, user)).toList();
         this.url = url;
         this.creator = creator;
+        this.entityId = entityId;
     }
 
     public Long getId() {
@@ -134,6 +138,10 @@ public class Notification implements Serializable {
     public void setCreator(User creator) {
         this.creator = creator;
     }
+
+    public Long getEntityId() {return entityId;}
+
+    public void setEntityId(Long entityId) {this.entityId = entityId;}
 
     @Override
     public boolean equals(Object o) {

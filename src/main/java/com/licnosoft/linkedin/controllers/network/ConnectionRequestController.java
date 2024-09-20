@@ -5,9 +5,13 @@ import com.licnosoft.linkedin.services.network.ConnectionRequestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/connection-requests")
@@ -22,27 +26,40 @@ public class ConnectionRequestController {
 		this.entityService = entityService;
 	}
 
+	@GetMapping("/search")
+	public ResponseEntity<Page<UserConnectionDTO>> findRequests(
+			@RequestParam(name = "creator",required = false) Long creatorId,
+			@RequestParam(name = "recipient",required = false) Long recipientId,
+			@RequestParam(name = "accepted",required = false) Boolean accepted,
+			Pageable pageable) {
+		return new ResponseEntity<>(entityService.findRequests(creatorId,recipientId,accepted,pageable), HttpStatus.OK);
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<List<UserConnectionDTO>> findRequests(
+			@RequestParam(name = "creator",required = false) Long creatorId,
+			@RequestParam(name = "recipient",required = false) Long recipientId,
+			@RequestParam(name = "accepted",required = false) Boolean accepted) {
+		return new ResponseEntity<>(entityService.findRequests(creatorId,recipientId,accepted), HttpStatus.OK);
+	}
+
 	@GetMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_view')")
 	public ResponseEntity<UserConnectionDTO> findById(@PathVariable Long id) {
 		return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
 		entityService.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PostMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<UserConnectionDTO> save(@RequestBody UserConnectionDTO dto) {
 		return handleSaveRequest(dto, true);
 	}
 
 	@PutMapping
-//    @PreAuthorize("hasAuthority('users_edit')")
 	public ResponseEntity<UserConnectionDTO> update(@RequestBody UserConnectionDTO dto) {
 		return handleSaveRequest(dto, false);
 	}
