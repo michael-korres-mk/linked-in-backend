@@ -1,6 +1,7 @@
 package com.licnosoft.linkedin.controllers.users;
 
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
+import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
@@ -87,10 +88,14 @@ public class UserController {
         return new ResponseEntity<>(entityService.updateProfile(dto), HttpStatus.OK);
     }
 
+    @GetMapping("/settings/{id}")
+    public ResponseEntity<UserInfoDTO> getUserInfo(@PathVariable Long id) {
+        return new ResponseEntity<>(entityService.findUserInfoById(id), HttpStatus.OK);
+    }
+
     @PutMapping("/settings")
-    public ResponseEntity<UserProfileDTO> updateUserInfo(@RequestBody UserProfileDTO dto) {
-        return null;
-//        return new ResponseEntity<>(entityService.saveProfile(dto), HttpStatus.OK);
+    public ResponseEntity<UserBasicDTO> updateUserInfo(@RequestBody UserInfoDTO dto) {
+        return new ResponseEntity<>(entityService.updateUserInfo(dto), HttpStatus.OK);
     }
 
     @PutMapping("/enabled")

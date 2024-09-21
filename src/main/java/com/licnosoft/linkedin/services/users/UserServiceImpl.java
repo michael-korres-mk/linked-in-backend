@@ -168,6 +168,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserBasicDTO updateUserInfo(UserInfoDTO dto) {
+        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISMATCH);
+
+        User newEntity = modelMapper.map(dto, User.class);
+        User currentEntity = getLoggedUser();
+
+        currentEntity.setEmail(newEntity.getEmail());
+        currentEntity.setPassword(newEntity.getPassword()); // encrypt in the future
+
+        UserInfoDTO newDTO = modelMapper.map(save(currentEntity), UserInfoDTO.class);
+        return loginUser(null, newDTO.getEmail(),newDTO.getPassword());
+    }
+
+    @Override
     public UserDetailedDTO save(UserDetailedDTO dto, boolean insert) {
         if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 

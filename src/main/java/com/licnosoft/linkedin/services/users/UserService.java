@@ -59,4 +59,6 @@ public interface UserService {
     UserProfileDTO updateProfile(UserProfileDTO dto);
 
     UserInfoDTO findUserInfoById(Long id);
+
+    UserBasicDTO updateUserInfo(UserInfoDTO dto);
 }
