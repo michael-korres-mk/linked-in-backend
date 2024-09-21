@@ -22,9 +22,8 @@ public class ValidationErrorMessages {
     public static final String ESS_TEMPLATE_NOT_BLANK = "Το πρότυπο ΕΣΣ δεν μπορεί να είναι κενό.";
     public static final String YEAR_NOT_BLANK = "Το έτος δεν μπορεί να είναι κενό";
     public static final String REFERENCE_PERIOD_NOT_BLANK = "Η περίοδος αναφοράς δεν μπορεί να είναι κενή.";
-    public static final String SUBMISSION_START_DATE_NOT_BLANK = "Η ημερομηνία έναρξης υποβολής δεν μπορεί να είναι κενή.";
-    public static final String SUBMISSION_END_DATE_NOT_BLANK = "Η ημερομηνία λήξης υποβολής δεν μπορεί να είναι κενή.";
-    public static final String END_DATE_NOT_BLANK = "Η ημερομηνία λήξης ΕΣΣ δεν μπορεί να είναι κενή.";
+    public static final String START_DATE_NOT_BLANK = "Η ημερομηνία έναρξης δεν μπορεί να είναι κενή.";
+    public static final String END_DATE_NOT_BLANK = "Η ημερομηνία λήξης δεν μπορεί να είναι κενή.";
     public static final String STATUS_NOT_BLANK = "Η κατάσταση δεν μπορεί να είναι κενή.";
     public static final String CREATION_NOT_BLANK = "Η ημερομηνία δημιουργίας δεν μπορεί να είναι κενή.";
     public static final String ASSIGN_NOT_BLANK = "Η ημερομηνία ανάθεσης δεν μπορεί να είναι κενή.";

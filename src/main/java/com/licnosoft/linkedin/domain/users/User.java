@@ -60,18 +60,6 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @Column(name = "about_me")
     private String aboutMe;
 
-    @Column(name = "work_experience")
-    private String workExperience;
-
-    @Column(name = "education")
-    private String education;
-
-    @Column(name = "skills")
-    private String skills;
-
-    @Column(name = "projects")
-    private String projects;
-
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<UserConnection> connections = new ArrayList<>();
 
@@ -87,6 +75,22 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<Job> jobs = new ArrayList<>();
 
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Skill> skills = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<Education> educations = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "creator", cascade = CascadeType.ALL)
+    private List<WorkExperience> workExperiences = new ArrayList<>();
+
+    @Column(name = "skills_enabled")
+    private boolean skillsEnabled;
+    @Column(name = "educations_enabled")
+    private boolean educationsEnabled;
+    @Column(name = "work_experiences_enabled")
+    private boolean workExperiencesEnabled;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<UserRole> authorities = new HashSet<>();
@@ -98,30 +102,12 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
         return firstName + " " + lastName;
     }
 
+    @Override
     public String getTitle() {
         return getName();
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
     public Long getId() {return id;}
 
     public void setId(Long id) {this.id = id;}
@@ -156,7 +142,22 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setMobile(String mobile) {this.mobile = mobile;}
 
+    @Override
+    public boolean isEnabled() {return enabled;}
+
     public void setEnabled(boolean enabled) {this.enabled = enabled;}
+
+    public String getJobTitle() {return jobTitle;}
+
+    public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
+
+    public String getCompany() {return company;}
+
+    public void setCompany(String company) {this.company = company;}
+
+    public String getAboutMe() {return aboutMe;}
+
+    public void setAboutMe(String aboutMe) {this.aboutMe = aboutMe;}
 
     public List<UserConnection> getConnections() {return connections;}
 
@@ -178,33 +179,29 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     public void setJobs(List<Job> jobs) {this.jobs = jobs;}
 
-    public String getWorkExperience() {return workExperience;}
+    public List<Skill> getSkills() {return skills;}
 
-    public void setWorkExperience(String workExperience) {this.workExperience = workExperience;}
+    public void setSkills(List<Skill> skills) {this.skills = skills;}
 
-    public String getEducation() {return education;}
+    public List<Education> getEducations() {return educations;}
 
-    public void setEducation(String education) {this.education = education;}
+    public void setEducations(List<Education> educations) {this.educations = educations;}
 
-    public String getJobTitle() {return jobTitle;}
+    public List<WorkExperience> getWorkExperiences() {return workExperiences;}
 
-    public void setJobTitle(String jobTitle) {this.jobTitle = jobTitle;}
+    public void setWorkExperiences(List<WorkExperience> workExperiences) {this.workExperiences = workExperiences;}
 
-    public String getCompany() {return company;}
+    public boolean isSkillsEnabled() {return skillsEnabled;}
 
-    public void setCompany(String company) {this.company = company;}
+    public void setSkillsEnabled(boolean skillsEnabled) {this.skillsEnabled = skillsEnabled;}
 
-    public String getSkills() {return skills;}
+    public boolean isEducationsEnabled() {return educationsEnabled;}
 
-    public void setSkills(String skills) {this.skills = skills;}
+    public void setEducationsEnabled(boolean educationsEnabled) {this.educationsEnabled = educationsEnabled;}
 
-    public String getAboutMe() {return aboutMe;}
+    public boolean isWorkExperiencesEnabled() {return workExperiencesEnabled;}
 
-    public void setAboutMe(String aboutMe) {this.aboutMe = aboutMe;}
-
-    public String getProjects() {return projects;}
-
-    public void setProjects(String projects) {this.projects = projects;}
+    public void setWorkExperiencesEnabled(boolean workExperiencesEnabled) {this.workExperiencesEnabled = workExperiencesEnabled;}
 
     @Override
     public boolean equals(Object o) {

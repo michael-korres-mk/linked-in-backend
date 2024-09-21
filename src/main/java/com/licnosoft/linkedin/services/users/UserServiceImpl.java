@@ -11,7 +11,12 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
+import com.licnosoft.linkedin.model.users.UserProfileDTO;
+import com.licnosoft.linkedin.repository.users.EducationRepository;
+import com.licnosoft.linkedin.repository.users.SkillRepository;
 import com.licnosoft.linkedin.repository.users.UserRepository;
+import com.licnosoft.linkedin.repository.users.WorkExperienceRepository;
+import com.licnosoft.linkedin.util.ProfileUtil;
 import com.licnosoft.linkedin.util.Utilities;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,10 +42,20 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final JwtUtil jwtUtil;
 
-    public UserServiceImpl(UserRepository entityRepository, ModelMapper modelMapper, JwtUtil jwtUtil) {
+    private final ProfileUtil userProfileUtil;
+
+    private final SkillRepository skillRepository;
+    private final EducationRepository educationRepository;
+    private final WorkExperienceRepository workExperienceRepository;
+
+    public UserServiceImpl(UserRepository entityRepository, ModelMapper modelMapper, JwtUtil jwtUtil, ProfileUtil userProfileUtil, SkillRepository skillRepository, EducationRepository educationRepository, WorkExperienceRepository workExperienceRepository) {
         this.entityRepository = entityRepository;
         this.modelMapper = modelMapper;
         this.jwtUtil = jwtUtil;
+        this.userProfileUtil = userProfileUtil;
+        this.skillRepository = skillRepository;
+        this.educationRepository = educationRepository;
+        this.workExperienceRepository = workExperienceRepository;
     }
 
     @Override
@@ -73,6 +88,13 @@ public class UserServiceImpl implements UserService {
     public UserDetailedDTO findById(Long id) {
         return modelMapper.map(findEntityById(id), UserDetailedDTO.class);
     }
+
+    @Override
+    public UserProfileDTO findProfileById(Long id) {return modelMapper.map(findEntityById(id), UserProfileDTO.class);}
+
+    @Override
+    public UserInfoDTO findUserInfoById(Long id) {return modelMapper.map(findEntityById(id), UserInfoDTO.class);}
+
 
     @Override
     public User findEntityById(Long id) {
@@ -128,16 +150,27 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(save(result), ToggleEntityDTO.class);
     }
 
+    @Override
+    public UserProfileDTO updateProfile(UserProfileDTO dto) {
+        User newEntity = modelMapper.map(dto, User.class);
+        User currentEntity = getLoggedUser();
+
+        currentEntity.setAboutMe(newEntity.getAboutMe());
+
+        userProfileUtil.updateSkills(currentEntity,newEntity);
+        userProfileUtil.updateWorkExperiences(currentEntity,newEntity);
+        userProfileUtil.updateEducations(currentEntity,newEntity);
+
+        return modelMapper.map(save(currentEntity), UserProfileDTO.class);
+    }
 
     @Override
-    public UserDetailedDTO save(UserInfoDTO dto, boolean insert) {
+    public UserDetailedDTO save(UserDetailedDTO dto, boolean insert) {
         if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
-        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISMATCH);
+//        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISMATCH);
 
-        // TODO: Check if connections get properly saved
         UserDetailedDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDetailedDTO.class);
-        userDTO.setToken(jwtUtil.generateToken(dto));
         return userDTO;
     }
 
