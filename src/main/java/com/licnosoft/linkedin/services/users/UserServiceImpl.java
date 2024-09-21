@@ -156,6 +156,9 @@ public class UserServiceImpl implements UserService {
         User currentEntity = getLoggedUser();
 
         currentEntity.setAboutMe(newEntity.getAboutMe());
+        currentEntity.setSkillsEnabled(newEntity.isSkillsEnabled());
+        currentEntity.setWorkExperiencesEnabled(newEntity.isWorkExperiencesEnabled());
+        currentEntity.setEducationsEnabled(newEntity.isEducationsEnabled());
 
         userProfileUtil.updateSkills(currentEntity,newEntity);
         userProfileUtil.updateWorkExperiences(currentEntity,newEntity);
@@ -170,8 +173,15 @@ public class UserServiceImpl implements UserService {
 
 //        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISMATCH);
 
-        UserDetailedDTO userDTO = modelMapper.map(save(modelMapper.map(dto, User.class)), UserDetailedDTO.class);
-        return userDTO;
+        User entity = modelMapper.map(dto, User.class);
+
+        if(insert){
+            entity.setSkillsEnabled(false);
+            entity.setEducationsEnabled(false);
+            entity.setWorkExperiencesEnabled(false);
+        }
+
+	    return modelMapper.map(save(entity), UserDetailedDTO.class);
     }
 
     @Override
