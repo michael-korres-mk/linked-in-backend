@@ -51,6 +51,9 @@ public class Job implements Serializable {
 	@Column(name = "enabled")
 	private boolean enabled;
 
+	@Column(name = "location")
+	private String location;
+
 	public Long getId() {return id;}
 
 	public void setId(Long id) {this.id = id;}
@@ -86,6 +89,10 @@ public class Job implements Serializable {
 	public String getDescription() {return description;}
 
 	public void setDescription(String description) {this.description = description;}
+
+	public String getLocation() {return location;}
+
+	public void setLocation(String location) {this.location = location;}
 
 	@Override
 	public boolean equals(Object o) {

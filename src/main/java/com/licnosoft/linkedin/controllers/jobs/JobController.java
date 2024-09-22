@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/jobs")
 public class JobController {
@@ -28,9 +30,17 @@ public class JobController {
 	@GetMapping("/search")
 	public ResponseEntity<Page<JobDetailedDTO>> search(
 			@RequestParam(value = "q", required = false) String searchTerm,
-			@RequestParam(value = "enabled", required = false) Boolean enabled, Pageable pageable) {
+			@RequestParam(value = "creator", required = false) Long creatorId, Pageable pageable) {
 		return new ResponseEntity<>(entityService.
-				search(searchTerm, enabled, pageable), HttpStatus.OK);
+				search(searchTerm, creatorId, pageable), HttpStatus.OK);
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<List<JobDetailedDTO>> search(
+			@RequestParam(value = "q", required = false) String searchTerm,
+			@RequestParam(value = "creator", required = false) Long creatorId) {
+		return new ResponseEntity<>(entityService.
+				searchAsList(searchTerm, creatorId), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")

@@ -6,8 +6,11 @@ import com.licnosoft.linkedin.model.jobs.JobDetailedDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface JobService {
-	Page<JobDetailedDTO> search(String searchTerm, Boolean enabled, Pageable pageable);
+	Page<JobDetailedDTO> search(String searchTerm, Long creatorId, Pageable pageable);
+	List<JobDetailedDTO> searchAsList(String searchTerm, Long creatorId);
 
 	JobDetailedDTO findById(Long id);
 

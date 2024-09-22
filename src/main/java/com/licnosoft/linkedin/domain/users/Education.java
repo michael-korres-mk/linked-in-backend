@@ -49,7 +49,6 @@ public class Education {
 	private boolean enabled;
 
 	@Column(name = "location")
-	@NotNull
 	private String location;
 
 	@Column(name = "start_date")

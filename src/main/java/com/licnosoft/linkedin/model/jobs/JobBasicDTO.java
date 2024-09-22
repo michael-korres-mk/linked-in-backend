@@ -10,7 +10,7 @@ public class JobBasicDTO extends BasicEntityDTO {
 	protected String company;
 	protected WorkplaceType workplaceType;
 	protected EmploymentType employmentType;
-
+	protected String location;
 	public UserBasicDTO getCreator() {return creator;}
 
 	public void setCreator(UserBasicDTO creator) {this.creator = creator;}
@@ -26,4 +26,8 @@ public class JobBasicDTO extends BasicEntityDTO {
 	public EmploymentType getEmploymentType() {return employmentType;}
 
 	public void setEmploymentType(EmploymentType employmentType) {this.employmentType = employmentType;}
+
+	public String getLocation() {return location;}
+
+	public void setLocation(String location) {this.location = location;}
 }

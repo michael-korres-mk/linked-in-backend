@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -35,9 +36,14 @@ public class JobServiceImpl implements JobService {
 	}
 
 	@Override
-	public Page<JobDetailedDTO> search(String searchTerm, Boolean enabled, Pageable pageable) {
-		return entityRepository.search(searchTerm, pageable)
+	public Page<JobDetailedDTO> search(String searchTerm,Long creatorId, Pageable pageable) {
+		return entityRepository.search(searchTerm, creatorId, pageable)
 				.map(entity -> modelMapper.map(entity, JobDetailedDTO.class));
+	}
+
+	@Override
+	public List<JobDetailedDTO> searchAsList(String searchTerm, Long creatorId) {
+		return entityRepository.searchAsList(searchTerm, creatorId).stream().map(j -> modelMapper.map(j, JobDetailedDTO.class)).toList();
 	}
 
 	@Override
