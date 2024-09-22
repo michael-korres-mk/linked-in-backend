@@ -3,7 +3,7 @@ package com.licnosoft.linkedin.model.notifications;
 import com.licnosoft.linkedin.config.LocalDateTimeAdapter;
 import com.licnosoft.linkedin.domain.enumeration.NotificationKind;
 import com.licnosoft.linkedin.model.general.BasicEntityDTO;
-import com.licnosoft.linkedin.model.general.PlainEntityDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -14,7 +14,7 @@ public class NotificationDTO extends BasicEntityDTO {
     private NotificationKind kind;
     protected LocalDateTime readDate;
     protected LocalDateTime endDate;
-    private PlainEntityDTO creator;
+    private UserBasicDTO creator;
     private String url;
     private String message;
     private Long entityId;
@@ -51,9 +51,9 @@ public class NotificationDTO extends BasicEntityDTO {
 
     public void setKind(NotificationKind kind) { this.kind = kind; }
 
-    public PlainEntityDTO getCreator() { return creator; }
+    public UserBasicDTO getCreator() { return creator; }
 
-    public void setCreator(PlainEntityDTO creator) { this.creator = creator; }
+    public void setCreator(UserBasicDTO creator) { this.creator = creator; }
 
     public Long getEntityId() {return entityId;}
 

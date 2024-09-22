@@ -3,6 +3,7 @@ package com.licnosoft.linkedin.model.users;
 import com.licnosoft.linkedin.config.LocalDateTimeAdapter;
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
 import com.licnosoft.linkedin.model.general.EntityDTO;
+import com.licnosoft.linkedin.model.general.FileDTO;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -24,6 +25,7 @@ public class UserBasicDTO extends EntityDTO {
     protected LocalDateTime lastVisit;
     protected Integer failedLoginAttempts = 0;
     protected LocalDateTime birthDate;
+    protected FileDTO profilePhoto;
 
     public String getEmail() {
         return email;
@@ -116,4 +118,8 @@ public class UserBasicDTO extends EntityDTO {
     public Integer getFailedLoginAttempts() {return failedLoginAttempts;}
 
     public void setFailedLoginAttempts(Integer failedLoginAttempts) {this.failedLoginAttempts = failedLoginAttempts;}
+
+    public FileDTO getProfilePhoto() {return profilePhoto;}
+
+    public void setProfilePhoto(FileDTO profilePhoto) {this.profilePhoto = profilePhoto;}
 }

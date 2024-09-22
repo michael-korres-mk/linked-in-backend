@@ -1,16 +1,17 @@
 package com.licnosoft.linkedin.model.posts;
 
 import com.licnosoft.linkedin.model.general.BasicEntityDTO;
-import com.licnosoft.linkedin.model.general.PlainEntityDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "comment")
 public class CommentDTO extends BasicEntityDTO {
-	protected PlainEntityDTO creator;
+	protected UserBasicDTO creator;
 	protected Long postId;
-	public PlainEntityDTO getCreator() {return creator;}
 
-	public void setCreator(PlainEntityDTO creator) {this.creator = creator;}
+	public UserBasicDTO getCreator() {return creator;}
+
+	public void setCreator(UserBasicDTO creator) {this.creator = creator;}
 
 	public Long getPostId() {return postId;}
 

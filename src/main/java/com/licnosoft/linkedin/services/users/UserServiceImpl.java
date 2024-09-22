@@ -155,6 +155,11 @@ public class UserServiceImpl implements UserService {
         User newEntity = modelMapper.map(dto, User.class);
         User currentEntity = getLoggedUser();
 
+        currentEntity.setProfilePhoto(newEntity.getProfilePhoto());
+        currentEntity.setFirstName(newEntity.getFirstName());
+        currentEntity.setLastName(newEntity.getLastName());
+        currentEntity.setMobile(newEntity.getMobile());
+        currentEntity.setUsername(newEntity.getUsername());
         currentEntity.setAboutMe(newEntity.getAboutMe());
         currentEntity.setSkillsEnabled(newEntity.isSkillsEnabled());
         currentEntity.setWorkExperiencesEnabled(newEntity.isWorkExperiencesEnabled());

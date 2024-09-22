@@ -1,5 +1,7 @@
 package com.licnosoft.linkedin.model.general;
 
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
+
 import java.time.LocalDate;
 
 public class ProfileInfoItemDTO extends BasicEntityDTO {
@@ -7,7 +9,7 @@ public class ProfileInfoItemDTO extends BasicEntityDTO {
 	protected LocalDate endDate;
 	protected String location;
 
-	protected PlainEntityDTO creator;
+	protected UserBasicDTO creator;
 
 	public LocalDate getStartDate() {return startDate;}
 
@@ -21,7 +23,7 @@ public class ProfileInfoItemDTO extends BasicEntityDTO {
 
 	public void setLocation(String location) {this.location = location;}
 
-	public PlainEntityDTO getCreator() {return creator;}
+	public UserBasicDTO getCreator() {return creator;}
 
-	public void setCreator(PlainEntityDTO creator) {this.creator = creator;}
+	public void setCreator(UserBasicDTO creator) {this.creator = creator;}
 }

@@ -2,7 +2,7 @@ package com.licnosoft.linkedin.model.posts;
 
 import com.licnosoft.linkedin.config.LocalDateTimeAdapter;
 import com.licnosoft.linkedin.model.general.EntityDTO;
-import com.licnosoft.linkedin.model.general.PlainEntityDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -12,11 +12,12 @@ import java.time.LocalDateTime;
 @XmlRootElement(name = "like")
 public class LikeDTO extends EntityDTO {
 
-	protected PlainEntityDTO creator;
+	protected UserBasicDTO creator;
 	protected LocalDateTime creationDate;
-	public PlainEntityDTO getCreator() {return creator;}
 
-	public void setCreator(PlainEntityDTO creator) {this.creator = creator;}
+	public UserBasicDTO getCreator() {return creator;}
+
+	public void setCreator(UserBasicDTO creator) {this.creator = creator;}
 
 	@XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
 	@XmlElement(name = "creation-date")

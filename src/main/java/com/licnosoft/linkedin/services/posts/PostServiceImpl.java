@@ -81,6 +81,7 @@ public class PostServiceImpl implements PostService{
 			entity.setEnabled(true);
 		}
 
+		// TODO: handle insert case
 		List<PostPhoto> photos = entity.getPhotos();
 		photos.forEach(postPhoto -> postPhoto.setPost(entity));
 
