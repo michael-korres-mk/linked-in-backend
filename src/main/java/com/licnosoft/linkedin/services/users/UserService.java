@@ -8,6 +8,7 @@ import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
+import com.licnosoft.linkedin.model.users.UserProfileDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -25,6 +26,8 @@ public interface UserService {
 
     UserBasicDTO findById(Long id);
 
+    UserProfileDTO findProfileById(Long id);
+
     User findEntityById(Long id);
 
     User findEntityByUsername(String username);
@@ -36,7 +39,7 @@ public interface UserService {
 
     ToggleEntityDTO toggleEnabled(ToggleEntityDTO dto);
 
-    UserBasicDTO save(UserInfoDTO dto, boolean insert);
+    UserDetailedDTO save(UserDetailedDTO dto, boolean insert);
 
     User save(User entity);
 
@@ -53,4 +56,9 @@ public interface UserService {
 
     UserBasicDTO loginUser(String token, String email, String password);
 
+    UserProfileDTO updateProfile(UserProfileDTO dto);
+
+    UserInfoDTO findUserInfoById(Long id);
+
+    UserBasicDTO updateUserInfo(UserInfoDTO dto);
 }

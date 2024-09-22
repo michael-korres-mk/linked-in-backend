@@ -1,12 +1,12 @@
 package com.licnosoft.linkedin.controllers.users;
 
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
-import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.auth.UserInfoDTO;
 import com.licnosoft.linkedin.model.general.PlainEntityDTO;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.users.UserBasicDTO;
 import com.licnosoft.linkedin.model.users.UserDetailedDTO;
+import com.licnosoft.linkedin.model.users.UserProfileDTO;
 import com.licnosoft.linkedin.services.users.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,16 +78,24 @@ public class UserController {
         return new ResponseEntity<>(entityService.findById(id), HttpStatus.OK);
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<UserBasicDTO> getUserProfile() {
-        return new ResponseEntity<>(entityService.findById(entityService.getLoggedUser().getId()), HttpStatus.OK);
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable Long id) {
+        return new ResponseEntity<>(entityService.findProfileById(id), HttpStatus.OK);
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<UserBasicDTO> updateProfile(@RequestBody UserInfoDTO dto) {
-        User user = entityService.getLoggedUser();
-        dto.setId(user.getId());
-        return handleSaveRequest(dto, false);
+    public ResponseEntity<UserProfileDTO> updateProfile(@RequestBody UserProfileDTO dto) {
+        return new ResponseEntity<>(entityService.updateProfile(dto), HttpStatus.OK);
+    }
+
+    @GetMapping("/settings/{id}")
+    public ResponseEntity<UserInfoDTO> getUserInfo(@PathVariable Long id) {
+        return new ResponseEntity<>(entityService.findUserInfoById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/settings")
+    public ResponseEntity<UserBasicDTO> updateUserInfo(@RequestBody UserInfoDTO dto) {
+        return new ResponseEntity<>(entityService.updateUserInfo(dto), HttpStatus.OK);
     }
 
     @PutMapping("/enabled")
@@ -102,16 +110,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserBasicDTO> save(@RequestBody UserInfoDTO dto) {
+    public ResponseEntity<UserDetailedDTO> save(@RequestBody UserDetailedDTO dto) {
         return handleSaveRequest(dto, true);
     }
 
     @PutMapping
-    public ResponseEntity<UserBasicDTO> update(@RequestBody UserInfoDTO dto) {
+    public ResponseEntity<UserDetailedDTO> update(@RequestBody UserDetailedDTO dto) {
         return handleSaveRequest(dto, false);
     }
 
-    private ResponseEntity<UserBasicDTO> handleSaveRequest(UserInfoDTO dto, boolean insert) {
+    private ResponseEntity<UserDetailedDTO> handleSaveRequest(UserDetailedDTO dto, boolean insert) {
         log.debug("REST request to save a user : {}", dto);
         return new ResponseEntity<>(entityService.save(dto, insert), HttpStatus.CREATED);
     }
