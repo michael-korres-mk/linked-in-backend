@@ -1,22 +1,22 @@
 package com.licnosoft.linkedin.model.chats;
 
 import com.licnosoft.linkedin.model.general.BasicEntityDTO;
-import com.licnosoft.linkedin.model.general.PlainEntityDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 
 public class ChatDTO extends BasicEntityDTO {
-	protected PlainEntityDTO creator;
-	protected PlainEntityDTO recipient;
+	protected UserBasicDTO creator;
+	protected UserBasicDTO recipient;
 	protected MessageDTO lastMessage;
 
 	public MessageDTO getLastMessage() {return lastMessage;}
 
 	public void setLastMessage(MessageDTO lastMessage) {this.lastMessage = lastMessage;}
 
-	public PlainEntityDTO getCreator() {return creator;}
+	public UserBasicDTO getCreator() {return creator;}
 
-	public void setCreator(PlainEntityDTO creator) {this.creator = creator;}
+	public void setCreator(UserBasicDTO creator) {this.creator = creator;}
 
-	public PlainEntityDTO getRecipient() {return recipient;}
+	public UserBasicDTO getRecipient() {return recipient;}
 
-	public void setRecipient(PlainEntityDTO recipient) {this.recipient = recipient;}
+	public void setRecipient(UserBasicDTO recipient) {this.recipient = recipient;}
 }

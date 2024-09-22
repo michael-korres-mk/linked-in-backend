@@ -1,18 +1,18 @@
 package com.licnosoft.linkedin.model.posts;
 
 import com.licnosoft.linkedin.model.general.BasicEntityDTO;
-import com.licnosoft.linkedin.model.general.PlainEntityDTO;
+import com.licnosoft.linkedin.model.users.UserBasicDTO;
 
 import java.util.List;
 
 public class PostBasicDTO extends BasicEntityDTO {
-	protected PlainEntityDTO creator;
+	protected UserBasicDTO creator;
 	protected List<CommentDTO> comments;
 	protected List<LikeDTO> likes;
 
-	public PlainEntityDTO getCreator() {return creator;}
+	public UserBasicDTO getCreator() {return creator;}
 
-	public void setCreator(PlainEntityDTO creator) {this.creator = creator;}
+	public void setCreator(UserBasicDTO creator) {this.creator = creator;}
 
 	public List<CommentDTO> getComments() { return comments; }
 

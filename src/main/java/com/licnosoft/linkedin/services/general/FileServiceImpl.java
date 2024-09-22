@@ -44,7 +44,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File findById(Long id) {
-        return entityRepository.findByIdAndUser(id, userService.getLoggedUser().getId()).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε αρχείο με αυτό το id: " + id +"."));
+        return entityRepository.findById(id).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε αρχείο με αυτό το id: " + id +"."));
+        //        return entityRepository.findByIdAndUser(id, userService.getLoggedUser().getId()).orElseThrow(() -> new AppNotFoundException("Δε βρέθηκε αρχείο με αυτό το id: " + id +"."));
     }
 
     @Override

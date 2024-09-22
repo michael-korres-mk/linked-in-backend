@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDetailedDTO> asListSearch(String searchTerm,String firstName, String lastName, String email, UserRole userRole, Boolean exceptLoggedUser, Boolean enabled) {
-        Long loggedUserId = (exceptLoggedUser)? getLoggedUser().getId() : null;
+        Long loggedUserId = (exceptLoggedUser != null)? getLoggedUser().getId() : null;
         return entityRepository.asListSearch(searchTerm, firstName, lastName, email, userRole,loggedUserId, enabled)
                 .stream()
                 .map(entity -> modelMapper.map(entity, UserDetailedDTO.class))
@@ -155,6 +155,11 @@ public class UserServiceImpl implements UserService {
         User newEntity = modelMapper.map(dto, User.class);
         User currentEntity = getLoggedUser();
 
+        currentEntity.setProfilePhoto(newEntity.getProfilePhoto());
+        currentEntity.setFirstName(newEntity.getFirstName());
+        currentEntity.setLastName(newEntity.getLastName());
+        currentEntity.setMobile(newEntity.getMobile());
+        currentEntity.setUsername(newEntity.getUsername());
         currentEntity.setAboutMe(newEntity.getAboutMe());
         currentEntity.setSkillsEnabled(newEntity.isSkillsEnabled());
         currentEntity.setWorkExperiencesEnabled(newEntity.isWorkExperiencesEnabled());

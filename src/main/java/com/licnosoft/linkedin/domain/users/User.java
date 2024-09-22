@@ -1,6 +1,7 @@
 package com.licnosoft.linkedin.domain.users;
 
 import com.licnosoft.linkedin.domain.enumeration.UserRole;
+import com.licnosoft.linkedin.domain.general.File;
 import com.licnosoft.linkedin.domain.general.PlainEntity;
 import com.licnosoft.linkedin.domain.jobs.Job;
 import com.licnosoft.linkedin.domain.network.UserConnection;
@@ -59,6 +60,10 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
 
     @Column(name = "about_me")
     private String aboutMe;
+
+    @OneToOne
+    @JoinColumn(name = "profile_photo")
+    private File profilePhoto;
 
     @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
     private List<UserConnection> connections = new ArrayList<>();
@@ -202,6 +207,11 @@ public class User implements Serializable, UserDetails, PlainEntity<User> {
     public boolean isWorkExperiencesEnabled() {return workExperiencesEnabled;}
 
     public void setWorkExperiencesEnabled(boolean workExperiencesEnabled) {this.workExperiencesEnabled = workExperiencesEnabled;}
+
+    public File getProfilePhoto() {return profilePhoto;}
+
+    public void setProfilePhoto(File profilePhoto) {this.profilePhoto = profilePhoto;}
+
 
     @Override
     public boolean equals(Object o) {
