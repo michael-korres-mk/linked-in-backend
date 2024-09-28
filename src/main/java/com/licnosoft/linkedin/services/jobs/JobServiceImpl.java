@@ -36,14 +36,16 @@ public class JobServiceImpl implements JobService {
 	}
 
 	@Override
-	public Page<JobDetailedDTO> search(String searchTerm,Long creatorId, Pageable pageable) {
-		return entityRepository.search(searchTerm, creatorId, pageable)
+	public Page<JobDetailedDTO> search(String searchTerm,Boolean exceptLoggedUser,Long creatorId, Pageable pageable) {
+		Long loggedUserId = (exceptLoggedUser != null)? userService.getLoggedUser().getId() : null;
+		return entityRepository.search(searchTerm,loggedUserId, creatorId, pageable)
 				.map(entity -> modelMapper.map(entity, JobDetailedDTO.class));
 	}
 
 	@Override
-	public List<JobDetailedDTO> searchAsList(String searchTerm, Long creatorId) {
-		return entityRepository.searchAsList(searchTerm, creatorId).stream().map(j -> modelMapper.map(j, JobDetailedDTO.class)).toList();
+	public List<JobDetailedDTO> searchAsList(String searchTerm,Boolean exceptLoggedUser, Long creatorId) {
+		Long loggedUserId = (exceptLoggedUser != null)? userService.getLoggedUser().getId() : null;
+		return entityRepository.searchAsList(searchTerm,loggedUserId, creatorId).stream().map(j -> modelMapper.map(j, JobDetailedDTO.class)).toList();
 	}
 
 	@Override

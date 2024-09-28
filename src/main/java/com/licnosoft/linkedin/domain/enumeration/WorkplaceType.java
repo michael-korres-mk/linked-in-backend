@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 public enum WorkplaceType implements Serializable {
 
-	ON_SITE("On-site"),
-	REMOTE("Remote"),
-	HYBRID("Hybrid");
+	ON_SITE("Στις Εγκαταστάσεις"),
+	REMOTE("Εξ Αποστάσεως"),
+	HYBRID("Υβριδικό");
+
 	private final String label;
 
 	WorkplaceType(String label) {

@@ -3,10 +3,10 @@ package com.licnosoft.linkedin.domain.enumeration;
 import java.io.Serializable;
 
 public enum EmploymentType implements Serializable {
-	FULL_TIME("Full Time"),
-	PART_TIME("Part Time"),
-	CONTRACT("Contract"),
-	INTERNSHIP("Internship");
+	FULL_TIME("Πλήρης Απασχόληση"),
+	PART_TIME("Μερική Απασχόληση"),
+	CONTRACT("Συμβόλαιο"),
+	INTERNSHIP("Πρακτική");
 
 	private final String label;
 

@@ -9,8 +9,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface JobService {
-	Page<JobDetailedDTO> search(String searchTerm, Long creatorId, Pageable pageable);
-	List<JobDetailedDTO> searchAsList(String searchTerm, Long creatorId);
+	Page<JobDetailedDTO> search(String searchTerm,Boolean exceptLoggedUser, Long creatorId, Pageable pageable);
+	List<JobDetailedDTO> searchAsList(String searchTerm,Boolean exceptLoggedUser, Long creatorId);
 
 	JobDetailedDTO findById(Long id);
 

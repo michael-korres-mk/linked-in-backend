@@ -12,14 +12,16 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 	@Query("""
 			SELECT j FROM Job j WHERE ((cast(:searchTerm as string) IS NULL) OR (UPPER(COALESCE(j.title, '') || COALESCE(j.company, '')) LIKE '%' || UPPER(cast(:searchTerm as string)) || '%'))
 			AND (:creatorId IS NULL OR j.creator.id = :creatorId)
-			ORDER BY j.creationDate ASC
+			 AND ((:loggedUserId IS NULL) OR (j.creator.id != :loggedUserId))
+			 ORDER BY j.creationDate ASC
 			""")
-	Page<Job> search(String searchTerm,Long creatorId, Pageable pageable);
+	Page<Job> search(String searchTerm,Long loggedUserId,Long creatorId, Pageable pageable);
 
 	@Query("""
 			SELECT j FROM Job j WHERE ((cast(:searchTerm as string) IS NULL) OR (UPPER(COALESCE(j.title, '') || COALESCE(j.company, '')) LIKE '%' || UPPER(cast(:searchTerm as string)) || '%'))
 			AND (:creatorId IS NULL OR j.creator.id = :creatorId)
+            AND ((:loggedUserId IS NULL) OR (j.creator.id != :loggedUserId))
 			ORDER BY j.creationDate ASC
 			""")
-	List<Job> searchAsList(String searchTerm, Long creatorId);
+	List<Job> searchAsList(String searchTerm,Long loggedUserId, Long creatorId);
 }
