@@ -10,6 +10,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -54,6 +56,9 @@ public class Job implements Serializable {
 	@Column(name = "location")
 	private String location;
 
+	@OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+	private List<JobApplication> applications = new ArrayList<>();
+
 	public Long getId() {return id;}
 
 	public void setId(Long id) {this.id = id;}
@@ -93,6 +98,10 @@ public class Job implements Serializable {
 	public String getLocation() {return location;}
 
 	public void setLocation(String location) {this.location = location;}
+
+	public List<JobApplication> getApplications() {return applications;}
+
+	public void setApplications(List<JobApplication> applications) {this.applications = applications;}
 
 	@Override
 	public boolean equals(Object o) {
