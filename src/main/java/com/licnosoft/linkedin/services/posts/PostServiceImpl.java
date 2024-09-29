@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -81,7 +82,7 @@ public class PostServiceImpl implements PostService{
 			entity.setCreationDate(LocalDateTime.now());
 			entity.setEnabled(true);
 			List<PostPhoto> photos = entity.getPhotos();
-			entity.setPhotos(null);
+			entity.setPhotos(new ArrayList<>());
 			savedEntity = save(entity);
 			photos.forEach(postPhoto -> postPhoto.setPost(savedEntity));
 			savedEntity.setPhotos(photos);

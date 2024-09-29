@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -81,7 +82,7 @@ public class JobServiceImpl implements JobService {
 			newEntity.setCreationDate(LocalDateTime.now());
 
 			List<Skill> skills = newEntity.getSkills();
-			newEntity.setSkills(null);
+			newEntity.setSkills(new ArrayList<>());
 			savedEntity = save(newEntity);
 			skills.forEach(skill -> skill.setJob(savedEntity));
 			savedEntity.setSkills(skills);
