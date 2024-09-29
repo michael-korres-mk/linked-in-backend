@@ -3,6 +3,7 @@ package com.licnosoft.linkedin.domain.jobs;
 import com.licnosoft.linkedin.config.ValidationErrorMessages;
 import com.licnosoft.linkedin.domain.enumeration.EmploymentType;
 import com.licnosoft.linkedin.domain.enumeration.WorkplaceType;
+import com.licnosoft.linkedin.domain.users.Skill;
 import com.licnosoft.linkedin.domain.users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -57,6 +58,9 @@ public class Job implements Serializable {
 	private String location;
 
 	@OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+	private List<Skill> skills  = new ArrayList<>();
+
+	@OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
 	private List<JobApplication> applications = new ArrayList<>();
 
 	public Long getId() {return id;}
@@ -102,6 +106,10 @@ public class Job implements Serializable {
 	public List<JobApplication> getApplications() {return applications;}
 
 	public void setApplications(List<JobApplication> applications) {this.applications = applications;}
+
+	public List<Skill> getSkills() {return skills;}
+
+	public void setSkills(List<Skill> skills) {this.skills = skills;}
 
 	@Override
 	public boolean equals(Object o) {
