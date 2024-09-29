@@ -3,6 +3,7 @@ package com.licnosoft.linkedin.domain.jobs;
 import com.licnosoft.linkedin.config.ValidationErrorMessages;
 import com.licnosoft.linkedin.domain.enumeration.EmploymentType;
 import com.licnosoft.linkedin.domain.enumeration.WorkplaceType;
+import com.licnosoft.linkedin.domain.users.Skill;
 import com.licnosoft.linkedin.domain.users.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -10,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -51,6 +54,15 @@ public class Job implements Serializable {
 	@Column(name = "enabled")
 	private boolean enabled;
 
+	@Column(name = "location")
+	private String location;
+
+	@OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+	private List<Skill> skills  = new ArrayList<>();
+
+	@OneToMany(mappedBy = "job", cascade = CascadeType.ALL)
+	private List<JobApplication> applications = new ArrayList<>();
+
 	public Long getId() {return id;}
 
 	public void setId(Long id) {this.id = id;}
@@ -86,6 +98,18 @@ public class Job implements Serializable {
 	public String getDescription() {return description;}
 
 	public void setDescription(String description) {this.description = description;}
+
+	public String getLocation() {return location;}
+
+	public void setLocation(String location) {this.location = location;}
+
+	public List<JobApplication> getApplications() {return applications;}
+
+	public void setApplications(List<JobApplication> applications) {this.applications = applications;}
+
+	public List<Skill> getSkills() {return skills;}
+
+	public void setSkills(List<Skill> skills) {this.skills = skills;}
 
 	@Override
 	public boolean equals(Object o) {

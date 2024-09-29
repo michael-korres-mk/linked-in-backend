@@ -54,6 +54,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .requestMatchers("/ws/**").permitAll()
                 .requestMatchers("/evictcacheimmediate").permitAll()
                 .requestMatchers("/jwt/**").permitAll()
+                .requestMatchers(HttpMethod.POST,"/users").permitAll()
                 .requestMatchers("/" + Constants.UPLOAD_FOLDER + "/**").permitAll()
                 // private endpoints
                 .anyRequest().authenticated()

@@ -3,12 +3,14 @@ package com.licnosoft.linkedin.services.jobs;
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
 import com.licnosoft.linkedin.domain.jobs.Job;
+import com.licnosoft.linkedin.domain.users.Skill;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.jobs.JobDetailedDTO;
 import com.licnosoft.linkedin.repository.jobs.JobRepository;
 import com.licnosoft.linkedin.services.general.FileService;
 import com.licnosoft.linkedin.services.users.UserService;
+import com.licnosoft.linkedin.util.JobUtil;
 import com.licnosoft.linkedin.util.Utilities;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,18 +30,27 @@ public class JobServiceImpl implements JobService {
 	private final ModelMapper modelMapper;
 	private final UserService userService;
 	private final FileService fileService;
+	private final JobUtil jobUtil;
 
-	public JobServiceImpl(JobRepository entityRepository, ModelMapper modelMapper, UserService userService, FileService fileService) {
+	public JobServiceImpl(JobRepository entityRepository, ModelMapper modelMapper, UserService userService, FileService fileService, JobUtil jobUtil) {
 		this.entityRepository = entityRepository;
 		this.modelMapper = modelMapper;
 		this.userService = userService;
 		this.fileService = fileService;
+		this.jobUtil = jobUtil;
 	}
 
 	@Override
-	public Page<JobDetailedDTO> search(String searchTerm, Boolean enabled, Pageable pageable) {
-		return entityRepository.search(searchTerm, pageable)
+	public Page<JobDetailedDTO> search(String searchTerm,Boolean exceptLoggedUser,Long creatorId, Pageable pageable) {
+		Long loggedUserId = (exceptLoggedUser != null)? userService.getLoggedUser().getId() : null;
+		return entityRepository.search(searchTerm,loggedUserId, creatorId, pageable)
 				.map(entity -> modelMapper.map(entity, JobDetailedDTO.class));
+	}
+
+	@Override
+	public List<JobDetailedDTO> searchAsList(String searchTerm,Boolean exceptLoggedUser, Long creatorId) {
+		Long loggedUserId = (exceptLoggedUser != null)? userService.getLoggedUser().getId() : null;
+		return entityRepository.searchAsList(searchTerm,loggedUserId, creatorId).stream().map(j -> modelMapper.map(j, JobDetailedDTO.class)).toList();
 	}
 
 	@Override
@@ -62,16 +75,33 @@ public class JobServiceImpl implements JobService {
 		if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
 		User creator = userService.getLoggedUser();
-		Job entity = modelMapper.map(dto, Job.class);
+		Job newEntity = modelMapper.map(dto, Job.class);
+		Job savedEntity;
 		if (insert) {
-			entity.setCreator(creator);
-			entity.setCreationDate(LocalDateTime.now());
+			newEntity.setCreator(creator);
+			newEntity.setCreationDate(LocalDateTime.now());
+
+			List<Skill> skills = newEntity.getSkills();
+			newEntity.setSkills(new ArrayList<>());
+			savedEntity = save(newEntity);
+			skills.forEach(skill -> skill.setJob(savedEntity));
+			savedEntity.setSkills(skills);
+
+			return modelMapper.map(save(newEntity), JobDetailedDTO.class);
 		}
+		else{
+			Job currentEntity = findEntityById(newEntity.getId());
+			currentEntity.setTitle(newEntity.getTitle());
+			currentEntity.setDescription(newEntity.getDescription());
+			currentEntity.setCompany(newEntity.getCompany());
+			currentEntity.setLocation(newEntity.getLocation());
+			currentEntity.setWorkplaceType(newEntity.getWorkplaceType());
+			currentEntity.setEmploymentType(newEntity.getEmploymentType());
 
-		JobDetailedDTO jobDetailedDTO = modelMapper.map(save(entity), JobDetailedDTO.class);
+			jobUtil.updateSkills(currentEntity,newEntity);
 
-		return jobDetailedDTO;
-
+			return modelMapper.map(save(currentEntity), JobDetailedDTO.class);
+		}
 	}
 
 	@Override

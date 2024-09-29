@@ -5,9 +5,13 @@ import com.licnosoft.linkedin.services.jobs.JobApplicationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/job-applications")
@@ -20,6 +24,22 @@ public class JobApplicationController {
 	@Autowired
 	public JobApplicationController(JobApplicationService entityService) {
 		this.entityService = entityService;
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<Page<JobApplicationDTO>> search(
+			@RequestParam(value = "q", required = false) String searchTerm,
+			@RequestParam(value = "creator", required = false) Long creatorId, Pageable pageable) {
+		return new ResponseEntity<>(entityService.
+				search(searchTerm, creatorId, pageable), HttpStatus.OK);
+	}
+
+	@GetMapping("/list")
+	public ResponseEntity<List<JobApplicationDTO>> search(
+			@RequestParam(value = "q", required = false) String searchTerm,
+			@RequestParam(value = "creator", required = false) Long creatorId) {
+		return new ResponseEntity<>(entityService.
+				searchAsList(searchTerm, creatorId), HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")

@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -75,13 +76,19 @@ public class PostServiceImpl implements PostService{
 
 		User creator = userService.getLoggedUser();
 		Post entity = modelMapper.map(dto, Post.class);
+		Post savedEntity;
 		if (insert) {
 			entity.setCreator(creator);
 			entity.setCreationDate(LocalDateTime.now());
 			entity.setEnabled(true);
+			List<PostPhoto> photos = entity.getPhotos();
+			entity.setPhotos(new ArrayList<>());
+			savedEntity = save(entity);
+			photos.forEach(postPhoto -> postPhoto.setPost(savedEntity));
+			savedEntity.setPhotos(photos);
+			return modelMapper.map(save(savedEntity), PostDetailedDTO.class);
 		}
 
-		// TODO: handle insert case
 		List<PostPhoto> photos = entity.getPhotos();
 		photos.forEach(postPhoto -> postPhoto.setPost(entity));
 

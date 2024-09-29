@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserBasicDTO> search(String searchTerm,String firstName, String lastName, String email, UserRole userRole,Boolean exceptLoggedUser, Boolean enabled, Pageable pageable) {
-        Long loggedUserId = (exceptLoggedUser)? getLoggedUser().getId() : null;
+        Long loggedUserId = (exceptLoggedUser != null)? getLoggedUser().getId() : null;
         return entityRepository.search(searchTerm, firstName, lastName, email, userRole,loggedUserId, enabled, pageable)
                 .map(entity -> modelMapper.map(entity, UserBasicDTO.class));
     }
@@ -160,6 +160,8 @@ public class UserServiceImpl implements UserService {
         currentEntity.setLastName(newEntity.getLastName());
         currentEntity.setMobile(newEntity.getMobile());
         currentEntity.setUsername(newEntity.getUsername());
+        currentEntity.setCompany(newEntity.getCompany());
+        currentEntity.setJobTitle(newEntity.getJobTitle());
         currentEntity.setAboutMe(newEntity.getAboutMe());
         currentEntity.setSkillsEnabled(newEntity.isSkillsEnabled());
         currentEntity.setWorkExperiencesEnabled(newEntity.isWorkExperiencesEnabled());
@@ -187,7 +189,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetailedDTO save(UserDetailedDTO dto, boolean insert) {
+    public UserInfoDTO save(UserInfoDTO dto, boolean insert) {
         if (!Utilities.validateEntityDto(dto, insert)) throw new AppValidationException();
 
 //        if (dto.getConfirmPassword() != null && !Utilities.validateConfirmPassword(dto)) throw new AppValidationException(ValidationErrorMessages.CONFIRM_PASSWORD_MISMATCH);
@@ -195,12 +197,13 @@ public class UserServiceImpl implements UserService {
         User entity = modelMapper.map(dto, User.class);
 
         if(insert){
+            entity.setUserRole(UserRole.PROFESSIONAL);
             entity.setSkillsEnabled(false);
             entity.setEducationsEnabled(false);
             entity.setWorkExperiencesEnabled(false);
         }
 
-	    return modelMapper.map(save(entity), UserDetailedDTO.class);
+	    return modelMapper.map(save(entity), UserInfoDTO.class);
     }
 
     @Override

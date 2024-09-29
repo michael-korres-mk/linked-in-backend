@@ -9,10 +9,13 @@ import com.licnosoft.linkedin.repository.jobs.JobApplicationRepository;
 import com.licnosoft.linkedin.services.users.UserService;
 import com.licnosoft.linkedin.util.Utilities;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -29,6 +32,17 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 		this.modelMapper = modelMapper;
 		this.userService = userService;
 		this.jobService = jobService;
+	}
+
+	@Override
+	public Page<JobApplicationDTO> search(String searchTerm, Long creatorId, Pageable pageable) {
+		return entityRepository.search(searchTerm, creatorId, pageable)
+				.map(entity -> modelMapper.map(entity, JobApplicationDTO.class));
+	}
+
+	@Override
+	public List<JobApplicationDTO> searchAsList(String searchTerm, Long creatorId) {
+		return entityRepository.searchAsList(searchTerm, creatorId).stream().map(ja -> modelMapper.map(ja, JobApplicationDTO.class)).toList();
 	}
 
 	@Override
@@ -50,12 +64,10 @@ public class JobApplicationServiceImpl implements JobApplicationService {
 		if (insert) {
 			entity.setCreator(creator);
 			entity.setCreationDate(LocalDateTime.now());
-			entity.setJob(jobService.findEntityById(dto.getJobId()));
+			entity.setJob(jobService.findEntityById(dto.getJob().getId()));
 		}
 
-		JobApplicationDTO jobDetailedDTO = modelMapper.map(save(entity), JobApplicationDTO.class);
-
-		return jobDetailedDTO;
+		return modelMapper.map(save(entity), JobApplicationDTO.class);
 
 	}
 
