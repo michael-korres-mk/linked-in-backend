@@ -39,7 +39,7 @@ public interface UserService {
 
     ToggleEntityDTO toggleEnabled(ToggleEntityDTO dto);
 
-    UserDetailedDTO save(UserDetailedDTO dto, boolean insert);
+    UserInfoDTO save(UserInfoDTO dto, boolean insert);
 
     User save(User entity);
 

@@ -3,6 +3,7 @@ package com.licnosoft.linkedin.services.jobs;
 import com.licnosoft.linkedin.config.exceptions.AppNotFoundException;
 import com.licnosoft.linkedin.config.exceptions.AppValidationException;
 import com.licnosoft.linkedin.domain.jobs.Job;
+import com.licnosoft.linkedin.domain.users.Skill;
 import com.licnosoft.linkedin.domain.users.User;
 import com.licnosoft.linkedin.model.general.ToggleEntityDTO;
 import com.licnosoft.linkedin.model.jobs.JobDetailedDTO;
@@ -74,9 +75,16 @@ public class JobServiceImpl implements JobService {
 
 		User creator = userService.getLoggedUser();
 		Job newEntity = modelMapper.map(dto, Job.class);
+		Job savedEntity;
 		if (insert) {
 			newEntity.setCreator(creator);
 			newEntity.setCreationDate(LocalDateTime.now());
+
+			List<Skill> skills = newEntity.getSkills();
+			newEntity.setSkills(null);
+			savedEntity = save(newEntity);
+			skills.forEach(skill -> skill.setJob(savedEntity));
+			savedEntity.setSkills(skills);
 
 			return modelMapper.map(save(newEntity), JobDetailedDTO.class);
 		}

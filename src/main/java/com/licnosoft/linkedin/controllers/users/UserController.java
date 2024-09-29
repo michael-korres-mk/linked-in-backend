@@ -110,16 +110,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDetailedDTO> save(@RequestBody UserDetailedDTO dto) {
+    public ResponseEntity<UserInfoDTO> save(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, true);
     }
 
     @PutMapping
-    public ResponseEntity<UserDetailedDTO> update(@RequestBody UserDetailedDTO dto) {
+    public ResponseEntity<UserInfoDTO> update(@RequestBody UserInfoDTO dto) {
         return handleSaveRequest(dto, false);
     }
 
-    private ResponseEntity<UserDetailedDTO> handleSaveRequest(UserDetailedDTO dto, boolean insert) {
+    private ResponseEntity<UserInfoDTO> handleSaveRequest(UserInfoDTO dto, boolean insert) {
         log.debug("REST request to save a user : {}", dto);
         return new ResponseEntity<>(entityService.save(dto, insert), HttpStatus.CREATED);
     }
